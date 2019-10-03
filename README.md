@@ -9,9 +9,8 @@ mvn clean install
 ```
 ```
 mysql -u root -p 
-> CREATE DATABASE plantator;
-> CREATE USER 'plantator_user'@'localhost' IDENTIFIED BY 'zaq1@WSX';
-> GRANT ALL PRIVILEGES ON plantator.* TO 'plantator_user'@'localhost';
+> CREATE DATABASE tasky;
+> CREATE USER 'root'@'localhost' IDENTIFIED BY 'admin';
+> GRANT ALL PRIVILEGES ON tasky.* TO 'root'@'localhost';
 > FLUSH PRIVILEGES;
-> source /src/main/resources/db/script.sql;
 ```
