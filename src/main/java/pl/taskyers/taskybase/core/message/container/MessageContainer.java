@@ -9,25 +9,25 @@ import java.util.stream.Collectors;
 
 abstract class MessageContainer<T, K> {
     
-    List<Message> messages = new ArrayList<>();
+    protected List<Message> messages = new ArrayList<>();
     
-    protected boolean hasErrors() {
+    public boolean hasErrors() {
         return messages.stream().anyMatch(message -> message.getType().equals(MessageType.ERROR));
     }
     
-    protected List<Message> getAll() {
+    public List<Message> getAll() {
         return messages;
     }
     
-    protected List<Message> getSuccesses() {
+    public List<Message> getSuccesses() {
         return getAllMessages(MessageType.SUCCESS);
     }
     
-    protected List<Message> getWarns() {
+    public List<Message> getWarns() {
         return getAllMessages(MessageType.WARN);
     }
     
-    protected List<Message> getErrors() {
+    public List<Message> getErrors() {
         return getAllMessages(MessageType.ERROR);
     }
     
