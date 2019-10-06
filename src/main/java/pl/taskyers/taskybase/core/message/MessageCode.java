@@ -8,15 +8,11 @@ import java.util.Locale;
 
 @Slf4j
 public enum MessageCode {
-    
-    /**
-     * Only for test purposes - do not change it
-     **/
-    test,
-    test_1,
-    test_1_2,
-    test_1_2_3,
-    test_1_2_3_4;
+    field_empty,
+    field_invalid_format,
+    password_invalid_format,
+    registration_successful,
+    user_field_already_exists;
     
     private static MessageSource messageSource;
     
