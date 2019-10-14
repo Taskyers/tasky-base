@@ -67,6 +67,7 @@ public class RegistrationIntegrationTest extends IntegrationBase {
                .andExpect(jsonPath("$.message", is("Registration was successful")))
                .andExpect(jsonPath("$.type", is("SUCCESS")))
                .andExpect(jsonPath("$.object.id", is(Integer.class)))
+               .andExpect(jsonPath("$.length()", is(3)))
                .andExpect(forwardedUrl(null))
                .andExpect(redirectedUrlPattern("**/register/{id}"))
                .andExpect(header().exists("Location"))

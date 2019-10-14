@@ -2,6 +2,7 @@ package pl.taskyers.taskybase.registration.slo;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.taskyers.taskybase.core.entity.UserEntity;
 import pl.taskyers.taskybase.core.message.MessageCode;
@@ -20,6 +21,8 @@ public class RegistrationSLOImpl implements RegistrationSLO {
     
     private final UserRepository userRepository;
     
+    private final PasswordEncoder passwordEncoder;
+    
     @Override
     public ResponseEntity register(UserEntity userEntity) {
         ValidationMessageContainer validationMessageContainer = new ValidationMessageContainer();
@@ -28,6 +31,7 @@ public class RegistrationSLOImpl implements RegistrationSLO {
             return ResponseEntity.badRequest().body(validationMessageContainer.getErrors());
         }
         
+        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         UserEntity savedUser = userRepository.save(userEntity);
         ResponseMessage<UserEntity> resultMessage =
                 new ResponseMessage<UserEntity>(MessageCode.registration_successful.getMessage(), MessageType.SUCCESS, savedUser);
