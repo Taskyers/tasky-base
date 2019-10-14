@@ -1,16 +1,28 @@
+Run serwera springowego:
 ```
 mvn spring-boot:run
 ```
-```
-mvn clean test 
-```
+Build całego projektu z testami: 
 ```
 mvn clean install
 ```
+Puszczenie wszystkich testów:
 ```
-mysql -u root -p 
-> CREATE DATABASE tasky;
-> CREATE USER 'root'@'localhost' IDENTIFIED BY 'admin';
-> GRANT ALL PRIVILEGES ON tasky.* TO 'root'@'localhost';
-> FLUSH PRIVILEGES;
+mvn clean test 
 ```
+Baza deweloperska (cleanuje się co run):
+```
+db = tasky
+username = root
+password = admin
+```
+Baza dla testów integracyjnych:
+```
+db = tasky_integration
+username = root
+password = admin
+```
+* Testy junitowe muszą się kończyć z *Test.java
+* Jak chcesz pisać integracyjne to extends IntegrationBase <br/>
+* Jeśli chcesz odpalać integracyjne przez intellija to musisz ręcznie clearować tą testową bazę. Jak mavenem to sama się będzie clearować co run <br/>
+* Dobrą pratyką jest odpalanie wszystkich testów jak dodasz jakąś funkcjonalność albo jak coś naprawiasz.
