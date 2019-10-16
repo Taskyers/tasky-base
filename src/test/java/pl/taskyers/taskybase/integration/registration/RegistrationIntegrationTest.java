@@ -5,6 +5,7 @@ import org.springframework.http.MediaType;
 import pl.taskyers.taskybase.core.entity.UserEntity;
 import pl.taskyers.taskybase.integration.IntegrationBase;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -72,6 +73,54 @@ public class RegistrationIntegrationTest extends IntegrationBase {
                .andExpect(redirectedUrlPattern("**/register/{id}"))
                .andExpect(header().exists("Location"))
                .andExpect(status().isCreated());
+    }
+    
+    @Test
+    public void givenNotExistingUsernameWhenCheckingByUsernameShouldReturnFalse() throws Exception {
+        String username = "testUsername";
+        mockMvc.perform(get("/register/checkByUsername/" + username))
+               .andDo(print())
+               .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$", is(false)))
+               .andExpect(forwardedUrl(null))
+               .andExpect(redirectedUrl(null))
+               .andExpect(status().isOk());
+    }
+    
+    @Test
+    public void givenExistingUsernameWhenCheckingByUsernameShouldReturnTrue() throws Exception {
+        String username = "u1";
+        mockMvc.perform(get("/register/checkByUsername/" + username))
+               .andDo(print())
+               .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$", is(true)))
+               .andExpect(forwardedUrl(null))
+               .andExpect(redirectedUrl(null))
+               .andExpect(status().isOk());
+    }
+    
+    @Test
+    public void givenNotExistingEmailWhenCheckingByEmailShouldReturnFalse() throws Exception {
+        String email = "test@test.com";
+        mockMvc.perform(get("/register/checkByEmail/" + email))
+               .andDo(print())
+               .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$", is(false)))
+               .andExpect(forwardedUrl(null))
+               .andExpect(redirectedUrl(null))
+               .andExpect(status().isOk());
+    }
+    
+    @Test
+    public void givenExistingEmailWhenCheckingByEmailShouldReturnTrue() throws Exception {
+        String email = "u1@email.com";
+        mockMvc.perform(get("/register/checkByEmail/" + email))
+               .andDo(print())
+               .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$", is(true)))
+               .andExpect(forwardedUrl(null))
+               .andExpect(redirectedUrl(null))
+               .andExpect(status().isOk());
     }
     
 }

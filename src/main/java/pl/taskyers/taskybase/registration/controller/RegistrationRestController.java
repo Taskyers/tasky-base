@@ -6,19 +6,28 @@ import org.springframework.web.bind.annotation.*;
 import pl.taskyers.taskybase.core.entity.UserEntity;
 import pl.taskyers.taskybase.registration.slo.RegistrationSLO;
 
-import static pl.taskyers.taskybase.registration.slo.RegistrationSLO.REGISTRATION_PREFIX;
+import static pl.taskyers.taskybase.registration.slo.RegistrationSLO.*;
 
 @RestController
 @RequestMapping(value = REGISTRATION_PREFIX)
 @AllArgsConstructor
-public class RegistrationRestController implements RegistrationSLO {
+public class RegistrationRestController {
     
     private final RegistrationSLO registrationSLO;
     
-    @Override
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity register(@RequestBody UserEntity userEntity) {
         return registrationSLO.register(userEntity);
+    }
+    
+    @RequestMapping(value = FIND_USER_BY_USERNAME, method = RequestMethod.GET)
+    public boolean userExistsByUsername(@PathVariable String username) {
+        return registrationSLO.userExistsByUsername(username);
+    }
+    
+    @RequestMapping(value = FIND_USER_BY_EMAIL, method = RequestMethod.GET)
+    public boolean userExistsByEmail(@PathVariable String email) {
+        return registrationSLO.userExistsByEmail(email);
     }
     
 }
