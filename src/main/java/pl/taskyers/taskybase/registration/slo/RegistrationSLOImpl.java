@@ -39,4 +39,14 @@ public class RegistrationSLOImpl implements RegistrationSLO {
         return ResponseEntity.created(UriUtils.createURIFromId(savedUser.getId())).body(resultMessage);
     }
     
+    @Override
+    public boolean userExistsByUsername(String username) {
+        return userRepository.findByUsername(username).isPresent();
+    }
+    
+    @Override
+    public boolean userExistsByEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+    
 }
