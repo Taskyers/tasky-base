@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.taskyers.taskybase.core.converters.AccountConverter;
+import pl.taskyers.taskybase.core.dto.AccountDTO;
 import pl.taskyers.taskybase.core.entity.UserEntity;
 import pl.taskyers.taskybase.core.message.MessageCode;
 import pl.taskyers.taskybase.core.message.MessageType;
@@ -24,19 +26,14 @@ public class RegistrationSLOImpl implements RegistrationSLO {
     private final PasswordEncoder passwordEncoder;
     
     @Override
-    public ResponseEntity register(UserEntity userEntity) {
+    public ResponseEntity register(AccountDTO accountDTO) {
         ValidationMessageContainer validationMessageContainer = new ValidationMessageContainer();
-        registrationValidator.validate(userEntity, validationMessageContainer);
+        registrationValidator.validate(accountDTO, validationMessageContainer);
         if ( validationMessageContainer.hasErrors() ) {
             return ResponseEntity.badRequest().body(validationMessageContainer.getErrors());
         }
-        
-        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
-        UserEntity savedUser = userRepository.save(userEntity);
-        ResponseMessage<UserEntity> resultMessage =
-                new ResponseMessage<UserEntity>(MessageCode.registration_successful.getMessage(), MessageType.SUCCESS, savedUser);
-        
-        return ResponseEntity.created(UriUtils.createURIFromId(savedUser.getId())).body(resultMessage);
+        ResponseMessage<UserEntity> resultMessage = saveUser(accountDTO);
+        return ResponseEntity.created(UriUtils.createURIFromId(resultMessage.getObject().getId())).body(resultMessage);
     }
     
     @Override
@@ -47,6 +44,13 @@ public class RegistrationSLOImpl implements RegistrationSLO {
     @Override
     public boolean userExistsByEmail(String email) {
         return userRepository.findByEmail(email).isPresent();
+    }
+    
+    private ResponseMessage<UserEntity> saveUser(AccountDTO accountDTO) {
+        accountDTO.setPassword(passwordEncoder.encode(accountDTO.getPassword()));
+        UserEntity savedUser = AccountConverter.convertFromDTO(accountDTO);
+        userRepository.save(savedUser);
+        return new ResponseMessage<UserEntity>(MessageCode.registration_successful.getMessage(), MessageType.SUCCESS, savedUser);
     }
     
 }

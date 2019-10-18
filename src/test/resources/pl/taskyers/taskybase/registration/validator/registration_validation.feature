@@ -2,14 +2,14 @@ Feature: Registration validation
 
   Background:
     Given I have following users in database
-      | id | username | email        |
-      | 1  | u1       | u1@email.com |
-      | 2  | u2       | u2@email.com |
+      | username | email        |
+      | u1       | u1@email.com |
+      | u2       | u2@email.com |
 
   Scenario: Validating user without providing any data
     Given I have following user
-      | id  | username | email | password | name | surname |
-      | 100 |          |       |          |      |         |
+      | username | email | password | name | surname |
+      |          |       |          |      |         |
 
     When I validate user for registration
     Then Container contains following messages
@@ -22,8 +22,8 @@ Feature: Registration validation
 
   Scenario: Validating user with invalid data formats
     Given I have following user
-      | id  | username | email           | password | name | surname |
-      | 100 | test     | test@@email.com | zaq1WSX  | test | test    |
+      | username | email           | password | name | surname |
+      | test     | test@@email.com | zaq1WSX  | test | test    |
 
     When I validate user for registration
     Then Container contains following messages
@@ -35,8 +35,8 @@ Feature: Registration validation
 
   Scenario: Validating user when provided username exists in database
     Given I have following user
-      | id  | username | email          | password | name | surname |
-      | 100 | u1       | test@email.com | zaq1@WSX | Test | Test    |
+      | username | email          | password | name | surname |
+      | u1       | test@email.com | zaq1@WSX | Test | Test    |
 
     When I validate user for registration
     Then Container contains following messages
@@ -45,8 +45,8 @@ Feature: Registration validation
 
   Scenario: Validating user when provided email exists in database
     Given I have following user
-      | id  | username | email        | password | name | surname |
-      | 100 | test     | u2@email.com | zaq1@WSX | Test | Test    |
+      | username | email        | password | name | surname |
+      | test     | u2@email.com | zaq1@WSX | Test | Test    |
 
     When I validate user for registration
     Then Container contains following messages
@@ -55,8 +55,8 @@ Feature: Registration validation
 
   Scenario: Validating user when all data is valid
     Given I have following user
-      | id  | username | email          | password | name | surname |
-      | 100 | test     | test@email.com | zaq1@WSX | Test | Test    |
+      | username | email          | password | name | surname |
+      | test     | test@email.com | zaq1@WSX | Test | Test    |
 
     When I validate user for registration
     Then Container is empty

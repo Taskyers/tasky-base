@@ -5,7 +5,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import pl.taskyers.taskybase.core.MessageCodeProvider;
-import pl.taskyers.taskybase.core.entity.UserEntity;
+import pl.taskyers.taskybase.core.dto.AccountDTO;
 import pl.taskyers.taskybase.core.message.Message;
 import pl.taskyers.taskybase.core.message.ValidationMessage;
 import pl.taskyers.taskybase.core.message.container.ValidationMessageContainer;
@@ -21,9 +21,9 @@ import static org.mockito.Mockito.*;
 
 public class RegistrationValidatorStepdefs {
     
-    private List<UserEntity> users = new ArrayList<>();
+    private List<AccountDTO> users = new ArrayList<>();
     
-    private UserEntity entry;
+    private AccountDTO entry;
     
     private ValidationMessageContainer result = new ValidationMessageContainer();
     
@@ -39,12 +39,12 @@ public class RegistrationValidatorStepdefs {
     }
     
     @Given("^I have following users in database$")
-    public void iHaveFollowingUsersInDatabase(List<UserEntity> userEntities) {
+    public void iHaveFollowingUsersInDatabase(List<AccountDTO> userEntities) {
         users.addAll(userEntities);
     }
     
     @Given("^I have following user$")
-    public void iHaveFollowingUser(List<UserEntity> user) {
+    public void iHaveFollowingUser(List<AccountDTO> user) {
         entry = user.get(0);
         if ( usernameExists(entry.getUsername()) != null ) {
             when(userRepository.findByUsername(anyString()).isPresent()).thenAnswer(invocationOnMock -> Optional.of(entry));
@@ -76,12 +76,12 @@ public class RegistrationValidatorStepdefs {
         assertEquals(0, result.getAll().size());
     }
     
-    private UserEntity usernameExists(String username) {
-        return users.stream().filter(userEntity -> userEntity.getUsername().equals(username)).findFirst().orElse(null);
+    private AccountDTO usernameExists(String username) {
+        return users.stream().filter(accountDTO -> accountDTO.getUsername().equals(username)).findFirst().orElse(null);
     }
     
-    private UserEntity emailExists(String email) {
-        return users.stream().filter(userEntity -> userEntity.getEmail().equals(email)).findFirst().orElse(null);
+    private AccountDTO emailExists(String email) {
+        return users.stream().filter(accountDTO -> accountDTO.getEmail().equals(email)).findFirst().orElse(null);
     }
     
     private Message checkForType(ValidationMessageContainer validationMessageContainer, ValidationMessage validationMessage) {

@@ -1,7 +1,7 @@
 package pl.taskyers.taskybase.registration.slo;
 
 import org.springframework.http.ResponseEntity;
-import pl.taskyers.taskybase.core.entity.UserEntity;
+import pl.taskyers.taskybase.core.dto.AccountDTO;
 
 public interface RegistrationSLO {
     
@@ -11,7 +11,7 @@ public interface RegistrationSLO {
     
     String FIND_USER_BY_EMAIL = "/checkByEmail/{email}";
     
-    ResponseEntity register(UserEntity userEntity);
+    ResponseEntity register(AccountDTO accountDTO);
     
     boolean userExistsByUsername(String username);
     

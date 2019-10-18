@@ -2,7 +2,7 @@ package pl.taskyers.taskybase.integration.registration;
 
 import org.junit.Test;
 import org.springframework.http.MediaType;
-import pl.taskyers.taskybase.core.entity.UserEntity;
+import pl.taskyers.taskybase.core.dto.AccountDTO;
 import pl.taskyers.taskybase.integration.IntegrationBase;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -15,8 +15,8 @@ public class RegistrationIntegrationTest extends IntegrationBase {
     
     @Test
     public void givenInvalidUserWhenRegisterShouldReturnStatus400() throws Exception {
-        UserEntity userEntity = new UserEntity(null, "", "", "", "", "", false);
-        String givenUser = createJSONUser(userEntity);
+        AccountDTO accountDTO = new AccountDTO("", "", "", "", "");
+        String givenUser = createJSONAccount(accountDTO);
         mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(givenUser))
                .andDo(print())
                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -32,12 +32,12 @@ public class RegistrationIntegrationTest extends IntegrationBase {
     
     @Test
     public void givenUserWithDuplicatedUsernameWhenRegisterShouldReturnStatus400() throws Exception {
-        UserEntity userEntity = new UserEntity(null, "u1", "zaq1@WSX", "Test", "Test", "email@email.com", false);
-        String givenUser = createJSONUser(userEntity);
+        AccountDTO accountDTO = new AccountDTO("u1", "email@email.com", "test", "Test", "Test");
+        String givenUser = createJSONAccount(accountDTO);
         mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(givenUser))
                .andDo(print())
                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$[0].message", is("User with " + userEntity.getUsername() + " username already exists")))
+               .andExpect(jsonPath("$[0].message", is("User with " + accountDTO.getUsername() + " username already exists")))
                .andExpect(jsonPath("$[0].type", is("ERROR")))
                .andExpect(jsonPath("$[0].field", is("username")))
                .andExpect(forwardedUrl(null))
@@ -47,12 +47,12 @@ public class RegistrationIntegrationTest extends IntegrationBase {
     
     @Test
     public void givenUserWithDuplicatedEmailAndInvalidPasswordWhenRegisterShouldReturnStatus400() throws Exception {
-        UserEntity userEntity = new UserEntity(null, "test", "test", "Test", "Test", "u1@email.com", false);
-        String givenUser = createJSONUser(userEntity);
+        AccountDTO accountDTO = new AccountDTO("test", "u1@email.com", "test", "Test", "Test");
+        String givenUser = createJSONAccount(accountDTO);
         mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(givenUser))
                .andDo(print())
                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$[0].message", is("User with " + userEntity.getEmail() + " email already exists")))
+               .andExpect(jsonPath("$[0].message", is("User with " + accountDTO.getEmail() + " email already exists")))
                .andExpect(jsonPath("$[1].message", is("Provided password is not strong enough")))
                .andExpect(forwardedUrl(null))
                .andExpect(redirectedUrl(null))
@@ -61,8 +61,8 @@ public class RegistrationIntegrationTest extends IntegrationBase {
     
     @Test
     public void givenValidUserWhenRegisterShouldReturnStatus200() throws Exception {
-        UserEntity userEntity = new UserEntity(null, "test", "zaq1@WSX", "Test", "Test", "test@email.com", false);
-        String givenUser = createJSONUser(userEntity);
+        AccountDTO accountDTO = new AccountDTO("test", "test@email.com", "zaq1@WSX", "Test", "Test");
+        String givenUser = createJSONAccount(accountDTO);
         mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(givenUser))
                .andDo(print())
                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -70,6 +70,7 @@ public class RegistrationIntegrationTest extends IntegrationBase {
                .andExpect(jsonPath("$.type", is("SUCCESS")))
                .andExpect(jsonPath("$.object.id", is(Integer.class)))
                .andExpect(jsonPath("$.length()", is(3)))
+               .andExpect(jsonPath("$.object.enabled", is(false)))
                .andExpect(forwardedUrl(null))
                .andExpect(redirectedUrlPattern("**/register/{id}"))
                .andExpect(header().exists("Location"))
