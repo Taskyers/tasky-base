@@ -5,5 +5,6 @@ CREATE TABLE IF NOT EXISTS users
     password binary(60) not null,
     email    varchar(200) unique,
     name     varchar(200),
-    surname  varchar(200)
+    surname  varchar(200),
+    enabled boolean default false
 );
