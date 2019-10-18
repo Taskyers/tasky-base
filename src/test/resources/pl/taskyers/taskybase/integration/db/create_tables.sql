@@ -8,3 +8,9 @@ CREATE TABLE IF NOT EXISTS users
     surname  varchar(200),
     enabled boolean default false
 );
+CREATE TABLE IF NOT EXISTS verification_tokens
+(
+    verification_token_id int primary key auto_increment,
+    user_id int not null references users(user_id),
+    token varchar(200) unique
+);
