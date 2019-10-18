@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import pl.taskyers.taskybase.core.entity.UserEntity;
+import pl.taskyers.taskybase.core.dto.AccountDTO;
 import pl.taskyers.taskybase.core.message.MessageCode;
 import pl.taskyers.taskybase.core.message.container.ValidationMessageContainer;
 import pl.taskyers.taskybase.core.repository.UserRepository;
@@ -14,7 +14,7 @@ import pl.taskyers.taskybase.core.validator.Validator;
 @Component
 @AllArgsConstructor
 @Slf4j
-public class RegistrationValidator implements Validator<UserEntity> {
+public class RegistrationValidator implements Validator<AccountDTO> {
     
     private static final String FIELD_USERNAME = "username";
     
@@ -29,12 +29,12 @@ public class RegistrationValidator implements Validator<UserEntity> {
     private final UserRepository userRepository;
     
     @Override
-    public void validate(UserEntity userEntity, ValidationMessageContainer validationMessageContainer) {
-        String username = userEntity.getUsername();
-        String email = userEntity.getEmail();
-        String password = userEntity.getPassword();
-        String name = userEntity.getName();
-        String surname = userEntity.getSurname();
+    public void validate(AccountDTO accountDTO, ValidationMessageContainer validationMessageContainer) {
+        String username = accountDTO.getUsername();
+        String email = accountDTO.getEmail();
+        String password = accountDTO.getPassword();
+        String name = accountDTO.getName();
+        String surname = accountDTO.getSurname();
         validateUsername(username, validationMessageContainer);
         validateEmail(email, validationMessageContainer);
         validatePassword(password, validationMessageContainer);

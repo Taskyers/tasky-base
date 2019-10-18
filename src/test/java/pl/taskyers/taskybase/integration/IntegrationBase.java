@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import pl.taskyers.taskybase.core.entity.UserEntity;
+import pl.taskyers.taskybase.core.dto.AccountDTO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -21,14 +21,13 @@ public abstract class IntegrationBase {
     
     protected final ObjectMapper objectMapper = new ObjectMapper();
     
-    protected final String createJSONUser(UserEntity userEntity) {
+    protected final String createJSONAccount(AccountDTO accountDTO) {
         StringBuilder json = new StringBuilder("{");
-        json.append("\"id\": \"").append(userEntity.getId()).append("\",");
-        json.append("\"username\": \"").append(userEntity.getUsername()).append("\",");
-        json.append("\"password\": \"").append(userEntity.getPassword()).append("\",");
-        json.append("\"email\": \"").append(userEntity.getEmail()).append("\",");
-        json.append("\"name\": \"").append(userEntity.getName()).append("\",");
-        json.append("\"surname\": \"").append(userEntity.getSurname()).append("\"");
+        json.append("\"username\": \"").append(accountDTO.getUsername()).append("\",");
+        json.append("\"password\": \"").append(accountDTO.getPassword()).append("\",");
+        json.append("\"email\": \"").append(accountDTO.getEmail()).append("\",");
+        json.append("\"name\": \"").append(accountDTO.getName()).append("\",");
+        json.append("\"surname\": \"").append(accountDTO.getSurname()).append("\"");
         json.append("}");
         return json.toString();
     }
