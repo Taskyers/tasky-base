@@ -15,7 +15,7 @@ public class RegistrationIntegrationTest extends IntegrationBase {
     
     @Test
     public void givenInvalidUserWhenRegisterShouldReturnStatus400() throws Exception {
-        UserEntity userEntity = new UserEntity(null, "", "", "", "", "");
+        UserEntity userEntity = new UserEntity(null, "", "", "", "", "", false);
         String givenUser = createJSONUser(userEntity);
         mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(givenUser))
                .andDo(print())
@@ -32,7 +32,7 @@ public class RegistrationIntegrationTest extends IntegrationBase {
     
     @Test
     public void givenUserWithDuplicatedUsernameWhenRegisterShouldReturnStatus400() throws Exception {
-        UserEntity userEntity = new UserEntity(null, "u1", "zaq1@WSX", "Test", "Test", "email@email.com");
+        UserEntity userEntity = new UserEntity(null, "u1", "zaq1@WSX", "Test", "Test", "email@email.com", false);
         String givenUser = createJSONUser(userEntity);
         mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(givenUser))
                .andDo(print())
@@ -47,7 +47,7 @@ public class RegistrationIntegrationTest extends IntegrationBase {
     
     @Test
     public void givenUserWithDuplicatedEmailAndInvalidPasswordWhenRegisterShouldReturnStatus400() throws Exception {
-        UserEntity userEntity = new UserEntity(null, "test", "test", "Test", "Test", "u1@email.com");
+        UserEntity userEntity = new UserEntity(null, "test", "test", "Test", "Test", "u1@email.com", false);
         String givenUser = createJSONUser(userEntity);
         mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(givenUser))
                .andDo(print())
@@ -61,7 +61,7 @@ public class RegistrationIntegrationTest extends IntegrationBase {
     
     @Test
     public void givenValidUserWhenRegisterShouldReturnStatus200() throws Exception {
-        UserEntity userEntity = new UserEntity(null, "test", "zaq1@WSX", "Test", "Test", "test@email.com");
+        UserEntity userEntity = new UserEntity(null, "test", "zaq1@WSX", "Test", "Test", "test@email.com", false);
         String givenUser = createJSONUser(userEntity);
         mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(givenUser))
                .andDo(print())
