@@ -15,6 +15,7 @@ import java.io.IOException;
 
 @Component
 public class RESTAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+    
     private RequestCache requestCache = new HttpSessionRequestCache();
     
     @Override
@@ -27,14 +28,14 @@ public class RESTAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
         SavedRequest savedRequest
                 = requestCache.getRequest(request, response);
         
-        if (savedRequest == null) {
+        if ( savedRequest == null ) {
             clearAuthenticationAttributes(request);
             return;
         }
         String targetUrlParam = getTargetUrlParameter();
-        if (isAlwaysUseDefaultTargetUrl()
-            || (targetUrlParam != null
-                && StringUtils.hasText(request.getParameter(targetUrlParam)))) {
+        if ( isAlwaysUseDefaultTargetUrl()
+             || (targetUrlParam != null
+                 && StringUtils.hasText(request.getParameter(targetUrlParam))) ) {
             requestCache.removeRequest(request, response);
             clearAuthenticationAttributes(request);
             return;
@@ -46,5 +47,5 @@ public class RESTAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
     public void setRequestCache(RequestCache requestCache) {
         this.requestCache = requestCache;
     }
-
+    
 }

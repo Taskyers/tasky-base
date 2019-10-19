@@ -17,4 +17,5 @@ public class RESTAuthenticationFailureHandler extends SimpleUrlAuthenticationFai
             throws IOException, ServletException {
         super.onAuthenticationFailure(request, response, exception);
     }
+    
 }

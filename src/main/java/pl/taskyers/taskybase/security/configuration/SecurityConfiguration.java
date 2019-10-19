@@ -25,12 +25,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     @Autowired
     private RESTAuthenticationEntryPoint restAuthenticationEntryPoint;
+    
     @Autowired
     private RESTAuthenticationSuccessHandler restAuthenticationSuccessHandler;
+    
     @Autowired
     private RESTAuthenticationFailureHandler restAuthenticationFailureHandler;
     
-
     @Autowired
     private DataSource dataSource;
     
@@ -51,8 +52,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         
-        
-                http
+        http
                 .csrf().disable()
                 .exceptionHandling()
                 .authenticationEntryPoint(restAuthenticationEntryPoint)
@@ -69,10 +69,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .cors()
                 .configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
-                
-
+        
     }
-    
     
     protected CustomAuthenticationFilter getAuthenticationFilter() {
         CustomAuthenticationFilter authFilter = new CustomAuthenticationFilter();
@@ -80,10 +78,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             authFilter.setAuthenticationManager(this.authenticationManagerBean());
             authFilter.setAuthenticationSuccessHandler(restAuthenticationSuccessHandler);
             authFilter.setAuthenticationFailureHandler(restAuthenticationFailureHandler);
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             e.printStackTrace();
         }
         return authFilter;
     }
-
+    
 }

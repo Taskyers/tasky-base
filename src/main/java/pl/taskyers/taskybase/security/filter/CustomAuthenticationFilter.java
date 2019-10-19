@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 
-
-
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     
     private boolean postOnly = true;
@@ -22,7 +20,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     public Authentication attemptAuthentication(HttpServletRequest request,
             HttpServletResponse response) throws AuthenticationException {
         
-        if (postOnly && !request.getMethod().equals("POST")) {
+        if ( postOnly && !request.getMethod().equals("POST") ) {
             throw new AuthenticationServiceException(
                     "Authentication method not supported: " + request.getMethod());
         }
@@ -32,12 +30,12 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             BufferedReader reader = request.getReader();
             StringBuffer sb = new StringBuffer();
             String line = null;
-            while ((line = reader.readLine()) != null){
+            while ( (line = reader.readLine()) != null ) {
                 sb.append(line);
             }
             ObjectMapper mapper = new ObjectMapper();
             loginRequest = mapper.readValue(sb.toString(), LoginRequest.class);
-        } catch (Exception ex) {
+        } catch ( Exception ex ) {
             throw new AuthenticationServiceException("Unable to read login credentials.");
         }
         
@@ -50,8 +48,12 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     
     @Data
     public static class LoginRequest {
+        
         String username;
+        
         String password;
+        
     }
+    
 }
 

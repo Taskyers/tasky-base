@@ -17,17 +17,18 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
     
     @Autowired
-    public void setUserRepository(UserRepository userRepository){
-        this.userRepository=userRepository;
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
     
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user=userRepository.findByUsername(username).get();
+        UserEntity user = userRepository.findByUsername(username).get();
     
-        if(user==null)
+        if ( user == null ) {
             throw new UsernameNotFoundException("User not found");
-        org.springframework.security.core.userdetails.User userDetails=
+        }
+        org.springframework.security.core.userdetails.User userDetails =
                 new org.springframework.security.core.userdetails.User(user.getUsername(),
                                                                        user.getPassword(),
                                                                        new HashSet<SimpleGrantedAuthority>());
