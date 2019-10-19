@@ -1,5 +1,6 @@
 package pl.taskyers.taskybase.security.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,14 +15,10 @@ import java.util.HashSet;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
     
-    private UserRepository userRepository;
-    
-    @Autowired
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final UserRepository userRepository;
     
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -30,7 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if ( !user.isPresent() ) {
             throw new UsernameNotFoundException("User not found.");
         }
-        if(!user.get().isEnabled()){
+        if ( !user.get().isEnabled() ) {
             throw new UserNotEnabledException("User is not enabled.");
         }
         

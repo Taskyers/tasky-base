@@ -16,7 +16,6 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<springframework-security-core.version>5.2.0.RELEASE</springframework-security-core.version>
 		<mockito-core.version>3.0.0</mockito-core.version>
 		<mockito-all.version>1.10.19</mockito-all.version>
 		<apache-commons-lang3.version>3.9</apache-commons-lang3.version>
