@@ -66,7 +66,7 @@ public class RegistrationIntegrationTest extends IntegrationBase {
         mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(givenUser))
                .andDo(print())
                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$.message", is("Registration was successful")))
+               .andExpect(jsonPath("$.message", is("Registration was successful. Activation link was sent to email address.")))
                .andExpect(jsonPath("$.type", is("SUCCESS")))
                .andExpect(jsonPath("$.object.id", is(Integer.class)))
                .andExpect(jsonPath("$.length()", is(3)))

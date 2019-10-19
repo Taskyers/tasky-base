@@ -8,8 +8,11 @@ import java.util.Locale;
 
 @Slf4j
 public enum MessageCode {
+    account_activated,
+    email_subject_registration,
     field_empty,
     field_invalid_format,
+    field_not_found,
     password_invalid_format,
     registration_successful,
     user_field_already_exists;

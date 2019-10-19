@@ -11,5 +11,13 @@ CREATE TABLE IF NOT EXISTS users
     surname  varchar(200),
     enabled boolean default false
 );
+CREATE TABLE IF NOT EXISTS verification_tokens
+(
+    verification_token_id int primary key auto_increment,
+    user_id int not null references users(user_id),
+    token varchar(200) unique
+);
 INSERT INTO users(username, password, name, surname, email)
 VALUES ('u1', '$2a$10$0k1y57DwGGZ8iKY5jpd6fum./qxDxq24lGsi8ChagpXgEHHVV0V6W', 'U', 'S', 'u1@email.com');
+INSERT INTO verification_tokens(user_id, token)
+VALUES (1, 'tested-token')
