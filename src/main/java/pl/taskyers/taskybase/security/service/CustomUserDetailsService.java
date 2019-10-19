@@ -8,8 +8,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pl.taskyers.taskybase.core.entity.UserEntity;
 import pl.taskyers.taskybase.core.repository.UserRepository;
+import pl.taskyers.taskybase.security.exception.UserNotEnabledException;
 
 import java.util.HashSet;
+import java.util.Optional;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -17,22 +19,25 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
     
     @Autowired
-    public void setUserRepository(UserRepository userRepository) {
+    public CustomUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
     
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findByUsername(username).get();
-    
-        if ( user == null ) {
-            throw new UsernameNotFoundException("User not found");
+        Optional<UserEntity> user = userRepository.findByUsername(username);
+        
+        if ( !user.isPresent() ) {
+            throw new UsernameNotFoundException("User not found.");
         }
-        org.springframework.security.core.userdetails.User userDetails =
-                new org.springframework.security.core.userdetails.User(user.getUsername(),
-                                                                       user.getPassword(),
-                                                                       new HashSet<SimpleGrantedAuthority>());
-        return userDetails;
+        if(!user.get().isEnabled()){
+            throw new UserNotEnabledException("User is not enabled.");
+        }
+        
+        return new org.springframework.security.core.userdetails.User(user.get().getUsername(),
+                                                                      user.get().getPassword(),
+                                                                      new HashSet<SimpleGrantedAuthority>());
+        
     }
     
 }

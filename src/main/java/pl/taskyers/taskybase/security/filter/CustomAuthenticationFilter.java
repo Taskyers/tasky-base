@@ -47,7 +47,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
     
     @Data
-    public static class LoginRequest {
+    private static class LoginRequest {
         
         String username;
         

@@ -33,9 +33,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private RESTAuthenticationFailureHandler restAuthenticationFailureHandler;
     
     @Autowired
-    private DataSource dataSource;
-    
-    @Autowired
     private CustomUserDetailsService customUserDetailsService;
     
     @Bean
@@ -62,8 +59,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterAt(getAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .formLogin()
-                .successHandler(restAuthenticationSuccessHandler)
-                .failureHandler(restAuthenticationFailureHandler)
                 .and()
                 .logout()
                 .and()

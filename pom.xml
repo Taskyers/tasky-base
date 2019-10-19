@@ -78,23 +78,8 @@
 			<version>${spring-boot-freemarker-email.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<version>${springframework-security-core.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.allanditzel</groupId>
-			<artifactId>spring-security-csrf-token-filter</artifactId>
-			<version>1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -145,10 +130,6 @@
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
 			<version>${selenium-java.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.jayway.jsonpath</groupId>
-			<artifactId>json-path</artifactId>
 		</dependency>
 	</dependencies>
 
