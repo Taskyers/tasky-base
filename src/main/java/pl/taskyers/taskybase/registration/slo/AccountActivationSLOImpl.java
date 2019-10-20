@@ -5,12 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import pl.taskyers.taskybase.core.entity.UserEntity;
 import pl.taskyers.taskybase.core.message.MessageCode;
 import pl.taskyers.taskybase.core.message.MessageType;
 import pl.taskyers.taskybase.core.message.ResponseMessage;
-import pl.taskyers.taskybase.core.repository.UserRepository;
 import pl.taskyers.taskybase.core.slo.TokenSLO;
+import pl.taskyers.taskybase.core.slo.UserSLO;
 import pl.taskyers.taskybase.registration.entity.VerificationTokenEntity;
 
 @Service
@@ -18,9 +17,9 @@ import pl.taskyers.taskybase.registration.entity.VerificationTokenEntity;
 @Slf4j
 public class AccountActivationSLOImpl implements AccountActivationSLO {
     
-    private final TokenSLO verificationTokenSLO;
+    private final UserSLO userSLO;
     
-    private final UserRepository userRepository;
+    private final TokenSLO verificationTokenSLO;
     
     @Override
     public ResponseEntity activateAccount(String token) {
@@ -32,10 +31,8 @@ public class AccountActivationSLOImpl implements AccountActivationSLO {
     }
     
     private ResponseMessage activateAccount(VerificationTokenEntity verificationTokenEntity) {
-        UserEntity userEntity = verificationTokenEntity.getUser();
         verificationTokenSLO.deleteToken(verificationTokenEntity.getToken());
-        userEntity.setEnabled(true);
-        userRepository.save(userEntity);
+        userSLO.enableUser(verificationTokenEntity.getUser());
         return new ResponseMessage<>(MessageCode.account_activated.getMessage(), MessageType.SUCCESS);
     }
     
