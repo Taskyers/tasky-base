@@ -13,6 +13,7 @@ import pl.taskyers.taskybase.core.message.MessageCode;
 import pl.taskyers.taskybase.core.message.MessageType;
 import pl.taskyers.taskybase.core.message.ResponseMessage;
 import pl.taskyers.taskybase.core.repository.UserRepository;
+import pl.taskyers.taskybase.core.slo.TokenSLO;
 import pl.taskyers.taskybase.recovery.entity.PasswordRecoveryTokenEntity;
 
 import java.io.UnsupportedEncodingException;
@@ -30,7 +31,7 @@ public class PasswordRecoverySLOImpl implements PasswordRecoverySLO {
     
     private final EmailSLO emailSLO;
     
-    private final PasswordRecoveryTokenSLO passwordRecoveryTokenSLO;
+    private final TokenSLO passwordRecoveryTokenSLO;
     
     private final PasswordEncoder passwordEncoder;
     
@@ -38,29 +39,31 @@ public class PasswordRecoverySLOImpl implements PasswordRecoverySLO {
     public ResponseEntity sendEmailWithToken(String email) {
         Optional<UserEntity> userEntity = userRepository.findByEmail(email);
         if ( userEntity.isPresent() ) {
-            passwordRecoveryTokenSLO.createPasswordRecoveryToken(userEntity.get());
+            passwordRecoveryTokenSLO.createToken(userEntity.get());
             sendEmail(userEntity.get());
-            return ResponseEntity.ok(new ResponseMessage<String>("Email with token was sent to provided address", MessageType.SUCCESS));
+            return ResponseEntity.ok(new ResponseMessage<String>(MessageCode.email_with_token_sent.getMessage(email), MessageType.SUCCESS));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage<>("Email was not found", MessageType.WARN));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ResponseMessage<>(MessageCode.field_not_found.getMessage("Email", email), MessageType.WARN));
     }
     
     @Override
     public ResponseEntity setNewPassword(String token, String password) {
-        PasswordRecoveryTokenEntity passwordRecoveryTokenEntity = passwordRecoveryTokenSLO.getTokenEntity(token);
+        PasswordRecoveryTokenEntity passwordRecoveryTokenEntity = (PasswordRecoveryTokenEntity) passwordRecoveryTokenSLO.getTokenEntity(token);
         if ( passwordRecoveryTokenEntity == null ) {
             log.warn("Token " + token + " was not found");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseMessage<String>("Token was not found", MessageType.WARN));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage<String>(MessageCode.field_not_found.getMessage("Token", token), MessageType.WARN));
         }
         UserEntity userEntity = passwordRecoveryTokenEntity.getUser();
         userEntity.setPassword(passwordEncoder.encode(password));
         userRepository.save(userEntity);
         passwordRecoveryTokenSLO.deleteToken(token);
-        return ResponseEntity.ok(new ResponseMessage<String>("Password successfully changed", MessageType.SUCCESS));
+        return ResponseEntity.ok(new ResponseMessage<String>(MessageCode.field_updated.getMessage("Password"), MessageType.SUCCESS));
     }
     
     private void sendEmail(UserEntity userEntity) {
-        String token = passwordRecoveryTokenSLO.getPasswordRecoveryToken(userEntity);
+        String token = passwordRecoveryTokenSLO.getToken(userEntity);
         String address = userEntity.getEmail();
         String personal = userEntity.getName() + " " + userEntity.getSurname();
         try {

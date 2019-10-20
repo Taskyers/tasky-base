@@ -33,14 +33,14 @@ public class SettingNewPasswordTest extends IntegrationBase {
         UserEntity userEntity = userRepository.findById(1L).get();
         String oldPassword = userEntity.getPassword();
         mockMvc.perform(post("/passwordRecovery/" + token).contentType(MediaType.APPLICATION_FORM_URLENCODED).param("password", newPassword))
-               .andDo(print())
-               .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$.message", is("Token was not found")))
-               .andExpect(jsonPath("$.type", is("WARN")))
-               .andExpect(jsonPath("$.object", is(nullValue())))
-               .andExpect(forwardedUrl(null))
-               .andExpect(redirectedUrl(null))
-               .andExpect(status().isNotFound());
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("Token was not found: " + token)))
+                .andExpect(jsonPath("$.type", is("WARN")))
+                .andExpect(jsonPath("$.object", is(nullValue())))
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isNotFound());
         
         userEntity = userRepository.findById(1L).get();
         assertEquals(oldPassword, userEntity.getPassword());
@@ -53,14 +53,14 @@ public class SettingNewPasswordTest extends IntegrationBase {
         UserEntity userEntity = userRepository.findById(1L).get();
         String oldPassword = userEntity.getPassword();
         mockMvc.perform(post("/passwordRecovery/" + token).contentType(MediaType.APPLICATION_FORM_URLENCODED).param("password", newPassword))
-               .andDo(print())
-               .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$.message", is("Password successfully changed")))
-               .andExpect(jsonPath("$.type", is("SUCCESS")))
-               .andExpect(jsonPath("$.object", is(nullValue())))
-               .andExpect(forwardedUrl(null))
-               .andExpect(redirectedUrl(null))
-               .andExpect(status().isOk());
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("Password was successfully updated")))
+                .andExpect(jsonPath("$.type", is("SUCCESS")))
+                .andExpect(jsonPath("$.object", is(nullValue())))
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isOk());
         
         userEntity = userRepository.findById(1L).get();
         assertFalse(passwordEncoder.matches(oldPassword, userEntity.getPassword()));

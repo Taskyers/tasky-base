@@ -15,6 +15,7 @@ import pl.taskyers.taskybase.core.message.MessageType;
 import pl.taskyers.taskybase.core.message.ResponseMessage;
 import pl.taskyers.taskybase.core.message.container.ValidationMessageContainer;
 import pl.taskyers.taskybase.core.repository.UserRepository;
+import pl.taskyers.taskybase.core.slo.TokenSLO;
 import pl.taskyers.taskybase.core.utils.UriUtils;
 import pl.taskyers.taskybase.registration.validator.RegistrationValidator;
 
@@ -36,7 +37,7 @@ public class RegistrationSLOImpl implements RegistrationSLO {
     
     private final EmailSLO emailSLO;
     
-    private final VerificationTokenSLO verificationTokenSLO;
+    private final TokenSLO verificationTokenSLO;
     
     @Override
     public ResponseEntity register(AccountDTO accountDTO) {
@@ -48,8 +49,8 @@ public class RegistrationSLOImpl implements RegistrationSLO {
         
         ResponseMessage<UserEntity> resultMessage = saveUser(accountDTO);
         UserEntity object = resultMessage.getObject();
-        verificationTokenSLO.createVerificationToken(object);
-        sendEmail(accountDTO, verificationTokenSLO.getVerificationToken(object));
+        verificationTokenSLO.createToken(object);
+        sendEmail(accountDTO, verificationTokenSLO.getToken(object));
         return ResponseEntity.created(UriUtils.createURIFromId(object.getId())).body(resultMessage);
     }
     
