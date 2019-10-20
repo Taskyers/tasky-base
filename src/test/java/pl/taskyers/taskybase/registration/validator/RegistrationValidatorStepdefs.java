@@ -9,7 +9,7 @@ import pl.taskyers.taskybase.core.dto.AccountDTO;
 import pl.taskyers.taskybase.core.message.Message;
 import pl.taskyers.taskybase.core.message.ValidationMessage;
 import pl.taskyers.taskybase.core.message.container.ValidationMessageContainer;
-import pl.taskyers.taskybase.core.repository.UserRepository;
+import pl.taskyers.taskybase.core.slo.UserSLO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +29,13 @@ public class RegistrationValidatorStepdefs {
     
     private RegistrationValidator registrationValidator;
     
-    private UserRepository userRepository;
+    private UserSLO userSLO;
     
     @Before
     public void setUp() {
         MessageCodeProvider.setMessageSource();
-        userRepository = mock(UserRepository.class);
-        registrationValidator = new RegistrationValidator(userRepository);
+        userSLO = mock(UserSLO.class);
+        registrationValidator = new RegistrationValidator(userSLO);
     }
     
     @Given("^I have following users in database$")
@@ -47,10 +47,10 @@ public class RegistrationValidatorStepdefs {
     public void iHaveFollowingUser(List<AccountDTO> user) {
         entry = user.get(0);
         if ( usernameExists(entry.getUsername()) != null ) {
-            when(userRepository.findByUsername(anyString()).isPresent()).thenAnswer(invocationOnMock -> Optional.of(entry));
+            when(userSLO.getEntityByUsername(anyString()).isPresent()).thenAnswer(invocationOnMock -> Optional.of(entry));
         }
         if ( emailExists(entry.getEmail()) != null ) {
-            when(userRepository.findByEmail(anyString()).isPresent()).thenAnswer(invocationOnMock -> Optional.of(entry));
+            when(userSLO.getEntityByEmail(anyString()).isPresent()).thenAnswer(invocationOnMock -> Optional.of(entry));
         }
     }
     
@@ -86,19 +86,19 @@ public class RegistrationValidatorStepdefs {
     
     private Message checkForType(ValidationMessageContainer validationMessageContainer, ValidationMessage validationMessage) {
         return validationMessageContainer.getAll().stream().filter(message -> message.getType().equals(validationMessage.getType())).findFirst()
-                                         .orElse(null);
+                .orElse(null);
     }
     
     private Message checkForMessage(ValidationMessageContainer validationMessageContainer, ValidationMessage validationMessage) {
         return validationMessageContainer.getAll().stream().filter(message -> message.getMessage().equals(validationMessage.getMessage())).findFirst()
-                                         .orElse(null);
+                .orElse(null);
     }
     
     private Message checkForField(ValidationMessageContainer validationMessageContainer, ValidationMessage validationMessage) {
         return validationMessageContainer.getAll().stream().filter(message -> message instanceof ValidationMessage)
-                                         .map(message -> ((ValidationMessage) message))
-                                         .filter(validationMessage1 -> validationMessage1.getField().equals(validationMessage.getField())).findFirst()
-                                         .orElse(null);
+                .map(message -> ((ValidationMessage) message))
+                .filter(validationMessage1 -> validationMessage1.getField().equals(validationMessage.getField())).findFirst()
+                .orElse(null);
     }
     
 }

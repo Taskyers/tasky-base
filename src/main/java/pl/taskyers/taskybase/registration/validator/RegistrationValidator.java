@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import pl.taskyers.taskybase.core.dto.AccountDTO;
 import pl.taskyers.taskybase.core.message.MessageCode;
 import pl.taskyers.taskybase.core.message.container.ValidationMessageContainer;
-import pl.taskyers.taskybase.core.repository.UserRepository;
+import pl.taskyers.taskybase.core.slo.UserSLO;
 import pl.taskyers.taskybase.core.utils.ValidationUtils;
 import pl.taskyers.taskybase.core.validator.Validator;
 
@@ -26,7 +26,7 @@ public class RegistrationValidator implements Validator<AccountDTO> {
     
     private static final String FIELD_SURNAME = "surname";
     
-    private final UserRepository userRepository;
+    private final UserSLO userSLO;
     
     @Override
     public void validate(AccountDTO accountDTO, ValidationMessageContainer validationMessageContainer) {
@@ -45,7 +45,7 @@ public class RegistrationValidator implements Validator<AccountDTO> {
     private void validateUsername(String username, ValidationMessageContainer validationMessageContainer) {
         if ( StringUtils.isBlank(username) ) {
             validationMessageContainer.addError(MessageCode.field_empty.getMessage("Username"), FIELD_USERNAME);
-        } else if ( userRepository.findByUsername(username).isPresent() ) {
+        } else if ( userSLO.getEntityByUsername(username).isPresent() ) {
             String message = MessageCode.user_field_already_exists.getMessage(username, "username");
             validationMessageContainer.addError(message, FIELD_USERNAME);
             log.warn(message);
@@ -57,7 +57,7 @@ public class RegistrationValidator implements Validator<AccountDTO> {
             validationMessageContainer.addError(MessageCode.field_empty.getMessage("Email"), FIELD_EMAIL);
         } else if ( !ValidationUtils.isUserEmailValid(email) ) {
             validationMessageContainer.addError(MessageCode.field_invalid_format.getMessage("email"), FIELD_EMAIL);
-        } else if ( userRepository.findByEmail(email).isPresent() ) {
+        } else if ( userSLO.getEntityByEmail(email).isPresent() ) {
             String message = MessageCode.user_field_already_exists.getMessage(email, "email");
             validationMessageContainer.addError(message, FIELD_EMAIL);
             log.warn(message);

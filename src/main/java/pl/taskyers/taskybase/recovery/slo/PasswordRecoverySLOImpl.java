@@ -5,15 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.taskyers.taskybase.core.emails.EmailSLO;
 import pl.taskyers.taskybase.core.entity.UserEntity;
 import pl.taskyers.taskybase.core.message.MessageCode;
 import pl.taskyers.taskybase.core.message.MessageType;
 import pl.taskyers.taskybase.core.message.ResponseMessage;
-import pl.taskyers.taskybase.core.repository.UserRepository;
 import pl.taskyers.taskybase.core.slo.TokenSLO;
+import pl.taskyers.taskybase.core.slo.UserSLO;
 import pl.taskyers.taskybase.recovery.entity.PasswordRecoveryTokenEntity;
 
 import java.io.UnsupportedEncodingException;
@@ -27,17 +26,15 @@ import static pl.taskyers.taskybase.core.emails.EmailConstants.EMAIL_RECOVERY_PA
 @Slf4j
 public class PasswordRecoverySLOImpl implements PasswordRecoverySLO {
     
-    private final UserRepository userRepository;
+    private final UserSLO userSLO;
     
     private final EmailSLO emailSLO;
     
     private final TokenSLO passwordRecoveryTokenSLO;
     
-    private final PasswordEncoder passwordEncoder;
-    
     @Override
     public ResponseEntity sendEmailWithToken(String email) {
-        Optional<UserEntity> userEntity = userRepository.findByEmail(email);
+        Optional<UserEntity> userEntity = userSLO.getEntityByEmail(email);
         if ( userEntity.isPresent() ) {
             passwordRecoveryTokenSLO.createToken(userEntity.get());
             sendEmail(userEntity.get());
@@ -55,9 +52,7 @@ public class PasswordRecoverySLOImpl implements PasswordRecoverySLO {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage<String>(MessageCode.field_not_found.getMessage("Token", token), MessageType.WARN));
         }
-        UserEntity userEntity = passwordRecoveryTokenEntity.getUser();
-        userEntity.setPassword(passwordEncoder.encode(password));
-        userRepository.save(userEntity);
+        userSLO.updatePassword(passwordRecoveryTokenEntity.getUser(), password);
         passwordRecoveryTokenSLO.deleteToken(token);
         return ResponseEntity.ok(new ResponseMessage<String>(MessageCode.field_updated.getMessage("Password"), MessageType.SUCCESS));
     }
