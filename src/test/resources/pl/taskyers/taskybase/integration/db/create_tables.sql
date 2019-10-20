@@ -14,3 +14,9 @@ CREATE TABLE IF NOT EXISTS verification_tokens
     user_id int not null references users(user_id),
     token varchar(200) unique
 );
+CREATE TABLE IF NOT EXISTS password_recovery_tokens
+(
+    password_recovery_token_id int primary key auto_increment,
+    user_id int not null references users(user_id),
+    token varchar(200) unique
+);

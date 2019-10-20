@@ -10,4 +10,6 @@ public interface EmailConstants {
     
     String EMAIL_REGISTER_PATH = "/emails/register.ftl";
     
+    String EMAIL_RECOVERY_PASSWORD_PATH = "/emails/recoveryPassword.ftl";
+    
 }
