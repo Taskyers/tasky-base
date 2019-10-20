@@ -4,35 +4,46 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.taskyers.taskybase.core.entity.UserEntity;
+import pl.taskyers.taskybase.core.slo.TokenSLO;
 import pl.taskyers.taskybase.recovery.entity.PasswordRecoveryTokenEntity;
 import pl.taskyers.taskybase.recovery.repository.PasswordRecoveryTokenRepository;
 
 import java.util.Optional;
 import java.util.UUID;
 
-@Service
+@Service("passwordRecoveryTokenSLO")
 @AllArgsConstructor
 @Slf4j
-public class PasswordRecoveryTokenSLOImpl implements PasswordRecoveryTokenSLO {
+public class PasswordRecoveryTokenSLOImpl implements TokenSLO<PasswordRecoveryTokenEntity> {
     
     private final PasswordRecoveryTokenRepository passwordRecoveryTokenRepository;
     
     @Override
-    public String getPasswordRecoveryToken(UserEntity userEntity) {
+    public String generateToken() {
+        String token = UUID.randomUUID().toString();
+        while ( passwordRecoveryTokenRepository.findByToken(token).isPresent() ) {
+            log.warn("Generated token already exists in database: " + token + ". Generating another one");
+            token = UUID.randomUUID().toString();
+        }
+        return token;
+    }
+    
+    @Override
+    public String getToken(UserEntity userEntity) {
         return passwordRecoveryTokenRepository.findByUser(userEntity).isPresent() ?
                 passwordRecoveryTokenRepository.findByUser(userEntity).get().getToken() : null;
     }
     
     @Override
-    public void createPasswordRecoveryToken(UserEntity userEntity) {
+    public void createToken(UserEntity userEntity) {
         PasswordRecoveryTokenEntity passwordRecoveryTokenEntity;
         if ( passwordRecoveryTokenRepository.findByUser(userEntity).isPresent() ) {
             passwordRecoveryTokenEntity = passwordRecoveryTokenRepository.findByUser(userEntity).get();
-            passwordRecoveryTokenEntity.setToken(generateRecoveryToken());
+            passwordRecoveryTokenEntity.setToken(generateToken());
             log.debug("Updating token for user: " + userEntity.getUsername());
         } else {
             passwordRecoveryTokenEntity = new PasswordRecoveryTokenEntity();
-            passwordRecoveryTokenEntity.setToken(generateRecoveryToken());
+            passwordRecoveryTokenEntity.setToken(generateToken());
             passwordRecoveryTokenEntity.setUser(userEntity);
             log.debug("Generating new token for user: " + userEntity.getUsername());
         }
@@ -48,15 +59,6 @@ public class PasswordRecoveryTokenSLOImpl implements PasswordRecoveryTokenSLO {
     public void deleteToken(String token) {
         Optional<PasswordRecoveryTokenEntity> passwordRecoveryTokenEntity = passwordRecoveryTokenRepository.findByToken(token);
         passwordRecoveryTokenEntity.ifPresent(recoveryTokenEntity -> passwordRecoveryTokenRepository.deleteById(recoveryTokenEntity.getId()));
-    }
-    
-    private String generateRecoveryToken() {
-        String token = UUID.randomUUID().toString();
-        while ( passwordRecoveryTokenRepository.findByToken(token).isPresent() ) {
-            log.warn("Generated token already exists in database: " + token);
-            token = UUID.randomUUID().toString();
-        }
-        return token;
     }
     
 }

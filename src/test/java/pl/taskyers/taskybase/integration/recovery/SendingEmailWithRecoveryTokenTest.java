@@ -18,7 +18,7 @@ public class SendingEmailWithRecoveryTokenTest extends IntegrationBase {
         String email = "test";
         mockMvc.perform(post("/passwordRecovery/requestToken").contentType(MediaType.APPLICATION_FORM_URLENCODED).param("email", email))
                 .andDo(print())
-                .andExpect(jsonPath("$.message", is("Email was not found")))
+                .andExpect(jsonPath("$.message", is("Email was not found: test")))
                 .andExpect(jsonPath("$.type", is("WARN")))
                 .andExpect(jsonPath("$.object", is(nullValue())))
                 .andExpect(forwardedUrl(null))
@@ -31,7 +31,7 @@ public class SendingEmailWithRecoveryTokenTest extends IntegrationBase {
         String email = "u1@email.com";
         mockMvc.perform(post("/passwordRecovery/requestToken").contentType(MediaType.APPLICATION_FORM_URLENCODED).param("email", email))
                 .andDo(print())
-                .andExpect(jsonPath("$.message", is("Email with token was sent to provided address")))
+                .andExpect(jsonPath("$.message", is("Email with token was sent to provided address: " + email)))
                 .andExpect(jsonPath("$.type", is("SUCCESS")))
                 .andExpect(jsonPath("$.object", is(nullValue())))
                 .andExpect(forwardedUrl(null))
@@ -44,7 +44,7 @@ public class SendingEmailWithRecoveryTokenTest extends IntegrationBase {
         String email = "u1@email.com";
         mockMvc.perform(post("/passwordRecovery/requestToken").contentType(MediaType.APPLICATION_FORM_URLENCODED).param("email", email))
                 .andDo(print())
-                .andExpect(jsonPath("$.message", is("Email with token was sent to provided address")))
+                .andExpect(jsonPath("$.message", is("Email with token was sent to provided address: " + email)))
                 .andExpect(jsonPath("$.type", is("SUCCESS")))
                 .andExpect(jsonPath("$.object", is(nullValue())))
                 .andExpect(forwardedUrl(null))
@@ -53,7 +53,7 @@ public class SendingEmailWithRecoveryTokenTest extends IntegrationBase {
         
         mockMvc.perform(post("/passwordRecovery/requestToken").contentType(MediaType.APPLICATION_FORM_URLENCODED).param("email", email))
                 .andDo(print())
-                .andExpect(jsonPath("$.message", is("Email with token was sent to provided address")))
+                .andExpect(jsonPath("$.message", is("Email with token was sent to provided address: " + email)))
                 .andExpect(jsonPath("$.type", is("SUCCESS")))
                 .andExpect(jsonPath("$.object", is(nullValue())))
                 .andExpect(forwardedUrl(null))

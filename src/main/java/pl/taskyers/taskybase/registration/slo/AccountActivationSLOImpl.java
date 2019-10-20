@@ -10,34 +10,30 @@ import pl.taskyers.taskybase.core.message.MessageCode;
 import pl.taskyers.taskybase.core.message.MessageType;
 import pl.taskyers.taskybase.core.message.ResponseMessage;
 import pl.taskyers.taskybase.core.repository.UserRepository;
+import pl.taskyers.taskybase.core.slo.TokenSLO;
 import pl.taskyers.taskybase.registration.entity.VerificationTokenEntity;
-import pl.taskyers.taskybase.registration.repository.VerificationTokenRepository;
-
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 @Slf4j
 public class AccountActivationSLOImpl implements AccountActivationSLO {
     
-    private final VerificationTokenRepository verificationTokenRepository;
+    private final TokenSLO verificationTokenSLO;
     
     private final UserRepository userRepository;
     
     @Override
     public ResponseEntity activateAccount(String token) {
-        Optional<VerificationTokenEntity> verificationTokenEntity = verificationTokenRepository.findByToken(token);
-        if ( verificationTokenEntity.isPresent() ) {
-            ResponseMessage responseMessage = activateAccount(verificationTokenEntity.get());
-            return ResponseEntity.ok(responseMessage);
+        VerificationTokenEntity verificationTokenEntity = (VerificationTokenEntity) verificationTokenSLO.getTokenEntity(token);
+        if ( verificationTokenEntity != null ) {
+            return ResponseEntity.ok(activateAccount(verificationTokenEntity));
         }
-        ResponseMessage responseMessage = logWarn(token);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseMessage);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(logWarn(token));
     }
     
     private ResponseMessage activateAccount(VerificationTokenEntity verificationTokenEntity) {
         UserEntity userEntity = verificationTokenEntity.getUser();
-        verificationTokenRepository.deleteById(verificationTokenEntity.getId());
+        verificationTokenSLO.deleteToken(verificationTokenEntity.getToken());
         userEntity.setEnabled(true);
         userRepository.save(userEntity);
         return new ResponseMessage<>(MessageCode.account_activated.getMessage(), MessageType.SUCCESS);

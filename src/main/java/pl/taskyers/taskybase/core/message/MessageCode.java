@@ -11,9 +11,11 @@ public enum MessageCode {
     account_activated,
     email_subject_registration,
     email_subject_password_recovery,
+    email_with_token_sent,
     field_empty,
     field_invalid_format,
     field_not_found,
+    field_updated,
     password_invalid_format,
     registration_successful,
     user_field_already_exists;
