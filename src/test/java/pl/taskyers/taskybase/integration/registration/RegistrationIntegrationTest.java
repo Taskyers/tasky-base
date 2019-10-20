@@ -16,7 +16,7 @@ public class RegistrationIntegrationTest extends IntegrationBase {
     @Test
     public void givenInvalidUserWhenRegisterShouldReturnStatus400() throws Exception {
         AccountDTO accountDTO = new AccountDTO("", "", "", "", "");
-        String givenUser = createJSONAccount(accountDTO);
+        String givenUser = objectMapper.writeValueAsString(accountDTO);
         mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(givenUser))
                .andDo(print())
                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -33,7 +33,7 @@ public class RegistrationIntegrationTest extends IntegrationBase {
     @Test
     public void givenUserWithDuplicatedUsernameWhenRegisterShouldReturnStatus400() throws Exception {
         AccountDTO accountDTO = new AccountDTO("u1", "email@email.com", "test", "Test", "Test");
-        String givenUser = createJSONAccount(accountDTO);
+        String givenUser = objectMapper.writeValueAsString(accountDTO);
         mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(givenUser))
                .andDo(print())
                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -48,7 +48,7 @@ public class RegistrationIntegrationTest extends IntegrationBase {
     @Test
     public void givenUserWithDuplicatedEmailAndInvalidPasswordWhenRegisterShouldReturnStatus400() throws Exception {
         AccountDTO accountDTO = new AccountDTO("test", "u1@email.com", "test", "Test", "Test");
-        String givenUser = createJSONAccount(accountDTO);
+        String givenUser = objectMapper.writeValueAsString(accountDTO);
         mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(givenUser))
                .andDo(print())
                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -62,7 +62,7 @@ public class RegistrationIntegrationTest extends IntegrationBase {
     @Test
     public void givenValidUserWhenRegisterShouldReturnStatus200() throws Exception {
         AccountDTO accountDTO = new AccountDTO("test", "test@email.com", "zaq1@WSX", "Test", "Test");
-        String givenUser = createJSONAccount(accountDTO);
+        String givenUser = objectMapper.writeValueAsString(accountDTO);
         mockMvc.perform(post("/register").contentType(MediaType.APPLICATION_JSON).content(givenUser))
                .andDo(print())
                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
