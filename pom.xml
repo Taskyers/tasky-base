@@ -223,6 +223,7 @@
 						<include>pl.taskyers.taskybase.registration.CucumberRunnerRegistration</include>
 						<include>**/*Test.java</include>
 					</includes>
+					<runOrder>reversealphabetical</runOrder>
 				</configuration>
 			</plugin>
 			<plugin>

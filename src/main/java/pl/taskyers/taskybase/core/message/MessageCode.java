@@ -10,6 +10,7 @@ import java.util.Locale;
 public enum MessageCode {
     account_activated,
     email_subject_registration,
+    email_subject_password_recovery,
     field_empty,
     field_invalid_format,
     field_not_found,
