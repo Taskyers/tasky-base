@@ -19,10 +19,10 @@ public class AuthenticationTest extends IntegrationBase {
         String user = objectMapper.writeValueAsString(userDTO);
         
         mockMvc.perform(post("/login").contentType(MediaType.APPLICATION_JSON).content(user))
-               .andDo(print())
-               .andExpect(forwardedUrl(null))
-               .andExpect(redirectedUrl(null))
-               .andExpect(status().isUnauthorized());
+                .andDo(print())
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isUnauthorized());
     }
     
     @Test
@@ -31,10 +31,10 @@ public class AuthenticationTest extends IntegrationBase {
         String user = objectMapper.writeValueAsString(userDTO);
         
         mockMvc.perform(post("/login").contentType(MediaType.APPLICATION_JSON).content(user))
-               .andDo(print())
-               .andExpect(forwardedUrl(null))
-               .andExpect(redirectedUrl(null))
-               .andExpect(status().isUnauthorized());
+                .andDo(print())
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isUnauthorized());
     }
     
     @Test
@@ -43,10 +43,10 @@ public class AuthenticationTest extends IntegrationBase {
         String user = objectMapper.writeValueAsString(userDTO);
         
         mockMvc.perform(post("/login").contentType(MediaType.APPLICATION_JSON).content(user))
-               .andDo(print())
-               .andExpect(forwardedUrl(null))
-               .andExpect(redirectedUrl(null))
-               .andExpect(status().isUnauthorized());
+                .andDo(print())
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isUnauthorized());
     }
     
     @Test
@@ -55,10 +55,10 @@ public class AuthenticationTest extends IntegrationBase {
         String user = objectMapper.writeValueAsString(userDTO);
         
         mockMvc.perform(post("/login").contentType(MediaType.APPLICATION_JSON).content(user))
-               .andDo(print())
-               .andExpect(forwardedUrl(null))
-               .andExpect(redirectedUrl(null))
-               .andExpect(status().isOk());
+                .andDo(print())
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isOk());
     }
     
     @Test
@@ -67,20 +67,20 @@ public class AuthenticationTest extends IntegrationBase {
         String user = objectMapper.writeValueAsString(userDTO);
         
         mockMvc.perform(post("/login").contentType(MediaType.APPLICATION_JSON).content(user))
-               .andDo(print())
-               .andExpect(forwardedUrl(null))
-               .andExpect(redirectedUrl(null))
-               .andExpect(status().isUnauthorized());
+                .andDo(print())
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isUnauthorized());
     }
     
     @Test
     public void givenLogoutUrlShouldReturnStatus200() throws Exception {
         
         mockMvc.perform(get("/logout"))
-               .andDo(print())
-               .andExpect(forwardedUrl(null))
-               .andExpect(redirectedUrl(null))
-               .andExpect(status().isOk());
+                .andDo(print())
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isOk());
     }
     
 }

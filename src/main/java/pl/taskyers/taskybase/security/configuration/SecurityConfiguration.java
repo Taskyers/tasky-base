@@ -62,7 +62,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilterAt(getAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .formLogin()
                 .and()
-                .logout()
+                .logout().deleteCookies("JSESSIONID").invalidateHttpSession(true)
                 .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
                 .and()
                 .cors()
