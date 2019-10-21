@@ -2,7 +2,7 @@ package pl.taskyers.taskybase.integration.registration;
 
 import org.junit.Test;
 import org.springframework.http.MediaType;
-import pl.taskyers.taskybase.core.message.MessageType;
+import pl.taskyers.taskybase.core.messages.MessageType;
 import pl.taskyers.taskybase.integration.IntegrationBase;
 
 import static org.hamcrest.CoreMatchers.nullValue;

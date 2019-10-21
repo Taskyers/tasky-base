@@ -1,8 +1,8 @@
-package pl.taskyers.taskybase.core.repository;
+package pl.taskyers.taskybase.core.users.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import pl.taskyers.taskybase.core.entity.UserEntity;
+import pl.taskyers.taskybase.core.users.entity.UserEntity;
 
 import java.util.Optional;
 

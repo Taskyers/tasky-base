@@ -1,7 +1,7 @@
-package pl.taskyers.taskybase.core.converters;
+package pl.taskyers.taskybase.core.users.converters;
 
-import pl.taskyers.taskybase.core.dto.AccountDTO;
-import pl.taskyers.taskybase.core.entity.UserEntity;
+import pl.taskyers.taskybase.core.users.dto.AccountDTO;
+import pl.taskyers.taskybase.core.users.entity.UserEntity;
 
 public class AccountConverter {
     

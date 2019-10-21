@@ -1,7 +1,7 @@
-package pl.taskyers.taskybase.core.message.container;
+package pl.taskyers.taskybase.core.messages.container;
 
-import pl.taskyers.taskybase.core.message.MessageType;
-import pl.taskyers.taskybase.core.message.ResponseMessage;
+import pl.taskyers.taskybase.core.messages.MessageType;
+import pl.taskyers.taskybase.core.messages.ResponseMessage;
 
 public class ResponseMessageContainer extends MessageContainer<String, Object> {
     

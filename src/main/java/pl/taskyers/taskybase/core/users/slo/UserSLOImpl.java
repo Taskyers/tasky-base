@@ -1,10 +1,10 @@
-package pl.taskyers.taskybase.core.slo;
+package pl.taskyers.taskybase.core.users.slo;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.taskyers.taskybase.core.entity.UserEntity;
-import pl.taskyers.taskybase.core.repository.UserRepository;
+import pl.taskyers.taskybase.core.users.entity.UserEntity;
+import pl.taskyers.taskybase.core.users.repository.UserRepository;
 
 import java.util.Optional;
 

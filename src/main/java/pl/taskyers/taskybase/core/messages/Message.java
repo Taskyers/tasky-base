@@ -1,4 +1,4 @@
-package pl.taskyers.taskybase.core.message;
+package pl.taskyers.taskybase.core.messages;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

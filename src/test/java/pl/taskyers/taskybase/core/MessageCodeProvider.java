@@ -1,7 +1,7 @@
 package pl.taskyers.taskybase.core;
 
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import pl.taskyers.taskybase.core.message.MessageCode;
+import pl.taskyers.taskybase.core.messages.MessageCode;
 
 public class MessageCodeProvider {
     

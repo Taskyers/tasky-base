@@ -1,4 +1,4 @@
-package pl.taskyers.taskybase.core.message;
+package pl.taskyers.taskybase.core.messages;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;

@@ -1,6 +1,6 @@
 package pl.taskyers.taskybase.core.emails;
 
-import pl.taskyers.taskybase.core.dto.AccountDTO;
+import pl.taskyers.taskybase.core.users.dto.AccountDTO;
 
 public interface EmailSLO {
     

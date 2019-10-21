@@ -4,8 +4,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import pl.taskyers.taskybase.core.entity.UserEntity;
-import pl.taskyers.taskybase.core.repository.UserRepository;
+import pl.taskyers.taskybase.core.users.entity.UserEntity;
+import pl.taskyers.taskybase.core.users.repository.UserRepository;
 import pl.taskyers.taskybase.integration.IntegrationBase;
 
 import static org.hamcrest.CoreMatchers.nullValue;

@@ -3,7 +3,7 @@ package pl.taskyers.taskybase.registration.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.taskyers.taskybase.core.entity.UserEntity;
+import pl.taskyers.taskybase.core.users.entity.UserEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;

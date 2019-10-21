@@ -2,7 +2,7 @@ package pl.taskyers.taskybase.integration.registration;
 
 import org.junit.Test;
 import org.springframework.http.MediaType;
-import pl.taskyers.taskybase.core.dto.AccountDTO;
+import pl.taskyers.taskybase.core.users.dto.AccountDTO;
 import pl.taskyers.taskybase.integration.IntegrationBase;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
