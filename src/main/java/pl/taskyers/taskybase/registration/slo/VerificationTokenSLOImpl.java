@@ -3,7 +3,7 @@ package pl.taskyers.taskybase.registration.slo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pl.taskyers.taskybase.core.entity.UserEntity;
+import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.core.slo.TokenSLO;
 import pl.taskyers.taskybase.registration.entity.VerificationTokenEntity;
 import pl.taskyers.taskybase.registration.repository.VerificationTokenRepository;

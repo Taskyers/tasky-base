@@ -1,4 +1,4 @@
-package pl.taskyers.taskybase.core.dto;
+package pl.taskyers.taskybase.core.users.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

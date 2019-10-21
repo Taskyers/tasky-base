@@ -5,11 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import pl.taskyers.taskybase.core.message.MessageCode;
-import pl.taskyers.taskybase.core.message.MessageType;
-import pl.taskyers.taskybase.core.message.ResponseMessage;
+import pl.taskyers.taskybase.core.messages.MessageCode;
+import pl.taskyers.taskybase.core.messages.MessageType;
+import pl.taskyers.taskybase.core.messages.ResponseMessage;
 import pl.taskyers.taskybase.core.slo.TokenSLO;
-import pl.taskyers.taskybase.core.slo.UserSLO;
+import pl.taskyers.taskybase.core.users.slo.UserSLO;
 import pl.taskyers.taskybase.registration.entity.VerificationTokenEntity;
 
 @Service

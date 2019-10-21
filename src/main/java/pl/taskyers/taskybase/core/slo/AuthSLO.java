@@ -1,6 +1,6 @@
 package pl.taskyers.taskybase.core.slo;
 
-import pl.taskyers.taskybase.core.entity.UserEntity;
+import pl.taskyers.taskybase.core.users.entity.UserEntity;
 
 public interface AuthSLO {
     

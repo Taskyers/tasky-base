@@ -1,4 +1,4 @@
-package pl.taskyers.taskybase.core.entity;
+package pl.taskyers.taskybase.core.users.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

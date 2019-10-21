@@ -3,7 +3,7 @@ package pl.taskyers.taskybase.registration.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.taskyers.taskybase.core.dto.AccountDTO;
+import pl.taskyers.taskybase.core.users.dto.AccountDTO;
 import pl.taskyers.taskybase.registration.slo.RegistrationSLO;
 
 import java.io.UnsupportedEncodingException;

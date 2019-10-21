@@ -1,7 +1,7 @@
 package pl.taskyers.taskybase.registration.slo;
 
 import org.springframework.http.ResponseEntity;
-import pl.taskyers.taskybase.core.dto.AccountDTO;
+import pl.taskyers.taskybase.core.users.dto.AccountDTO;
 
 import java.io.UnsupportedEncodingException;
 

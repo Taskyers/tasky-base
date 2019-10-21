@@ -8,7 +8,7 @@ import it.ozimov.springboot.mail.service.exception.CannotSendEmailException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pl.taskyers.taskybase.core.dto.AccountDTO;
+import pl.taskyers.taskybase.core.users.dto.AccountDTO;
 
 import javax.mail.internet.InternetAddress;
 import java.io.UnsupportedEncodingException;

@@ -1,6 +1,6 @@
-package pl.taskyers.taskybase.core.slo;
+package pl.taskyers.taskybase.core.users.slo;
 
-import pl.taskyers.taskybase.core.entity.UserEntity;
+import pl.taskyers.taskybase.core.users.entity.UserEntity;
 
 import java.util.Optional;
 

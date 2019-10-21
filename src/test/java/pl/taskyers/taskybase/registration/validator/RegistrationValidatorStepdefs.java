@@ -5,11 +5,11 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import pl.taskyers.taskybase.core.MessageCodeProvider;
-import pl.taskyers.taskybase.core.dto.AccountDTO;
-import pl.taskyers.taskybase.core.message.Message;
-import pl.taskyers.taskybase.core.message.ValidationMessage;
-import pl.taskyers.taskybase.core.message.container.ValidationMessageContainer;
-import pl.taskyers.taskybase.core.slo.UserSLO;
+import pl.taskyers.taskybase.core.users.dto.AccountDTO;
+import pl.taskyers.taskybase.core.messages.Message;
+import pl.taskyers.taskybase.core.messages.ValidationMessage;
+import pl.taskyers.taskybase.core.messages.container.ValidationMessageContainer;
+import pl.taskyers.taskybase.core.users.slo.UserSLO;
 
 import java.util.ArrayList;
 import java.util.List;

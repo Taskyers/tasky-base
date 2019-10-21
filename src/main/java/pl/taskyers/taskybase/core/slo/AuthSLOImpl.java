@@ -3,7 +3,8 @@ package pl.taskyers.taskybase.core.slo;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import pl.taskyers.taskybase.core.entity.UserEntity;
+import pl.taskyers.taskybase.core.users.entity.UserEntity;
+import pl.taskyers.taskybase.core.users.slo.UserSLO;
 
 @Service
 @AllArgsConstructor

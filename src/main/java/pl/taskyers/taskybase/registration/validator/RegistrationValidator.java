@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
-import pl.taskyers.taskybase.core.dto.AccountDTO;
-import pl.taskyers.taskybase.core.message.MessageCode;
-import pl.taskyers.taskybase.core.message.container.ValidationMessageContainer;
-import pl.taskyers.taskybase.core.slo.UserSLO;
+import pl.taskyers.taskybase.core.users.dto.AccountDTO;
+import pl.taskyers.taskybase.core.messages.MessageCode;
+import pl.taskyers.taskybase.core.messages.container.ValidationMessageContainer;
+import pl.taskyers.taskybase.core.users.slo.UserSLO;
 import pl.taskyers.taskybase.core.utils.ValidationUtils;
 import pl.taskyers.taskybase.core.validator.Validator;
 
