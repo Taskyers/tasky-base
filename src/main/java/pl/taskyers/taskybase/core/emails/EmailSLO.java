@@ -1,17 +1,11 @@
 package pl.taskyers.taskybase.core.emails;
 
-import it.ozimov.springboot.mail.service.exception.CannotSendEmailException;
-
-import java.io.UnsupportedEncodingException;
-import java.util.Map;
+import pl.taskyers.taskybase.core.dto.AccountDTO;
 
 public interface EmailSLO {
     
-    Map<String, Object> createModel(String[] keys, Object[] values);
+    void sendEmailWithTemplateToSingleAddressee(String address, String personal, String subject, String templatePath, String[] keys, Object[] values);
     
-    void sendEmailWithPlainTextToSingleAddressee(String address, String personal, String subject, String body) throws UnsupportedEncodingException;
-    
-    void sendEmailWithTemplateToSingleAddressee(String address, String personal, String subject, String templatePath, Map<String, Object> model)
-            throws UnsupportedEncodingException, CannotSendEmailException;
+    void sendEmailWithTemplateToSingleAddressee(AccountDTO accountDTO, String subject, String templatePath, String[] keys, Object[] values);
     
 }

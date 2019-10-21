@@ -29,7 +29,7 @@ public class AccountActivationIntegrationTest extends IntegrationBase {
     }
     
     @Test
-    public void givenValidTokenWhenActivatingAccountShouldReturnStatus200() throws Exception {
+    public void givenSameTokenTwoTimesWhenActivatingAccountShouldFirstReturnStatus200ThenShouldReturnStatus404() throws Exception {
         String token = "tested-token";
         mockMvc.perform(get("/activateAccount/" + token))
                 .andDo(print())
@@ -40,6 +40,16 @@ public class AccountActivationIntegrationTest extends IntegrationBase {
                 .andExpect(forwardedUrl(null))
                 .andExpect(redirectedUrl(null))
                 .andExpect(status().isOk());
+        
+        mockMvc.perform(get("/activateAccount/" + token))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("Token was not found: " + token)))
+                .andExpect(jsonPath("$.type", is(MessageType.WARN.toString())))
+                .andExpect(jsonPath("$.object", is(nullValue())))
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isNotFound());
     }
     
 }
