@@ -1,12 +1,12 @@
 package pl.taskyers.taskybase.registration.slo;
 
-import it.ozimov.springboot.mail.service.exception.CannotSendEmailException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.taskyers.taskybase.core.converters.AccountConverter;
 import pl.taskyers.taskybase.core.dto.AccountDTO;
+import pl.taskyers.taskybase.core.emails.EmailConstants;
 import pl.taskyers.taskybase.core.entity.UserEntity;
 import pl.taskyers.taskybase.core.emails.EmailSLO;
 import pl.taskyers.taskybase.core.message.MessageCode;
@@ -17,11 +17,6 @@ import pl.taskyers.taskybase.core.slo.TokenSLO;
 import pl.taskyers.taskybase.core.slo.UserSLO;
 import pl.taskyers.taskybase.core.utils.UriUtils;
 import pl.taskyers.taskybase.registration.validator.RegistrationValidator;
-
-import java.io.UnsupportedEncodingException;
-import java.util.Map;
-
-import static pl.taskyers.taskybase.core.emails.EmailConstants.EMAIL_REGISTER_PATH;
 
 @Service
 @AllArgsConstructor
@@ -45,10 +40,14 @@ public class RegistrationSLOImpl implements RegistrationSLO {
         }
         
         ResponseMessage<UserEntity> resultMessage = saveUser(accountDTO);
-        UserEntity object = resultMessage.getObject();
-        verificationTokenSLO.createToken(object);
-        sendEmail(accountDTO, verificationTokenSLO.getToken(object));
-        return ResponseEntity.created(UriUtils.createURIFromId(object.getId())).body(resultMessage);
+        UserEntity userEntity = resultMessage.getObject();
+        verificationTokenSLO.createToken(userEntity);
+        emailSLO.sendEmailWithTemplateToSingleAddressee(accountDTO, MessageCode.email_subject_registration.getMessage(),
+                EmailConstants.REGISTER_PATH, new String[]{ "name", "surname", "token" },
+                new Object[]{ accountDTO.getName(), accountDTO.getSurname(),
+                        EmailConstants.REGISTER_URL_TOKEN.replace("{tokenPlaceholder}", verificationTokenSLO.getToken(userEntity)) });
+        
+        return ResponseEntity.created(UriUtils.createURIFromId(userEntity.getId())).body(resultMessage);
     }
     
     @Override
@@ -65,21 +64,6 @@ public class RegistrationSLOImpl implements RegistrationSLO {
         UserEntity savedUser = AccountConverter.convertFromDTO(accountDTO);
         userSLO.updatePassword(savedUser, savedUser.getPassword());
         return new ResponseMessage<UserEntity>(MessageCode.registration_successful.getMessage(), MessageType.SUCCESS, savedUser);
-    }
-    
-    private void sendEmail(AccountDTO accountDTO, String token) {
-        final String address = accountDTO.getEmail();
-        final String personal = accountDTO.getName() + " " + accountDTO.getSurname();
-        try {
-            Map<String, Object> model = emailSLO
-                    .createModel(new String[]{ "name", "surname", "token" },
-                            new Object[]{ accountDTO.getName(), accountDTO.getSurname(), "/activateAccount/" + token });
-            emailSLO.sendEmailWithTemplateToSingleAddressee(address, personal, MessageCode.email_subject_registration.getMessage(),
-                    EMAIL_REGISTER_PATH, model);
-            log.debug("Email was sent to: " + address);
-        } catch ( UnsupportedEncodingException | CannotSendEmailException e ) {
-            log.error("Email could not be send to: " + address);
-        }
     }
     
 }

@@ -2,14 +2,18 @@ package pl.taskyers.taskybase.core.emails;
 
 public interface EmailConstants {
     
-    String EMAIL_SENDER_ADDRESS = "noreply@taskyers.com";
+    String SENDER_ADDRESS = "noreply@taskyers.com";
     
-    String EMAIL_SENDER_PERSONAL = "Taskyers";
+    String SENDER_PERSONAL = "Taskyers";
     
-    String EMAIL_ENCODING = "UTF-8";
+    String ENCODING = "UTF-8";
     
-    String EMAIL_REGISTER_PATH = "/emails/register.ftl";
+    String REGISTER_PATH = "/emails/register.ftl";
     
-    String EMAIL_RECOVERY_PASSWORD_PATH = "/emails/recoveryPassword.ftl";
+    String REGISTER_URL_TOKEN = "/activateAccount/{tokenPlaceholder}";
+    
+    String PASSWORD_RECOVERY_PATH = "/emails/recoveryPassword.ftl";
+    
+    String PASSWORD_RECOVERY_URL_TOKEN = "/passwordRecovery/{tokenPlaceholder}";
     
 }
