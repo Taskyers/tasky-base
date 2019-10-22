@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface UserSLO {
     
-    UserEntity saveUser(UserEntity userEntity);
+    UserEntity registerUser(UserEntity userEntity);
     
     void updatePassword(UserEntity userEntity, String password);
     

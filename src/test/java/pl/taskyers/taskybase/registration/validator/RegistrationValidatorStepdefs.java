@@ -10,6 +10,7 @@ import pl.taskyers.taskybase.core.messages.Message;
 import pl.taskyers.taskybase.core.messages.ValidationMessage;
 import pl.taskyers.taskybase.core.messages.container.ValidationMessageContainer;
 import pl.taskyers.taskybase.core.users.slo.UserSLO;
+import pl.taskyers.taskybase.core.validator.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class RegistrationValidatorStepdefs {
     
     private ValidationMessageContainer result = new ValidationMessageContainer();
     
-    private RegistrationValidator registrationValidator;
+    private Validator<AccountDTO> registrationValidator;
     
     private UserSLO userSLO;
     

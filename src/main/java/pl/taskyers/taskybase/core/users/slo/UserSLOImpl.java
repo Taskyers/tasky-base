@@ -17,7 +17,7 @@ public class UserSLOImpl implements UserSLO {
     private final PasswordEncoder passwordEncoder;
     
     @Override
-    public UserEntity saveUser(UserEntity userEntity) {
+    public UserEntity registerUser(UserEntity userEntity) {
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         return userRepository.save(userEntity);
     }

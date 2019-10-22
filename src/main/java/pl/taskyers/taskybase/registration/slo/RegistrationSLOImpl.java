@@ -18,7 +18,7 @@ import pl.taskyers.taskybase.core.messages.container.ValidationMessageContainer;
 import pl.taskyers.taskybase.core.slo.TokenSLO;
 import pl.taskyers.taskybase.core.users.slo.UserSLO;
 import pl.taskyers.taskybase.core.utils.UriUtils;
-import pl.taskyers.taskybase.registration.validator.RegistrationValidator;
+import pl.taskyers.taskybase.core.validator.Validator;
 
 import javax.transaction.Transactional;
 
@@ -27,7 +27,7 @@ import javax.transaction.Transactional;
 @Slf4j
 public class RegistrationSLOImpl implements RegistrationSLO {
     
-    private final RegistrationValidator registrationValidator;
+    private final Validator<AccountDTO> registrationValidator;
     
     private final UserSLO userSLO;
     
@@ -67,7 +67,7 @@ public class RegistrationSLOImpl implements RegistrationSLO {
     }
     
     private UserEntity saveUser(UserEntity userEntity) {
-        UserEntity savedUser = userSLO.saveUser(userEntity);
+        UserEntity savedUser = userSLO.registerUser(userEntity);
         verificationTokenSLO.createToken(savedUser);
         return savedUser;
     }

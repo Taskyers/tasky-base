@@ -1,6 +1,6 @@
 package pl.taskyers.taskybase.security.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -19,23 +19,18 @@ import pl.taskyers.taskybase.security.handler.RESTAuthenticationFailureHandler;
 import pl.taskyers.taskybase.security.handler.RESTAuthenticationSuccessHandler;
 import pl.taskyers.taskybase.security.service.CustomUserDetailsService;
 
-import javax.sql.DataSource;
-
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     
-    @Autowired
-    private RESTAuthenticationEntryPoint restAuthenticationEntryPoint;
+    private final RESTAuthenticationEntryPoint restAuthenticationEntryPoint;
     
-    @Autowired
-    private RESTAuthenticationSuccessHandler restAuthenticationSuccessHandler;
+    private final RESTAuthenticationSuccessHandler restAuthenticationSuccessHandler;
     
-    @Autowired
-    private RESTAuthenticationFailureHandler restAuthenticationFailureHandler;
+    private final RESTAuthenticationFailureHandler restAuthenticationFailureHandler;
     
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
     
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -44,13 +39,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        
         auth.userDetailsService(customUserDetailsService);
     }
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        
         http
                 .csrf().disable()
                 .exceptionHandling()
@@ -70,7 +63,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         
     }
     
-    protected CustomAuthenticationFilter getAuthenticationFilter() {
+    private CustomAuthenticationFilter getAuthenticationFilter() {
         CustomAuthenticationFilter authFilter = new CustomAuthenticationFilter();
         try {
             authFilter.setAuthenticationManager(this.authenticationManagerBean());

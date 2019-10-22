@@ -11,7 +11,7 @@ import pl.taskyers.taskybase.core.users.slo.UserSLO;
 import pl.taskyers.taskybase.core.utils.ValidationUtils;
 import pl.taskyers.taskybase.core.validator.Validator;
 
-@Component
+@Component("registrationValidator")
 @AllArgsConstructor
 @Slf4j
 public class RegistrationValidator implements Validator<AccountDTO> {
