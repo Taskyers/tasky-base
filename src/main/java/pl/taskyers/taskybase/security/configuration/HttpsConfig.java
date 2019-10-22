@@ -1,4 +1,4 @@
-package pl.taskyers.taskybase.https.configuration;
+package pl.taskyers.taskybase.security.configuration;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;

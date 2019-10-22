@@ -25,19 +25,20 @@ public class EmailSLOImpl implements EmailSLO {
     private final EmailService emailService;
     
     @Override
-    public void sendEmailWithTemplateToSingleAddressee(AccountDTO accountDTO, String subject, String templatePath, String[] keys, Object[] values) {
+    public boolean sendEmailWithTemplateToSingleAddressee(AccountDTO accountDTO, String subject, String templatePath, String[] keys,
+            Object[] values) {
         String address = accountDTO.getEmail();
         String personal = accountDTO.getName() + " " + accountDTO.getSurname();
-        sendEmail(address, personal, subject, templatePath, createModel(keys, values));
+        return sendEmail(address, personal, subject, templatePath, createModel(keys, values));
     }
     
     @Override
-    public void sendEmailWithTemplateToSingleAddressee(String address, String personal, String subject, String templatePath, String[] keys,
+    public boolean sendEmailWithTemplateToSingleAddressee(String address, String personal, String subject, String templatePath, String[] keys,
             Object[] values) {
-        sendEmail(address, personal, subject, templatePath, createModel(keys, values));
+        return sendEmail(address, personal, subject, templatePath, createModel(keys, values));
     }
     
-    private void sendEmail(String address, String personal, String subject, String templatePath, Map<String, Object> model) {
+    private boolean sendEmail(String address, String personal, String subject, String templatePath, Map<String, Object> model) {
         try {
             final Email email = DefaultEmail.builder()
                     .from(new InternetAddress(SENDER_ADDRESS, SENDER_PERSONAL))
@@ -46,10 +47,12 @@ public class EmailSLOImpl implements EmailSLO {
                     .body("")
                     .encoding(ENCODING).build();
             emailService.send(email, templatePath, model);
+            return true;
         } catch ( UnsupportedEncodingException | CannotSendEmailException e ) {
             e.printStackTrace();
             log.error("Could not send an email. Address: " + address + ", personals: " + personal + ", subject: " + subject + ", template: " +
                       templatePath);
+            return false;
         }
     }
     

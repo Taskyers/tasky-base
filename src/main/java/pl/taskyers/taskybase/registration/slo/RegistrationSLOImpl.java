@@ -1,7 +1,9 @@
 package pl.taskyers.taskybase.registration.slo;
 
+import com.sun.mail.util.MailConnectException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.taskyers.taskybase.core.users.converters.AccountConverter;
@@ -18,6 +20,8 @@ import pl.taskyers.taskybase.core.users.slo.UserSLO;
 import pl.taskyers.taskybase.core.utils.UriUtils;
 import pl.taskyers.taskybase.registration.validator.RegistrationValidator;
 
+import javax.transaction.Transactional;
+
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -32,6 +36,7 @@ public class RegistrationSLOImpl implements RegistrationSLO {
     private final TokenSLO verificationTokenSLO;
     
     @Override
+    @Transactional(rollbackOn = MailConnectException.class)
     public ResponseEntity register(AccountDTO accountDTO) {
         ValidationMessageContainer validationMessageContainer = new ValidationMessageContainer();
         registrationValidator.validate(accountDTO, validationMessageContainer);
@@ -39,15 +44,16 @@ public class RegistrationSLOImpl implements RegistrationSLO {
             return ResponseEntity.badRequest().body(validationMessageContainer.getErrors());
         }
         
-        ResponseMessage<UserEntity> resultMessage = saveUser(accountDTO);
-        UserEntity userEntity = resultMessage.getObject();
-        verificationTokenSLO.createToken(userEntity);
-        emailSLO.sendEmailWithTemplateToSingleAddressee(accountDTO, MessageCode.email_subject_registration.getMessage(),
+        UserEntity savedUser = saveUser(AccountConverter.convertFromDTO(accountDTO));
+        boolean emailWasSent = emailSLO.sendEmailWithTemplateToSingleAddressee(accountDTO, MessageCode.email_subject_registration.getMessage(),
                 EmailConstants.REGISTER_PATH, new String[]{ "name", "surname", "token" },
                 new Object[]{ accountDTO.getName(), accountDTO.getSurname(),
-                        EmailConstants.REGISTER_URL_TOKEN.replace("{tokenPlaceholder}", verificationTokenSLO.getToken(userEntity)) });
+                        EmailConstants.REGISTER_URL_TOKEN.replace("{tokenPlaceholder}", verificationTokenSLO.getToken(savedUser)) });
         
-        return ResponseEntity.created(UriUtils.createURIFromId(userEntity.getId())).body(resultMessage);
+        return emailWasSent ? ResponseEntity.created(UriUtils.createURIFromId(savedUser.getId()))
+                .body(new ResponseMessage<>(MessageCode.registration_successful.getMessage(), MessageType.SUCCESS, savedUser)) :
+                ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(new ResponseMessage<>(MessageCode.server_problem_occured.getMessage(), MessageType.ERROR));
     }
     
     @Override
@@ -60,10 +66,10 @@ public class RegistrationSLOImpl implements RegistrationSLO {
         return userSLO.getEntityByEmail(email).isPresent();
     }
     
-    private ResponseMessage<UserEntity> saveUser(AccountDTO accountDTO) {
-        UserEntity savedUser = AccountConverter.convertFromDTO(accountDTO);
-        userSLO.updatePassword(savedUser, savedUser.getPassword());
-        return new ResponseMessage<UserEntity>(MessageCode.registration_successful.getMessage(), MessageType.SUCCESS, savedUser);
+    private UserEntity saveUser(UserEntity userEntity) {
+        UserEntity savedUser = userSLO.saveUser(userEntity);
+        verificationTokenSLO.createToken(savedUser);
+        return savedUser;
     }
     
 }

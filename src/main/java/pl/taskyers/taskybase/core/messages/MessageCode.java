@@ -18,6 +18,7 @@ public enum MessageCode {
     field_updated,
     password_invalid_format,
     registration_successful,
+    server_problem_occured,
     user_field_already_exists;
     
     private static MessageSource messageSource;

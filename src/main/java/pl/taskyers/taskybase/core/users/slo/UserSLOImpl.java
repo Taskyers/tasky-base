@@ -17,6 +17,12 @@ public class UserSLOImpl implements UserSLO {
     private final PasswordEncoder passwordEncoder;
     
     @Override
+    public UserEntity saveUser(UserEntity userEntity) {
+        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+        return userRepository.save(userEntity);
+    }
+    
+    @Override
     public void updatePassword(UserEntity userEntity, String password) {
         userEntity.setPassword(passwordEncoder.encode(password));
         userRepository.save(userEntity);

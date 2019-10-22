@@ -16,8 +16,6 @@ import pl.taskyers.taskybase.core.slo.TokenSLO;
 import pl.taskyers.taskybase.core.users.slo.UserSLO;
 import pl.taskyers.taskybase.recovery.entity.PasswordRecoveryTokenEntity;
 
-import java.util.Optional;
-
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -31,17 +29,21 @@ public class PasswordRecoverySLOImpl implements PasswordRecoverySLO {
     
     @Override
     public ResponseEntity sendEmailWithToken(String email) {
-        Optional<UserEntity> userEntity = userSLO.getEntityByEmail(email);
-        if ( userEntity.isPresent() ) {
-            passwordRecoveryTokenSLO.createToken(userEntity.get());
-            emailSLO.sendEmailWithTemplateToSingleAddressee(AccountConverter.convertToDTO(userEntity.get()),
+        if ( userSLO.getEntityByEmail(email).isPresent() ) {
+            UserEntity userEntity = userSLO.getEntityByEmail(email).get();
+            passwordRecoveryTokenSLO.createToken(userEntity);
+            boolean emailWasSent = emailSLO.sendEmailWithTemplateToSingleAddressee(AccountConverter.convertToDTO(userEntity),
                     MessageCode.email_subject_password_recovery.getMessage(),
                     EmailConstants.PASSWORD_RECOVERY_PATH,
                     new String[]{ "token" },
                     new Object[]{
-                            EmailConstants.PASSWORD_RECOVERY_URL_TOKEN.replace("{tokenPlaceholder}", passwordRecoveryTokenSLO.getToken(userEntity.get())) });
+                            EmailConstants.PASSWORD_RECOVERY_URL_TOKEN.replace("{tokenPlaceholder}",
+                                    passwordRecoveryTokenSLO.getToken(userEntity)) });
             
-            return ResponseEntity.ok(new ResponseMessage<String>(MessageCode.email_with_token_sent.getMessage(email), MessageType.SUCCESS));
+            return emailWasSent ?
+                    ResponseEntity.ok(new ResponseMessage<String>(MessageCode.email_with_token_sent.getMessage(email), MessageType.SUCCESS)) :
+                    ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                            .body(new ResponseMessage<>(MessageCode.server_problem_occured.getMessage(), MessageType.ERROR));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ResponseMessage<>(MessageCode.field_not_found.getMessage("Email", email), MessageType.WARN));

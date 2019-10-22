@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import pl.taskyers.taskybase.core.users.dto.AccountDTO;
 import pl.taskyers.taskybase.registration.slo.RegistrationSLO;
 
-import java.io.UnsupportedEncodingException;
-
 import static pl.taskyers.taskybase.registration.slo.RegistrationSLO.*;
 
 @RestController
@@ -18,7 +16,7 @@ public class RegistrationRestController {
     private final RegistrationSLO registrationSLO;
     
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity register(@RequestBody AccountDTO accountDTO) throws UnsupportedEncodingException {
+    public ResponseEntity register(@RequestBody AccountDTO accountDTO) {
         return registrationSLO.register(accountDTO);
     }
     
