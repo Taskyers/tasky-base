@@ -9,7 +9,7 @@ import pl.taskyers.taskybase.core.users.repository.UserRepository;
 import pl.taskyers.taskybase.integration.IntegrationBase;
 
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -32,7 +32,7 @@ public class SettingNewPasswordTest extends IntegrationBase {
         String newPassword = "test";
         UserEntity userEntity = userRepository.findById(1L).get();
         String oldPassword = userEntity.getPassword();
-        mockMvc.perform(post("/passwordRecovery/" + token).contentType(MediaType.APPLICATION_FORM_URLENCODED).param("password", newPassword))
+        mockMvc.perform(patch("/passwordRecovery/" + token).contentType(MediaType.APPLICATION_FORM_URLENCODED).param("password", newPassword))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message", is("Token was not found: " + token)))
@@ -52,7 +52,7 @@ public class SettingNewPasswordTest extends IntegrationBase {
         String newPassword = "test";
         UserEntity userEntity = userRepository.findById(1L).get();
         String oldPassword = userEntity.getPassword();
-        mockMvc.perform(post("/passwordRecovery/" + token).contentType(MediaType.APPLICATION_FORM_URLENCODED).param("password", newPassword))
+        mockMvc.perform(patch("/passwordRecovery/" + token).contentType(MediaType.APPLICATION_FORM_URLENCODED).param("password", newPassword))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message", is("Password was successfully updated")))

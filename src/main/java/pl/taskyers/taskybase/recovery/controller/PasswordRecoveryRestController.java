@@ -19,7 +19,7 @@ public class PasswordRecoveryRestController {
         return passwordRecoverySLO.sendEmailWithToken(email);
     }
     
-    @RequestMapping(value = SET_NEW_PASSWORD, method = RequestMethod.POST)
+    @RequestMapping(value = SET_NEW_PASSWORD, method = RequestMethod.PATCH)
     public ResponseEntity setNewPassword(@PathVariable String token, @RequestParam String password) {
         return passwordRecoverySLO.setNewPassword(token, password);
     }
