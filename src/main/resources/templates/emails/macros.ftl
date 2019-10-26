@@ -6,5 +6,5 @@
 </#macro>
 
 <#assign server>
-    localhost:4200
+    https://localhost:4200
 </#assign>
