@@ -39,7 +39,7 @@ public class AuthSLOImpl implements AuthSLO {
     
     @Override
     public String getUserPersonal() {
-        return getUserEntity().getName() + " " + getUserEntity().getSurname();
+        return getUserName() + " " + getUserSurname();
     }
     
 }
