@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
-import pl.taskyers.taskybase.core.users.repository.UserRepository;
 import pl.taskyers.taskybase.integration.IntegrationBase;
 
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -19,9 +18,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 
 public class SettingNewPasswordTest extends IntegrationBase {
-    
-    @Autowired
-    private UserRepository userRepository;
     
     @Autowired
     private PasswordEncoder passwordEncoder;

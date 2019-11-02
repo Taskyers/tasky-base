@@ -17,6 +17,7 @@ public enum MessageCode {
     field_not_found,
     field_updated,
     password_invalid_format,
+    project_field_already_exists,
     registration_successful,
     server_problem_occured,
     user_field_already_exists;
