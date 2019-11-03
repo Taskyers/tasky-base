@@ -1,12 +1,13 @@
 package pl.taskyers.taskybase.core.users.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import pl.taskyers.taskybase.project.entity.ProjectEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -14,29 +15,34 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserEntity implements Serializable {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
-
+    
+    @ManyToMany(mappedBy = "users", targetEntity = ProjectEntity.class)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    Set<ProjectEntity> projects;
+    
     @Column(nullable = false, unique = true)
     private String username;
-
+    
     @Column(nullable = false, length = 60)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-
+    
     @Column
     private String name;
-
+    
     @Column
     private String surname;
-
+    
     @Column(unique = true)
     private String email;
-
+    
     @Column(columnDefinition = "boolean default false")
     private boolean enabled;
-
+    
 }
