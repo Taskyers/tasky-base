@@ -24,6 +24,7 @@ public class UserEntity implements Serializable {
     @ManyToMany(mappedBy = "users", targetEntity = ProjectEntity.class)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @JsonBackReference
     Set<ProjectEntity> projects;
     
     @Column(nullable = false, unique = true)
