@@ -8,7 +8,7 @@ import pl.taskyers.taskybase.core.users.slo.UserSLO;
 
 @Service
 @AllArgsConstructor
-public class AuthSLOImpl implements AuthSLO {
+public class AuthProviderImpl implements AuthProvider {
     
     private final UserSLO userSLO;
     

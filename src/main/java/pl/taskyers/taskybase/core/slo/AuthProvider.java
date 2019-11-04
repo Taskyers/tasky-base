@@ -8,7 +8,7 @@ import pl.taskyers.taskybase.core.users.entity.UserEntity;
  * @author Jakub Sildatk
  */
 
-public interface AuthSLO {
+public interface AuthProvider {
     
     /**
      * Getting logged user's username

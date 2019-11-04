@@ -2,7 +2,7 @@ package pl.taskyers.taskybase.project.slo;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.taskyers.taskybase.core.slo.AuthSLO;
+import pl.taskyers.taskybase.core.slo.AuthProvider;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.dashboard.main.converter.ProjectConverter;
 import pl.taskyers.taskybase.dashboard.main.dto.ProjectDTO;
@@ -15,13 +15,13 @@ import java.util.*;
 @AllArgsConstructor
 public class ProjectSLOImpl implements ProjectSLO {
     
-    private final AuthSLO authSLO;
+    private final AuthProvider authProvider;
     
     private final ProjectRepository projectRepository;
     
     @Override
     public Set<ProjectDTO> getProjects(int n) {
-        Set<ProjectEntity> userProjects = authSLO.getUserEntity().getProjects();
+        Set<ProjectEntity> userProjects = authProvider.getUserEntity().getProjects();
         Set<ProjectDTO> result = new HashSet<>();
         for ( ProjectEntity projectEntity : userProjects ) {
             result.add(ProjectConverter.convertToDTO(projectEntity));
@@ -34,7 +34,7 @@ public class ProjectSLOImpl implements ProjectSLO {
     
     @Override
     public ProjectEntity addNewProject(ProjectEntity projectEntity) {
-        final UserEntity userEntity = authSLO.getUserEntity();
+        final UserEntity userEntity = authProvider.getUserEntity();
         projectEntity.setOwner(userEntity);
         projectEntity.setUsers(new HashSet<UserEntity>() {{
             add(userEntity);
