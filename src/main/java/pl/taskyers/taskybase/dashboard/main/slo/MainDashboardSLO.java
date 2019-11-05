@@ -1,6 +1,8 @@
 package pl.taskyers.taskybase.dashboard.main.slo;
 
-import org.springframework.http.ResponseEntity;
+import pl.taskyers.taskybase.dashboard.main.dto.ProjectDTO;
+
+import java.util.List;
 
 /**
  * Interface for operations with main dashboard
@@ -13,15 +15,15 @@ public interface MainDashboardSLO {
     
     String GET_PROJECTS = "/projects";
     
-    int NUMBER_OF_PROJECTS = 5;
+    int NUMBER_OF_PROJECTS = 8;
     
     /**
      * Get max n projects assigned to the currently logged user
      *
      * @param n number of projects that will be returned
-     * @return status 200 with n project dto with name, description, owner's personals and owner's username
+     * @return list containing n project dto with name, description and owner's personals, sorted by creation date
      * @since 0.0.3
      */
-    ResponseEntity getProjects(int n);
+    List<ProjectDTO> getProjects(int n);
     
 }

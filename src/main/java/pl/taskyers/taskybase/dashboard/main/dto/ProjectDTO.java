@@ -13,8 +13,6 @@ public class ProjectDTO {
     
     private String description;
     
-    private String ownerPersonals;
-    
-    private String ownerUsername;
+    private String owner;
     
 }

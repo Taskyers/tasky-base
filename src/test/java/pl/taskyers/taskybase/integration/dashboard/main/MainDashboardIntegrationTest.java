@@ -22,7 +22,7 @@ public class MainDashboardIntegrationTest extends IntegrationBase {
     
     private final static String USER_WITH_5_PROJECTS = "userWith5Projects";
     
-    private final static String USER_WITH_6_PROJECTS = "userWith6Projects";
+    private final static String USER_WITH_9_PROJECTS = "userWith9Projects";
     
     @Test
     @WithMockUser(value = USER_WITHOUT_PROJECTS)
@@ -70,18 +70,18 @@ public class MainDashboardIntegrationTest extends IntegrationBase {
     }
     
     @Test
-    @WithMockUser(value = USER_WITH_6_PROJECTS)
+    @WithMockUser(value = USER_WITH_9_PROJECTS)
     @Transactional
     public void givenUserWith6ProjectsShouldReturn5ProjectsWithStatus200() throws Exception {
         mockMvc.perform(get("/secure/mainDashboard/projects"))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.length()", is(5)))
+                .andExpect(jsonPath("$.length()", is(8)))
                 .andExpect(forwardedUrl(null))
                 .andExpect(redirectedUrl(null))
                 .andExpect(status().isOk());
         
-        assertEquals(6, userRepository.findByUsername(USER_WITH_6_PROJECTS).get().getProjects().size());
+        assertEquals(9, userRepository.findByUsername(USER_WITH_9_PROJECTS).get().getProjects().size());
     }
     
 }

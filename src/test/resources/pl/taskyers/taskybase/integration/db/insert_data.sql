@@ -17,15 +17,18 @@ VALUES ('userWithoutProjects', '$2a$10$0k1y57DwGGZ8iKY5jpd6fum./qxDxq24lGsi8Chag
         'userWith4Projects@gmail.com', 1),
        ('userWith5Projects', '$2a$10$0k1y57DwGGZ8iKY5jpd6fum./qxDxq24lGsi8ChagpXgEHHVV0V6W', 'Tester', 'Good',
         'userWith5Projects@gmail.com', 1),
-       ('userWith6Projects', '$2a$10$0k1y57DwGGZ8iKY5jpd6fum./qxDxq24lGsi8ChagpXgEHHVV0V6W', 'Tester', 'Good',
-        'userWith6Projects@gmail.com', 1);
-INSERT INTO projects(owner_id, name, description)
-VALUES (1, 'test1', 'test1'),
-       (1, 'test12', 'test12'),
-       (1, 'test13', 'test13'),
-       (1, 'test14', 'test14'),
-       (1, 'test15', 'test15'),
-       (1, 'test16', 'test16');
+       ('userWith9Projects', '$2a$10$0k1y57DwGGZ8iKY5jpd6fum./qxDxq24lGsi8ChagpXgEHHVV0V6W', 'Tester', 'Good',
+        'userWith9Projects@gmail.com', 1);
+INSERT INTO projects(owner_id, name, description, creation_date)
+VALUES (1, 'test1', 'test1', '2019-11-05 15:00'),
+       (1, 'test12', 'test12', '2019-11-05 15:10'),
+       (1, 'test13', 'test13', '2019-11-05 15:15'),
+       (1, 'test14', 'test14', '2019-11-05 15:20'),
+       (1, 'test15', 'test15', '2019-11-05 15:25'),
+       (1, 'test16', 'test16', '2019-11-05 15:30'),
+       (1, 'test17', 'test17', '2019-11-05 15:35'),
+       (1, 'test18', 'test18', '2019-11-05 15:40'),
+       (1, 'test19', 'test19', '2019-11-05 15:45');
 INSERT INTO project_user(project_id, user_id)
 VALUES (1, 5),
        (2, 5),
@@ -41,4 +44,7 @@ VALUES (1, 5),
        (3, 7),
        (4, 7),
        (5, 7),
-       (6, 7);
+       (6, 7),
+       (7, 7),
+       (8, 7),
+       (9, 7);

@@ -1,9 +1,11 @@
 package pl.taskyers.taskybase.project.slo;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import pl.taskyers.taskybase.core.slo.AuthProvider;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
+import pl.taskyers.taskybase.core.utils.DateUtils;
 import pl.taskyers.taskybase.dashboard.main.converter.ProjectConverter;
 import pl.taskyers.taskybase.dashboard.main.dto.ProjectDTO;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
@@ -20,14 +22,12 @@ public class ProjectSLOImpl implements ProjectSLO {
     private final ProjectRepository projectRepository;
     
     @Override
-    public Set<ProjectDTO> getProjects(int n) {
-        Set<ProjectEntity> userProjects = authProvider.getUserEntity().getProjects();
-        Set<ProjectDTO> result = new HashSet<>();
-        for ( ProjectEntity projectEntity : userProjects ) {
+    public List<ProjectDTO> getProjects(int n) {
+        List<ProjectEntity> projectEntities =
+                projectRepository.findAllByUsersContainingOrderByCreationDateDesc(authProvider.getUserEntityAsSet(), PageRequest.of(0, n));
+        List<ProjectDTO> result = new ArrayList<>();
+        for ( ProjectEntity projectEntity : projectEntities ) {
             result.add(ProjectConverter.convertToDTO(projectEntity));
-            if ( result.size() == n ) {
-                break;
-            }
         }
         return result;
     }
@@ -39,6 +39,7 @@ public class ProjectSLOImpl implements ProjectSLO {
         projectEntity.setUsers(new HashSet<UserEntity>() {{
             add(userEntity);
         }});
+        projectEntity.setCreationDate(DateUtils.getCurrentTimestamp());
         return projectRepository.save(projectEntity);
     }
     

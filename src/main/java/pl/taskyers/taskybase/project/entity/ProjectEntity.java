@@ -6,6 +6,7 @@ import pl.taskyers.taskybase.core.users.entity.UserEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -38,5 +39,9 @@ public class ProjectEntity implements Serializable {
     
     @Column
     private String description;
+    
+    @Column(name = "creation_date", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationDate;
     
 }

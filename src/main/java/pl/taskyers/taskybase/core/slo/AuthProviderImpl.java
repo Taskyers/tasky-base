@@ -1,10 +1,13 @@
 package pl.taskyers.taskybase.core.slo;
 
+import com.google.common.collect.Sets;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.core.users.slo.UserSLO;
+
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -40,6 +43,11 @@ public class AuthProviderImpl implements AuthProvider {
     @Override
     public String getUserPersonal() {
         return getUserName() + " " + getUserSurname();
+    }
+    
+    @Override
+    public Set<UserEntity> getUserEntityAsSet() {
+        return Sets.newHashSet(getUserEntity());
     }
     
 }

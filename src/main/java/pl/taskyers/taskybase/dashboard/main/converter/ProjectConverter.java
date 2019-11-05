@@ -14,8 +14,7 @@ public class ProjectConverter {
     
     public static ProjectDTO convertToDTO(ProjectEntity projectEntity) {
         String personals = projectEntity.getOwner().getName() + " " + projectEntity.getOwner().getSurname();
-        return new ProjectDTO(projectEntity.getName(), projectEntity.getDescription(),
-                personals, projectEntity.getOwner().getUsername());
+        return new ProjectDTO(projectEntity.getName(), projectEntity.getDescription(), personals);
     }
     
 }

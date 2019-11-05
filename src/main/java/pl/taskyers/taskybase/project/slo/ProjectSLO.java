@@ -3,8 +3,8 @@ package pl.taskyers.taskybase.project.slo;
 import pl.taskyers.taskybase.dashboard.main.dto.ProjectDTO;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * Interface for operations on project entity
@@ -20,7 +20,7 @@ public interface ProjectSLO {
      * @return n projects as DTO
      * @since 0.0.3
      */
-    Set<ProjectDTO> getProjects(int n);
+    List<ProjectDTO> getProjects(int n);
     
     /**
      * Save new project to database - currently logged user will be the owner

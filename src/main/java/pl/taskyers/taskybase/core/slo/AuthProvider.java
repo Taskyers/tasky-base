@@ -2,6 +2,8 @@ package pl.taskyers.taskybase.core.slo;
 
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
 
+import java.util.Set;
+
 /**
  * Interface for providing data about currently logged user
  *
@@ -57,5 +59,13 @@ public interface AuthProvider {
      * @since 0.0.1
      */
     String getUserPersonal();
+    
+    /**
+     * Getting set with currently logged in user
+     *
+     * @return set with user
+     * @since 0.0.3
+     */
+    Set<UserEntity> getUserEntityAsSet();
     
 }
