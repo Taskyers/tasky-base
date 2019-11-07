@@ -36,6 +36,20 @@ CREATE TABLE IF NOT EXISTS project_user
     foreign key (project_id) references projects (project_id),
     foreign key (user_id) references users (user_id)
 );
+CREATE TABLE IF NOT EXISTS roles
+(
+    role_id     bigint auto_increment primary key,
+    `key`       varchar(255) unique,
+    description varchar(255) null
+);
+CREATE TABLE IF NOT EXISTS role_linkers
+(
+    role_linker_id bigint auto_increment primary key,
+    checked        bit    null,
+    project_id     bigint null references projects (project_id),
+    role_id        bigint null references roles (role_id),
+    user_id        bigint null references users (user_id)
+);
 
 INSERT INTO users(username, password, name, surname, email)
 VALUES ('u1', '$2a$10$0k1y57DwGGZ8iKY5jpd6fum./qxDxq24lGsi8ChagpXgEHHVV0V6W', 'U', 'S', 'u1@email.com');
@@ -87,3 +101,7 @@ VALUES (1, 5),
        (7, 7),
        (8, 7),
        (9, 7);
+INSERT INTO roles (`key`, description)
+VALUES ('settings.manage.users', 'User is able to manage manage users in project settings'),
+       ('settings.project.edit', 'User is able to edit project name and description'),
+       ('settings.project.delete', 'User is able to delete project');

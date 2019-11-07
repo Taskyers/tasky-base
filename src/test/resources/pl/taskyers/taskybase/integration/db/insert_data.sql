@@ -48,3 +48,7 @@ VALUES (1, 5),
        (7, 7),
        (8, 7),
        (9, 7);
+INSERT INTO roles (`key`, description)
+VALUES ('settings.manage.users', 'User is able to manage manage users in project settings'),
+       ('settings.project.edit', 'User is able to edit project name and description'),
+       ('settings.project.delete', 'User is able to delete project');
