@@ -26,7 +26,7 @@ public class AddingNewProjectIntegrationTest extends IntegrationBase {
         int sizeBefore = projectRepository.findAll().size();
         int roleLinkerSizeBefore = roleLinkerRepository.findAll().size();
         String projectJSON = objectMapper.writeValueAsString(new ProjectDTO("test1", "test"));
-        mockMvc.perform(post("/secure/addNewProject")
+        mockMvc.perform(post("/secure/projects")
                 .contentType(MediaType.APPLICATION_JSON).content(projectJSON))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -52,7 +52,7 @@ public class AddingNewProjectIntegrationTest extends IntegrationBase {
         int roleSizeBefore = roleRepository.findAll().size();
         int roleLinkerSizeBefore = roleLinkerRepository.findAll().size();
         String projectJSON = objectMapper.writeValueAsString(new ProjectDTO("uniqueName", "test"));
-        mockMvc.perform(post("/secure/addNewProject")
+        mockMvc.perform(post("/secure/projects")
                 .contentType(MediaType.APPLICATION_JSON).content(projectJSON))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -66,7 +66,7 @@ public class AddingNewProjectIntegrationTest extends IntegrationBase {
                 .andExpect(jsonPath("$.object.name", is("uniqueName")))
                 .andExpect(jsonPath("$.object.description", is("test")))
                 .andExpect(forwardedUrl(null))
-                .andExpect(redirectedUrlPattern("**/addNewProject/{id}"))
+                .andExpect(redirectedUrlPattern("**/projects/{id}"))
                 .andExpect(header().exists("Location"))
                 .andExpect(status().isCreated());
         
@@ -83,7 +83,7 @@ public class AddingNewProjectIntegrationTest extends IntegrationBase {
     @Test
     @WithMockUser(value = DEFAULT_USERNAME)
     public void givenNotExistingProjectWhenCheckingForProjectByNameShouldReturnFalse() throws Exception {
-        mockMvc.perform(get("/secure/addNewProject/uniqueProjectName"))
+        mockMvc.perform(get("/secure/projects/uniqueProjectName"))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", is(false)))
@@ -95,7 +95,7 @@ public class AddingNewProjectIntegrationTest extends IntegrationBase {
     @Test
     @WithMockUser(value = DEFAULT_USERNAME)
     public void givenExistingProjectWhenCheckingForProjectByNameShouldReturnTrue() throws Exception {
-        mockMvc.perform(get("/secure/addNewProject/test1"))
+        mockMvc.perform(get("/secure/projects/test1"))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", is(true)))
