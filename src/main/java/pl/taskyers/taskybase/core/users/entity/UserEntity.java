@@ -3,6 +3,7 @@ package pl.taskyers.taskybase.core.users.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import pl.taskyers.taskybase.core.roles.entity.RoleLinkerEntity;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 
 import javax.persistence.*;
@@ -26,6 +27,12 @@ public class UserEntity implements Serializable {
     @EqualsAndHashCode.Exclude
     @JsonBackReference
     Set<ProjectEntity> projects;
+    
+    @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonBackReference
+    private Set<RoleLinkerEntity> roleLinkerEntities;
     
     @Column(nullable = false, unique = true)
     private String username;

@@ -36,3 +36,17 @@ CREATE TABLE IF NOT EXISTS project_user
     foreign key (project_id) references projects (project_id),
     foreign key (user_id) references users (user_id)
 );
+CREATE TABLE IF NOT EXISTS roles
+(
+    role_id     bigint auto_increment primary key,
+    `key`       varchar(255) unique,
+    description varchar(255) null
+);
+CREATE TABLE IF NOT EXISTS role_linkers
+(
+    role_linker_id bigint auto_increment primary key,
+    checked        bit    null,
+    project_id     bigint null references projects (project_id),
+    role_id        bigint null references roles (role_id),
+    user_id        bigint null references users (user_id)
+);

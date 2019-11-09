@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import pl.taskyers.taskybase.core.roles.repository.RoleLinkerRepository;
+import pl.taskyers.taskybase.core.roles.repository.RoleRepository;
 import pl.taskyers.taskybase.core.users.repository.UserRepository;
 import pl.taskyers.taskybase.project.repository.ProjectRepository;
 
@@ -26,6 +28,12 @@ public abstract class IntegrationBase {
     
     @Autowired
     protected ProjectRepository projectRepository;
+    
+    @Autowired
+    protected RoleLinkerRepository roleLinkerRepository;
+    
+    @Autowired
+    protected RoleRepository roleRepository;
     
     protected final ObjectMapper objectMapper = new ObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     
