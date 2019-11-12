@@ -13,6 +13,8 @@ import java.util.Optional;
  */
 public interface ProjectSLO {
     
+    String PROJECTS_PREFIX = "/secure/projects";
+    
     /**
      * Get n currently logged in user's projects as DTO converted from ProjectEntity
      *
@@ -21,6 +23,14 @@ public interface ProjectSLO {
      * @since 0.0.3
      */
     List<ProjectDTO> getProjects(int n);
+    
+    /**
+     * Get all projects for currently logged in user
+     *
+     * @return all projects as DTO
+     * @since 0.0.3
+     */
+    List<ProjectDTO> getAllProjects();
     
     /**
      * Save new project to database - currently logged user will be the owner

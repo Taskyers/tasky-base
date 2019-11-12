@@ -5,10 +5,10 @@ import pl.taskyers.taskybase.project.dto.ProjectDTO;
 
 /**
  * Interface for adding new project
+ *
+ * @author Jakub Sildatk
  */
 public interface AddingProjectSLO {
-    
-    String ADDING_PROJECT_PREFIX = "/secure/addNewProject";
     
     String GET_PROJECT_BY_NAME = "/{name}";
     

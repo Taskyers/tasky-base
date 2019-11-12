@@ -26,13 +26,13 @@ public class ProjectSLOImpl implements ProjectSLO {
     
     @Override
     public List<ProjectDTO> getProjects(int n) {
-        List<ProjectEntity> projectEntities =
-                projectRepository.findAllByUsersContainingOrderByCreationDateDesc(authProvider.getUserEntityAsSet(), PageRequest.of(0, n));
-        List<ProjectDTO> result = new ArrayList<>();
-        for ( ProjectEntity projectEntity : projectEntities ) {
-            result.add(ProjectConverter.convertToDTO(projectEntity));
-        }
-        return result;
+        return getProjectsAsDTO(
+                projectRepository.findAllByUsersContainingOrderByCreationDateDesc(authProvider.getUserEntityAsSet(), PageRequest.of(0, n)));
+    }
+    
+    @Override
+    public List<ProjectDTO> getAllProjects() {
+        return getProjectsAsDTO(projectRepository.findAllByUsersContaining(authProvider.getUserEntityAsSet()));
     }
     
     @Override
@@ -50,6 +50,14 @@ public class ProjectSLOImpl implements ProjectSLO {
     @Override
     public Optional<ProjectEntity> getProjectEntityByName(String name) {
         return projectRepository.findByName(name);
+    }
+    
+    private List<ProjectDTO> getProjectsAsDTO(List<ProjectEntity> projectEntities) {
+        List<ProjectDTO> result = new ArrayList<>();
+        for ( ProjectEntity projectEntity : projectEntities ) {
+            result.add(ProjectConverter.convertToDTO(projectEntity));
+        }
+        return result;
     }
     
 }

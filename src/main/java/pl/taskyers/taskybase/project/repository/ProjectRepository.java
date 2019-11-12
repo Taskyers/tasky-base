@@ -17,4 +17,6 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
     
     List<ProjectEntity> findAllByUsersContainingOrderByCreationDateDesc(Set<UserEntity> users, Pageable pageable);
     
+    List<ProjectEntity> findAllByUsersContaining(Set<UserEntity> users);
+    
 }
