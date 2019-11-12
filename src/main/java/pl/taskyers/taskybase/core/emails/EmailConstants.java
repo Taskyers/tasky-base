@@ -16,4 +16,8 @@ public interface EmailConstants {
     
     String PASSWORD_RECOVERY_URL_TOKEN = "/passwordRecovery/{tokenPlaceholder}";
     
+    String PROJECT_INVITATION_PATH="/emails/projectInvitation.ftl";
+    
+    String PROJECT_INVITATION_URL_TOKEN="/secure/projectInvitation/{tokenPlaceholder}";
+    
 }

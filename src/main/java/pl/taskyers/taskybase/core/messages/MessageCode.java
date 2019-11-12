@@ -11,6 +11,7 @@ public enum MessageCode {
     account_activated,
     email_subject_registration,
     email_subject_password_recovery,
+    email_subject_project_invitation,
     email_with_token_sent,
     field_empty,
     field_invalid_format,
@@ -19,6 +20,8 @@ public enum MessageCode {
     password_invalid_format,
     project_created,
     project_field_already_exists,
+    project_invitation_acceptance,
+    project_permission_not_granted,
     registration_successful,
     server_problem_occured,
     user_field_already_exists;

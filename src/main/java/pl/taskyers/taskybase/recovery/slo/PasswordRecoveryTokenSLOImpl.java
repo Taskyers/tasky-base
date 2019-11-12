@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.core.slo.TokenSLO;
+import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.recovery.entity.PasswordRecoveryTokenEntity;
 import pl.taskyers.taskybase.recovery.repository.PasswordRecoveryTokenRepository;
 
@@ -48,6 +49,11 @@ public class PasswordRecoveryTokenSLOImpl implements TokenSLO<PasswordRecoveryTo
             log.debug("Generating new token for user: " + userEntity.getUsername());
         }
         passwordRecoveryTokenRepository.save(passwordRecoveryTokenEntity);
+    }
+    
+    @Deprecated
+    @Override
+    public void createToken(UserEntity userEntity, ProjectEntity projectEntity) {
     }
     
     @Override
