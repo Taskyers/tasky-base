@@ -1,6 +1,7 @@
 package pl.taskyers.taskybase.core.slo;
 
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
+import pl.taskyers.taskybase.project.entity.ProjectEntity;
 
 /**
  * Interface for operations on token entities
@@ -43,6 +44,15 @@ public interface TokenSLO<T> {
      * @since 0.0.1
      */
     void createToken(UserEntity userEntity);
+    
+    /**
+     * Create and save to database token which will be assigned to passed user
+     *
+     * @param userEntity user that token will be created for
+     * @param projectEntity project that token will be created for
+     * @since 0.0.3
+     */
+    void createToken(UserEntity userEntity, ProjectEntity projectEntity);
     
     /**
      * Delete from database token entity by token as string

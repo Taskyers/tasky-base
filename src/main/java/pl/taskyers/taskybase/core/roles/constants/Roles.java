@@ -23,4 +23,9 @@ public interface Roles {
      */
     String SETTINGS_DELETE_PROJECT = "settings.delete.project";
     
+    /**
+     * @since 0.0.3
+     */
+    String PROJECT_INVITE_OTHERS = "project.invite.others";
+    
 }

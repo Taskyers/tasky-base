@@ -1,5 +1,6 @@
 package pl.taskyers.taskybase.project.slo;
 
+import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.dashboard.main.dto.ProjectDTO;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 
@@ -50,5 +51,15 @@ public interface ProjectSLO {
      * @since 0.0.3
      */
     Optional<ProjectEntity> getProjectEntityByName(String name);
+    
+    /**
+     * Get project entity by project entity and user entity
+     *
+     * @param projectEntity project entity
+     * @param userEntity    user entity
+     * @return project entity
+     * @since 0.0.3
+     */
+    ProjectEntity addUserToProject(ProjectEntity projectEntity, UserEntity userEntity);
     
 }

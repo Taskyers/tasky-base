@@ -60,4 +60,15 @@ public class ProjectSLOImpl implements ProjectSLO {
         return result;
     }
     
+    @Override
+    public ProjectEntity addUserToProject(ProjectEntity projectEntity, UserEntity userEntity) {
+        final UserEntity loggedUser = authProvider.getUserEntity();
+        if ( loggedUser != userEntity ) {
+            return null;
+        }
+        projectEntity.getUsers().add(loggedUser);
+        roleSLO.createAllRolesForUser(loggedUser, projectEntity);
+        return projectRepository.save(projectEntity);
+    }
+    
 }

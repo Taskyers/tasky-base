@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.core.slo.TokenSLO;
+import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.registration.entity.VerificationTokenEntity;
 import pl.taskyers.taskybase.registration.repository.VerificationTokenRepository;
 
@@ -34,6 +35,11 @@ public class VerificationTokenSLOImpl implements TokenSLO<VerificationTokenEntit
         verificationTokenEntity.setToken(generateToken());
         verificationTokenEntity.setUser(userEntity);
         verificationTokenRepository.save(verificationTokenEntity);
+    }
+    
+    @Deprecated
+    @Override
+    public void createToken(UserEntity userEntity, ProjectEntity projectEntity) {
     }
     
     @Override

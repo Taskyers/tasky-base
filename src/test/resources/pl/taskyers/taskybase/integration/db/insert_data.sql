@@ -4,6 +4,8 @@ INSERT INTO verification_tokens(user_id, token)
 VALUES (1, 'tested-token');
 INSERT INTO password_recovery_tokens(user_id, token)
 VALUES (1, 'tested-token');
+INSERT INTO project_invitation_tokens(user_id,project_id, token)
+VALUES (1,1, 'tested-token');
 INSERT INTO users(username, password, name, surname, email, enabled)
 VALUES ('enabled', '$2a$10$0k1y57DwGGZ8iKY5jpd6fum./qxDxq24lGsi8ChagpXgEHHVV0V6W', 'Tester', 'Good',
         'enabled@gmail.com', 1);
@@ -51,4 +53,10 @@ VALUES (1, 5),
 INSERT INTO roles (`key`, description)
 VALUES ('settings.manage.users', 'User is able to manage manage users in project settings'),
        ('settings.project.edit', 'User is able to edit project name and description'),
-       ('settings.project.delete', 'User is able to delete project');
+       ('settings.project.delete', 'User is able to delete project'),
+       ('project.invite.others', 'User is able to invite others to project');
+INSERT INTO role_linkers (user_id, project_id, role_id, checked)
+VALUES (1, 1, 1, true),
+       (1, 1, 2, true),
+       (1, 1, 3, true),
+       (1, 1, 4, true);

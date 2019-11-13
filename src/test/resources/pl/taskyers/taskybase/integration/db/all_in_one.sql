@@ -28,6 +28,13 @@ CREATE TABLE IF NOT EXISTS projects
     description   varchar(50),
     creation_date datetime not null
 );
+CREATE TABLE IF NOT EXISTS project_invitation_tokens
+(
+    project_invitation_token_id int primary key auto_increment,
+    user_id                    int not null references users (user_id),
+    project_id                 int not null references projects (project_id),
+    token                      varchar(200) unique
+);
 CREATE TABLE IF NOT EXISTS project_user
 (
     project_id int,
@@ -104,4 +111,10 @@ VALUES (1, 5),
 INSERT INTO roles (`key`, description)
 VALUES ('settings.manage.users', 'User is able to manage manage users in project settings'),
        ('settings.project.edit', 'User is able to edit project name and description'),
-       ('settings.project.delete', 'User is able to delete project');
+       ('settings.project.delete', 'User is able to delete project'),
+       ('project.invite.others', 'User is able to invite others to project');
+INSERT INTO role_linkers (user_id, project_id, role_id, checked)
+VALUES (1, 1, 1, true),
+       (1, 1, 2, true),
+       (1, 1, 3, true),
+       (1, 1, 4, true);
