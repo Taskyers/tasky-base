@@ -19,9 +19,12 @@ public enum MessageCode {
     field_updated,
     password_invalid_format,
     project_created,
+    project_deleted,
     project_field_already_exists,
     project_invitation_acceptance,
+    project_not_found,
     project_permission_not_granted,
+    project_updated,
     registration_successful,
     server_problem_occured,
     user_field_already_exists;

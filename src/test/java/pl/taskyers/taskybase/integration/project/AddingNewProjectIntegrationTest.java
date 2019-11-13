@@ -74,10 +74,6 @@ public class AddingNewProjectIntegrationTest extends IntegrationBase {
         int roleLinkerSizeAfter = roleLinkerRepository.findAll().size();
         assertNotEquals(sizeBefore, sizeAfter);
         assertEquals(roleLinkerSizeAfter, roleLinkerSizeBefore + roleSizeBefore);
-        
-        for ( RoleLinkerEntity roleLinkerEntity : roleLinkerRepository.findAll() ) {
-            assertTrue(roleLinkerEntity.isChecked());
-        }
     }
     
     @Test

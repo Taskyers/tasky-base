@@ -52,14 +52,6 @@ public class ProjectSLOImpl implements ProjectSLO {
         return projectRepository.findByName(name);
     }
     
-    private List<ProjectDTO> getProjectsAsDTO(List<ProjectEntity> projectEntities) {
-        List<ProjectDTO> result = new ArrayList<>();
-        for ( ProjectEntity projectEntity : projectEntities ) {
-            result.add(ProjectConverter.convertToDTO(projectEntity));
-        }
-        return result;
-    }
-    
     @Override
     public ProjectEntity addUserToProject(ProjectEntity projectEntity, UserEntity userEntity) {
         final UserEntity loggedUser = authProvider.getUserEntity();
@@ -69,6 +61,31 @@ public class ProjectSLOImpl implements ProjectSLO {
         projectEntity.getUsers().add(loggedUser);
         roleSLO.createAllRolesForUser(loggedUser, projectEntity);
         return projectRepository.save(projectEntity);
+    }
+    
+    @Override
+    public Optional<ProjectEntity> getProjectEntityById(Long id) {
+        return projectRepository.findById(id);
+    }
+    
+    @Override
+    public ProjectEntity updateProject(ProjectEntity projectEntity, String name, String description) {
+        projectEntity.setName(name);
+        projectEntity.setDescription(description);
+        return projectRepository.save(projectEntity);
+    }
+    
+    @Override
+    public void deleteProjectById(Long id) {
+        projectRepository.deleteById(id);
+    }
+    
+    private List<ProjectDTO> getProjectsAsDTO(List<ProjectEntity> projectEntities) {
+        List<ProjectDTO> result = new ArrayList<>();
+        for ( ProjectEntity projectEntity : projectEntities ) {
+            result.add(ProjectConverter.convertToDTO(projectEntity));
+        }
+        return result;
     }
     
 }
