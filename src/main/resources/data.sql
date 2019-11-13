@@ -28,8 +28,8 @@ VALUES (1, 1),
        (2, 3);
 INSERT INTO roles (`key`, description)
 VALUES ('settings.manage.users', 'User is able to manage manage users in project settings'),
-       ('settings.project.edit', 'User is able to edit project name and description'),
-       ('settings.project.delete', 'User is able to delete project'),
+       ('settings.edit.project', 'User is able to edit project name and description'),
+       ('settings.delete.project', 'User is able to delete project'),
        ('project.invite.others', 'User is able to invite others to project');
 INSERT INTO role_linkers (user_id, project_id, role_id, checked)
 VALUES (1, 1, 1, true),

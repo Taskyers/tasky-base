@@ -36,7 +36,7 @@ public class ProjectEntity implements Serializable {
     @EqualsAndHashCode.Exclude
     Set<UserEntity> users;
     
-    @OneToMany(mappedBy = "project", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @OneToMany(mappedBy = "project", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonBackReference

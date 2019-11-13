@@ -62,4 +62,32 @@ public interface ProjectSLO {
      */
     ProjectEntity addUserToProject(ProjectEntity projectEntity, UserEntity userEntity);
     
+    /**
+     * Get project entity by project's id
+     *
+     * @param id project's id
+     * @return project entity as optional
+     * @since 0.0.3
+     */
+    Optional<ProjectEntity> getProjectEntityById(Long id);
+    
+    /**
+     * Update project basic data - name and description
+     *
+     * @param projectEntity existing project as entity
+     * @param name          new project's name
+     * @param description   new project's description
+     * @return updated project entity
+     * @since 0.0.3
+     */
+    ProjectEntity updateProject(ProjectEntity projectEntity, String name, String description);
+    
+    /**
+     * Delete project by id
+     *
+     * @param id id of project
+     * @since 0.0.3
+     */
+    void deleteProjectById(Long id);
+    
 }
