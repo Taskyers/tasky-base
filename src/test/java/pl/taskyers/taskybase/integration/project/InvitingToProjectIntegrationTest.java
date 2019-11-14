@@ -124,4 +124,44 @@ public class InvitingToProjectIntegrationTest extends IntegrationBase {
         assertEquals(0, projectRepository.findAllByUsersContaining(Sets.newHashSet(userEntity)).size());
     }
     
+    @Test
+    @WithMockUser(value = "enabled")
+    public void givenUserWithoutPermissionToInvitationEntryPointShouldReturnStatus403() throws Exception {
+        mockMvc.perform(get("/secure/projectInvitation/test1"))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("You have no permission for requested operation")))
+                .andExpect(jsonPath("$.type", is("ERROR")))
+                .andExpect(jsonPath("$.object", is(nullValue())))
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isForbidden());
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    public void givenNotExistingProjectNameToEntryPointShouldReturnStatus404() throws Exception {
+        final String name = "testdefhbdfghfgdhgfh";
+        mockMvc.perform(get("/secure/projectInvitation/" + name))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("Project with name " + name + " was not found")))
+                .andExpect(jsonPath("$.type", is("WARN")))
+                .andExpect(jsonPath("$.object", is(nullValue())))
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isNotFound());
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    public void givenValidUserAndValidProjectNameToEntryPointShouldReturnStatus200() throws Exception {
+        mockMvc.perform(get("/secure/projectInvitation/test1"))
+                .andDo(print())
+                .andExpect(jsonPath("$").doesNotExist())
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isOk());
+    }
+    
 }

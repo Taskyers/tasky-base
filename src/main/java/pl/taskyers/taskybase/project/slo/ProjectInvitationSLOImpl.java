@@ -87,4 +87,16 @@ public class ProjectInvitationSLOImpl implements ProjectInvitationSLO {
                 new ResponseMessage<String>(MessageCode.project_invitation_acceptance.getMessage(projectEntity.getName()), MessageType.SUCCESS));
     }
     
+    @Override
+    public ResponseEntity hasProperRoleOnEntry(String projectName) {
+        if ( projectSLO.getProjectEntityByName(projectName).isPresent() ) {
+            ProjectEntity projectEntity = projectSLO.getProjectEntityByName(projectName).get();
+            return roleSLO.hasPermission(authProvider.getUserEntity(), projectEntity, PROJECT_INVITE_OTHERS) ? ResponseEntity.ok().build() :
+                    ResponseEntity.status(HttpStatus.FORBIDDEN)
+                            .body(new ResponseMessage<>(MessageCode.project_permission_not_granted.getMessage(), MessageType.ERROR));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ResponseMessage<>(MessageCode.project_not_found.getMessage("name", projectName), MessageType.WARN));
+    }
+    
 }

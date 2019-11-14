@@ -71,4 +71,5 @@ VALUES (1, 1, 1, true),
        (1, 1, 4, true),
        (1, 8, 2, false),
        (1, 9, 3, false),
-       (1, 10, 3, true);
+       (1, 10, 3, true),
+       (2, 1, 4, false);

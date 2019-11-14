@@ -20,8 +20,13 @@ public class ProjectInvitationRestController {
     }
     
     @RequestMapping(value = ACCEPT_INVITATION, method = RequestMethod.PATCH)
-    public ResponseEntity setNewPassword(@PathVariable String token) {
+    public ResponseEntity acceptInvitation(@PathVariable String token) {
         return projectInvitationSLO.acceptInvitation(token);
+    }
+    
+    @RequestMapping(value = USER_CAN_INVITE, method = RequestMethod.GET)
+    public ResponseEntity userCanInvite(@PathVariable String projectName) {
+        return projectInvitationSLO.hasProperRoleOnEntry(projectName);
     }
     
 }
