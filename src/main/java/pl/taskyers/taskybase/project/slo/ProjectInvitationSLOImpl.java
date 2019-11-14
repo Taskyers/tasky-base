@@ -10,6 +10,7 @@ import pl.taskyers.taskybase.core.emails.EmailSLO;
 import pl.taskyers.taskybase.core.messages.MessageCode;
 import pl.taskyers.taskybase.core.messages.MessageType;
 import pl.taskyers.taskybase.core.messages.ResponseMessage;
+import pl.taskyers.taskybase.core.roles.constants.Roles;
 import pl.taskyers.taskybase.core.roles.slo.RoleSLO;
 import pl.taskyers.taskybase.core.slo.AuthProvider;
 import pl.taskyers.taskybase.core.slo.TokenSLO;
@@ -85,6 +86,17 @@ public class ProjectInvitationSLOImpl implements ProjectInvitationSLO {
         projectInvitationTokenSLO.deleteToken(token);
         return ResponseEntity.ok(
                 new ResponseMessage<String>(MessageCode.project_invitation_acceptance.getMessage(projectEntity.getName()), MessageType.SUCCESS));
+    }
+    
+    @Override
+    public boolean userCanInvite(String projectName) {
+        if ( projectSLO.getProjectEntityByName(projectName).isPresent() ) {
+            ProjectEntity projectEntity = projectSLO.getProjectEntityByName(projectName).get();
+            if ( roleSLO.hasPermission(authProvider.getUserEntity(), projectEntity, PROJECT_INVITE_OTHERS) ) {
+                return true;
+            }
+        }
+        return false;
     }
     
 }
