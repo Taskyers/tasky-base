@@ -11,9 +11,11 @@ import pl.taskyers.taskybase.core.messages.container.ValidationMessageContainer;
 import pl.taskyers.taskybase.core.roles.constants.Roles;
 import pl.taskyers.taskybase.core.roles.slo.RoleSLO;
 import pl.taskyers.taskybase.core.slo.AuthProvider;
+import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.core.validator.Validator;
 import pl.taskyers.taskybase.project.converter.ProjectConverter;
 import pl.taskyers.taskybase.project.dto.ProjectDTO;
+import pl.taskyers.taskybase.project.dto.SettingsEntryResponseData;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 
 import java.util.Optional;
@@ -65,6 +67,26 @@ public class ProjectSettingsSLOImpl implements ProjectSettingsSLO {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ResponseMessage<>(MessageCode.project_not_found.getMessage("id", id), MessageType.ERROR));
+    }
+    
+    @Override
+    public ResponseEntity hasProperRoleOnEntry(String projectName) {
+        if ( projectSLO.getProjectEntityByName(projectName).isPresent() ) {
+            final ProjectEntity projectEntity = projectSLO.getProjectEntityByName(projectName).get();
+            final UserEntity userEntity = authProvider.getUserEntity();
+            final boolean canEdit = roleSLO.hasPermission(userEntity, projectEntity, Roles.SETTINGS_EDIT_PROJECT);
+            final boolean canDelete = roleSLO.hasPermission(userEntity, projectEntity, Roles.SETTINGS_DELETE_PROJECT);
+            
+            return (canEdit || canDelete) ? ResponseEntity.ok(createEntryData(projectEntity, canEdit, canDelete)) :
+                    ResponseEntity.status(HttpStatus.FORBIDDEN)
+                            .body(new ResponseMessage<>(MessageCode.project_permission_not_granted.getMessage(), MessageType.ERROR));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ResponseMessage<>(MessageCode.project_not_found.getMessage("name", projectName), MessageType.WARN));
+    }
+    
+    private SettingsEntryResponseData createEntryData(ProjectEntity projectEntity, boolean canEdit, boolean canDelete) {
+        return new SettingsEntryResponseData(projectEntity.getId(), projectEntity.getName(), projectEntity.getDescription(), canEdit, canDelete);
     }
     
 }
