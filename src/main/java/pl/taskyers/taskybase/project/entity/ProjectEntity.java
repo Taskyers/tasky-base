@@ -42,7 +42,7 @@ public class ProjectEntity implements Serializable {
     @JsonBackReference
     private Set<RoleLinkerEntity> roleLinkerEntities;
     
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String name;
     
     @Column
