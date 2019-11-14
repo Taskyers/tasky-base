@@ -27,6 +27,7 @@
 		<spring-boot-email-core.version>0.6.3</spring-boot-email-core.version>
 		<spring-boot-freemarker-email.version>0.6.3</spring-boot-freemarker-email.version>
 		<spring-security-test.version>5.1.5.RELEASE</spring-security-test.version>
+		<slf4j-api.version>1.7.25</slf4j-api.version>
 		<!-- Integration database -->
 		<mysql-connector-java.version>8.0.17</mysql-connector-java.version>
 		<integration-driver>com.mysql.cj.jdbc.Driver</integration-driver>
@@ -124,6 +125,11 @@
 			<artifactId>spring-security-test</artifactId>
 			<version>${spring-security-test.version}</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j-api.version}</version>
 		</dependency>
 	</dependencies>
 
