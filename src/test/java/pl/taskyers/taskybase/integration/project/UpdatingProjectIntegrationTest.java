@@ -91,6 +91,33 @@ public class UpdatingProjectIntegrationTest extends IntegrationBase {
     @Test
     @WithMockUser(value = DEFAULT_USERNAME)
     @Transactional
+    public void givenEmptyProjectNameWhenUpdatingProjectShouldReturnStatus400() throws Exception {
+        long id = 1L;
+        int sizeBefore = projectRepository.findAll().size();
+        ProjectEntity projectEntityBefore = projectRepository.findById(id).get();
+        String projectJSON = objectMapper.writeValueAsString(new ProjectDTO("", "asdasd"));
+        
+        mockMvc.perform(put("/secure/projects/settings/" + id).contentType(MediaType.APPLICATION_JSON).content(projectJSON))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].message", is("Name cannot be empty")))
+                .andExpect(jsonPath("$[0].type", is("ERROR")))
+                .andExpect(jsonPath("$[0].field", is("name")))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isBadRequest());
+        
+        int sizeAfter = projectRepository.findAll().size();
+        ProjectEntity projectEntityAfter = projectRepository.findById(id).get();
+        
+        assertEquals(sizeBefore, sizeAfter);
+        assertEquals(projectEntityBefore.getName(), projectEntityAfter.getName());
+        assertEquals(projectEntityBefore.getDescription(), projectEntityAfter.getDescription());
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
     public void givenValidProjectWhenUpdatingProjectShouldReturnStatus200() throws Exception {
         Long id = 1L;
         final String newName = "uniquedNames";
