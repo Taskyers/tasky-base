@@ -22,10 +22,11 @@ public class AddingNewProjectIntegrationTest extends IntegrationBase {
     @Test
     @WithMockUser(value = DEFAULT_USERNAME)
     @Transactional
-    public void givenInvalidProjectWhenAddingNewProjectShouldReturnStatus400() throws Exception {
+    public void givenExistingProjectNameWhenAddingNewProjectShouldReturnStatus400() throws Exception {
         int sizeBefore = projectRepository.findAll().size();
         int roleLinkerSizeBefore = roleLinkerRepository.findAll().size();
         String projectJSON = objectMapper.writeValueAsString(new ProjectDTO("test1", "test"));
+        
         mockMvc.perform(post("/secure/projects")
                 .contentType(MediaType.APPLICATION_JSON).content(projectJSON))
                 .andDo(print())
@@ -40,6 +41,34 @@ public class AddingNewProjectIntegrationTest extends IntegrationBase {
         
         int sizeAfter = projectRepository.findAll().size();
         int roleLinkerSizeAfter = roleLinkerRepository.findAll().size();
+        
+        assertEquals(sizeBefore, sizeAfter);
+        assertEquals(roleLinkerSizeBefore, roleLinkerSizeAfter);
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
+    public void givenProjectWithEmptyNameWhenAddingNewProjectShouldReturnStatus400() throws Exception {
+        int sizeBefore = projectRepository.findAll().size();
+        int roleLinkerSizeBefore = roleLinkerRepository.findAll().size();
+        String projectJSON = objectMapper.writeValueAsString(new ProjectDTO("", "test"));
+        
+        mockMvc.perform(post("/secure/projects")
+                .contentType(MediaType.APPLICATION_JSON).content(projectJSON))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(1)))
+                .andExpect(jsonPath("$[0].message", is("Name cannot be empty")))
+                .andExpect(jsonPath("$[0].type", is("ERROR")))
+                .andExpect(jsonPath("$[0].field", is("name")))
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isBadRequest());
+        
+        int sizeAfter = projectRepository.findAll().size();
+        int roleLinkerSizeAfter = roleLinkerRepository.findAll().size();
+        
         assertEquals(sizeBefore, sizeAfter);
         assertEquals(roleLinkerSizeBefore, roleLinkerSizeAfter);
     }
@@ -52,6 +81,7 @@ public class AddingNewProjectIntegrationTest extends IntegrationBase {
         int roleSizeBefore = roleRepository.findAll().size();
         int roleLinkerSizeBefore = roleLinkerRepository.findAll().size();
         String projectJSON = objectMapper.writeValueAsString(new ProjectDTO("uniqueName", "test"));
+        
         mockMvc.perform(post("/secure/projects")
                 .contentType(MediaType.APPLICATION_JSON).content(projectJSON))
                 .andDo(print())
@@ -72,6 +102,7 @@ public class AddingNewProjectIntegrationTest extends IntegrationBase {
         
         int sizeAfter = projectRepository.findAll().size();
         int roleLinkerSizeAfter = roleLinkerRepository.findAll().size();
+        
         assertNotEquals(sizeBefore, sizeAfter);
         assertEquals(roleLinkerSizeAfter, roleLinkerSizeBefore + roleSizeBefore);
     }
