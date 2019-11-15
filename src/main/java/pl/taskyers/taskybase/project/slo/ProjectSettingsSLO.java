@@ -1,6 +1,7 @@
 package pl.taskyers.taskybase.project.slo;
 
 import org.springframework.http.ResponseEntity;
+import pl.taskyers.taskybase.core.roles.slo.EntryEndpoint;
 import pl.taskyers.taskybase.project.dto.ProjectDTO;
 
 /**
@@ -8,11 +9,13 @@ import pl.taskyers.taskybase.project.dto.ProjectDTO;
  *
  * @author Jakub Sildatk
  */
-public interface ProjectSettingsSLO {
+public interface ProjectSettingsSLO extends EntryEndpoint {
     
     String PROJECT_SETTINGS_PREFIX = "/secure/projects/settings";
     
     String GET_PROJECT_BY_ID = "/{id}";
+    
+    String GET_PROJECT_BY_NAME = "/{projectName}";
     
     /**
      * Update basic information about project - name and description
