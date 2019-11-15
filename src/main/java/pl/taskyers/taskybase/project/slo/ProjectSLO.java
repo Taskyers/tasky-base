@@ -98,4 +98,13 @@ public interface ProjectSLO {
      */
     Optional<ProjectEntity> getProjectByNameAndUser(String projectName, UserEntity userEntity);
     
+    /**
+     * Remove user from project
+     *
+     * @param userId      id
+     * @param projectName project's name
+     * @since 0.0.3
+     */
+    void deleteUserInProject(Long userId, String projectName);
+    
 }

@@ -55,4 +55,20 @@ public interface UserSLO {
      */
     Optional<UserEntity> getEntityByUsername(String username);
     
+    /**
+     * Get user entity by id
+     *
+     * @param id
+     * @return optional user entity
+     * @since 0.0.3
+     */
+    Optional<UserEntity> getEntityById(Long id);
+    
+    /**
+     * Flush user repository
+     *
+     * @since 0.0.3
+     */
+    void flushRepository();
+    
 }

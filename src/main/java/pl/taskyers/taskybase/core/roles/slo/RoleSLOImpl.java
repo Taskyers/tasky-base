@@ -52,6 +52,16 @@ public class RoleSLOImpl implements RoleSLO {
         return false;
     }
     
+    @Override
+    public Optional<RoleEntity> getEntityByKey(String key) {
+        return roleRepository.findByKey(key);
+    }
+    
+    @Override
+    public List<RoleLinkerEntity> getRoleLinkersByUserAndProject(UserEntity userEntity, ProjectEntity projectEntity) {
+        return roleLinkerRepository.findAllByUserAndProject(userEntity, projectEntity);
+    }
+    
     private void createLinker(UserEntity userEntity, ProjectEntity projectEntity, boolean checked) {
         List<RoleEntity> allRoles = roleRepository.findAll();
         for ( RoleEntity roleEntity : allRoles ) {
