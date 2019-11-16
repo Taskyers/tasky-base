@@ -90,4 +90,12 @@ public interface ProjectSLO {
      */
     void deleteProjectById(Long id);
     
+    /**
+     * Get project user by name
+     *
+     * @return project
+     * @since 0.0.3
+     */
+    Optional<ProjectEntity> getProjectByNameAndUser(String projectName, UserEntity userEntity);
+    
 }
