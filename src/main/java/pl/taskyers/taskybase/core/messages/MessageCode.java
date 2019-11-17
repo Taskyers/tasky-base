@@ -27,7 +27,8 @@ public enum MessageCode {
     project_updated,
     registration_successful,
     server_problem_occured,
-    user_field_already_exists;
+    user_field_already_exists,
+    user_already_in_project;
     
     private static MessageSource messageSource;
     

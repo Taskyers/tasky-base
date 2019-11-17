@@ -164,4 +164,22 @@ public class InvitingToProjectIntegrationTest extends IntegrationBase {
                 .andExpect(status().isOk());
     }
     
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    public void givenValidUserAlreadyInProjectShouldReturnStatus400() throws Exception {
+        String userName = "userWith4Projects";
+        String projectName = "test1";
+        MultiValueMap<String, String> paraMap = new LinkedMultiValueMap<>();
+        paraMap.add("username", userName);
+        paraMap.add("projectName", projectName);
+        mockMvc.perform(post("/secure/projectInvitation/invitationToken").contentType(MediaType.APPLICATION_FORM_URLENCODED).params(paraMap))
+                .andDo(print())
+                .andExpect(jsonPath("$.message", is(userName + " is already in " + projectName + ".")))
+                .andExpect(jsonPath("$.type", is("ERROR")))
+                .andExpect(jsonPath("$.object", is(nullValue())))
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isBadRequest());
+    }
+    
 }

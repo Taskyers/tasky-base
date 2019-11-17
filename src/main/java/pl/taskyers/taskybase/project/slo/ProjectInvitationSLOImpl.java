@@ -46,6 +46,10 @@ public class ProjectInvitationSLOImpl implements ProjectInvitationSLO {
             if ( !roleSLO.hasPermission(authProvider.getUserEntity(), projectEntity, PROJECT_INVITE_OTHERS) ) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body(new ResponseMessage<String>(MessageCode.project_permission_not_granted.getMessage(), MessageType.WARN));
+            } else if ( projectSLO.getProjectByNameAndUser(projectName, userEntity).isPresent() ) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ResponseMessage<>(MessageCode.user_already_in_project.getMessage(userEntity.getUsername(), projectEntity.getName()),
+                                MessageType.ERROR));
             }
             projectInvitationTokenSLO.createToken(userEntity, projectEntity);
             boolean emailWasSent = emailSLO.sendEmailWithTemplateToSingleAddressee(AccountConverter.convertToDTO(userEntity),

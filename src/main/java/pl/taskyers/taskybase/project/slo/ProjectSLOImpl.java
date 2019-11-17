@@ -80,6 +80,11 @@ public class ProjectSLOImpl implements ProjectSLO {
         projectRepository.deleteById(id);
     }
     
+    @Override
+    public Optional<ProjectEntity> getProjectByNameAndUser(String projectName, UserEntity userEntity) {
+        return projectRepository.findByNameAndUsers(projectName, userEntity);
+    }
+    
     private List<ProjectDTO> getProjectsAsDTO(List<ProjectEntity> projectEntities) {
         List<ProjectDTO> result = new ArrayList<>();
         for ( ProjectEntity projectEntity : projectEntities ) {
