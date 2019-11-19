@@ -1,11 +1,13 @@
 package pl.taskyers.taskybase.project.slo;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import pl.taskyers.taskybase.core.roles.slo.RoleSLO;
 import pl.taskyers.taskybase.core.slo.AuthProvider;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
+import pl.taskyers.taskybase.core.users.slo.UserSLO;
 import pl.taskyers.taskybase.core.utils.DateUtils;
 import pl.taskyers.taskybase.dashboard.main.converter.ProjectConverter;
 import pl.taskyers.taskybase.dashboard.main.dto.ProjectDTO;
@@ -16,6 +18,7 @@ import java.util.*;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ProjectSLOImpl implements ProjectSLO {
     
     private final AuthProvider authProvider;
@@ -23,6 +26,8 @@ public class ProjectSLOImpl implements ProjectSLO {
     private final ProjectRepository projectRepository;
     
     private final RoleSLO roleSLO;
+    
+    private final UserSLO userSLO;
     
     @Override
     public List<ProjectDTO> getProjects(int n) {
@@ -83,6 +88,26 @@ public class ProjectSLOImpl implements ProjectSLO {
     @Override
     public Optional<ProjectEntity> getProjectByNameAndUser(String projectName, UserEntity userEntity) {
         return projectRepository.findByNameAndUsers(projectName, userEntity);
+    }
+    
+    @Override
+    public void deleteUserInProject(Long userId, String projectName) {
+        log.debug("Try to delete user with id = {} and project with name {}", userId, projectName);
+        final ProjectEntity projectEntity = this.getProjectEntityByName(projectName).get();
+        final UserEntity userEntity = userSLO.getEntityById(userId).get();
+        
+        for ( UserEntity user : projectEntity.getUsers() ) {
+            if ( user.getId().equals(userId) ) {
+                projectEntity.getUsers().remove(user);
+                userEntity.getProjects().remove(projectEntity);
+                
+                projectRepository.flush();
+                userSLO.flushRepository();
+                
+                log.debug("User has been removed");
+                break;
+            }
+        }
     }
     
     private List<ProjectDTO> getProjectsAsDTO(List<ProjectEntity> projectEntities) {

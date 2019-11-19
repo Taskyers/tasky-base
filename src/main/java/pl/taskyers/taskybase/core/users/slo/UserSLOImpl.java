@@ -44,4 +44,14 @@ public class UserSLOImpl implements UserSLO {
         return userRepository.findByUsername(username);
     }
     
+    @Override
+    public Optional<UserEntity> getEntityById(Long id) {
+        return userRepository.findById(id);
+    }
+    
+    @Override
+    public void flushRepository() {
+        userRepository.flush();
+    }
+    
 }

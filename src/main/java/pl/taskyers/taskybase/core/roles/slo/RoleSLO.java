@@ -1,8 +1,12 @@
 package pl.taskyers.taskybase.core.roles.slo;
 
 import pl.taskyers.taskybase.core.roles.entity.RoleEntity;
+import pl.taskyers.taskybase.core.roles.entity.RoleLinkerEntity;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Interface for operations on role entity and role linker entity
@@ -54,5 +58,23 @@ public interface RoleSLO {
      * @since 0.0.3
      */
     boolean hasPermission(UserEntity userEntity, ProjectEntity projectEntity, String role);
+    
+    /**
+     * Get role entity by role key
+     *
+     * @param key key
+     * @return entity as optional
+     */
+    Optional<RoleEntity> getEntityByKey(String key);
+    
+    /**
+     * Get all linkers assigned to user and project
+     *
+     * @param userEntity
+     * @param projectEntity
+     * @return all linkers as list
+     * @since 0.0.3
+     */
+    List<RoleLinkerEntity> getRoleLinkersByUserAndProject(UserEntity userEntity, ProjectEntity projectEntity);
     
 }

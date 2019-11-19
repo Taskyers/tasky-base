@@ -26,9 +26,13 @@ public enum MessageCode {
     project_permission_not_granted,
     project_updated,
     registration_successful,
+    roles_updated,
     server_problem_occured,
+    user_already_in_project,
     user_field_already_exists,
-    user_already_in_project;
+    user_not_found,
+    user_in_project_not_found,
+    user_removed_from_project;
     
     private static MessageSource messageSource;
     
