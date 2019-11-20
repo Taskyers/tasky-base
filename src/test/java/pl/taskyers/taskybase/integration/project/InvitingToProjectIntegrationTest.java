@@ -182,4 +182,46 @@ public class InvitingToProjectIntegrationTest extends IntegrationBase {
                 .andExpect(status().isBadRequest());
     }
     
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    public void givenValidUsernameWhileSearchingShouldReturn1UserWithStatus200() throws Exception {
+        String username = "userWith4Projects";
+        mockMvc.perform(get("/secure/projectInvitation/search/" + username))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(1)))
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isOk());
+        assertEquals(1, userRepository.findTop5ByUsernameIgnoreCaseContaining(username).size());
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    public void givenNotValidUsernameWhileSearchingShouldReturn0UsersWithStatus200() throws Exception {
+        String username = "badumtssbadum";
+        mockMvc.perform(get("/secure/projectInvitation/search/" + username))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(0)))
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isOk());
+        assertEquals(0, userRepository.findTop5ByUsernameIgnoreCaseContaining(username).size());
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    public void givenValidUsernameWhileSearchingShouldReturn4UsersWithStatus200() throws Exception {
+        String username = "userWithRoles";
+        mockMvc.perform(get("/secure/projectInvitation/search/" + username))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(4)))
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isOk());
+        assertEquals(4, userRepository.findTop5ByUsernameIgnoreCaseContaining(username).size());
+    }
+    
 }

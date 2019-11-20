@@ -2,6 +2,7 @@ package pl.taskyers.taskybase.core.users.slo;
 
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -70,5 +71,14 @@ public interface UserSLO {
      * @since 0.0.3
      */
     void flushRepository();
+    
+    /**
+     * Get user entities by username
+     *
+     * @param username
+     * @return UserEntity list
+     * @since 0.0.3
+     */
+    List<UserEntity> findUsersByUsernameLike(String username);
     
 }

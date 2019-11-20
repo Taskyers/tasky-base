@@ -2,6 +2,9 @@ package pl.taskyers.taskybase.project.slo;
 
 import org.springframework.http.ResponseEntity;
 import pl.taskyers.taskybase.core.roles.slo.EntryEndpoint;
+import pl.taskyers.taskybase.project.dto.UserDTO;
+
+import java.util.List;
 
 /**
  * Interface for project invitation
@@ -17,6 +20,8 @@ public interface ProjectInvitationSLO extends EntryEndpoint {
     String ACCEPT_INVITATION = "/{token}";
     
     String USER_CAN_INVITE = "/{projectName}";
+    
+    String FIND_USER_BY_USERNAME_LIKE = "/search/{username}";
     
     /**
      * Method for creating project invitation token and then sending email to passed user with generated token
@@ -36,5 +41,14 @@ public interface ProjectInvitationSLO extends EntryEndpoint {
      * @since 0.0.3
      */
     ResponseEntity acceptInvitation(String token);
+    
+    /**
+     * Method for finding 5 first users by username from database
+     *
+     * @param username users's username which was passed by path variable
+     * @return found users as UserDTO
+     * @since 0.0.3
+     */
+    List<String> findUsersByUsernameLike(String username);
     
 }

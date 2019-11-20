@@ -19,6 +19,9 @@ import pl.taskyers.taskybase.core.users.slo.UserSLO;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.project.entity.ProjectInvitationTokenEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static pl.taskyers.taskybase.core.roles.constants.Roles.PROJECT_INVITE_OTHERS;
 
 @Service
@@ -92,6 +95,11 @@ public class ProjectInvitationSLOImpl implements ProjectInvitationSLO {
     }
     
     @Override
+    public List<String> findUsersByUsernameLike(String username) {
+        return getUsersUsername(userSLO.findUsersByUsernameLike(username));
+    }
+    
+    @Override
     public ResponseEntity hasProperRoleOnEntry(String projectName) {
         if ( projectSLO.getProjectEntityByName(projectName).isPresent() ) {
             ProjectEntity projectEntity = projectSLO.getProjectEntityByName(projectName).get();
@@ -101,6 +109,14 @@ public class ProjectInvitationSLOImpl implements ProjectInvitationSLO {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ResponseMessage<>(MessageCode.project_not_found.getMessage("name", projectName), MessageType.WARN));
+    }
+    
+    private List<String> getUsersUsername(List<UserEntity> userEntities) {
+        List<String> result = new ArrayList<>();
+        for ( UserEntity userEntity : userEntities ) {
+            result.add(userEntity.getUsername());
+        }
+        return result;
     }
     
 }
