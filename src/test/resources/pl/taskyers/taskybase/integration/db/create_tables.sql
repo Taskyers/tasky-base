@@ -37,9 +37,9 @@ CREATE TABLE IF NOT EXISTS projects
 CREATE TABLE IF NOT EXISTS project_invitation_tokens
 (
     project_invitation_token_id int primary key auto_increment,
-    user_id                    int not null references users (user_id),
-    project_id                 int not null references projects (project_id),
-    token                      varchar(200) unique
+    user_id                     int not null references users (user_id),
+    project_id                  int not null references projects (project_id),
+    token                       varchar(200) unique
 );
 CREATE TABLE IF NOT EXISTS project_user
 (
@@ -62,4 +62,12 @@ CREATE TABLE IF NOT EXISTS role_linkers
     project_id     bigint null references projects (project_id),
     role_id        bigint null references roles (role_id),
     user_id        bigint null references users (user_id)
+);
+CREATE TABLE IF NOT EXISTS status_entries
+(
+    status_entry_id  bigint auto_increment primary key,
+    background_color varchar(255) not null,
+    text_color       varchar(255) not null,
+    value            varchar(255) not null,
+    project_id       bigint       not null references projects (project_id)
 );

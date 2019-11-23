@@ -28,4 +28,9 @@ public interface Roles {
      */
     String PROJECT_INVITE_OTHERS = "project.invite.others";
     
+    /**
+     * @since 0.0.3
+     */
+    String SETTINGS_MANAGE_STATUSES = "settings.manage.statuses";
+    
 }

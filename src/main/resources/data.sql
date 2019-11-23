@@ -30,12 +30,16 @@ INSERT INTO roles (`key`, description)
 VALUES ('settings.manage.users', 'User is able to manage manage users in project settings'),
        ('settings.edit.project', 'User is able to edit project name and description'),
        ('settings.delete.project', 'User is able to delete project'),
-       ('project.invite.others', 'User is able to invite others to project');
+       ('project.invite.others', 'User is able to invite others to project'),
+       ('settings.manage.statuses', 'User is able to manage task statuses');
+INSERT INTO status_entries (background_color, text_color, value, project_id)
+VALUES ('#34eb52', '#ebe834', 'test-status', 1);
 INSERT INTO role_linkers (user_id, project_id, role_id, checked)
 VALUES (1, 1, 1, true),
        (1, 1, 2, true),
        (1, 1, 3, true),
        (1, 1, 4, true),
+       (1, 1, 5, true),
        (1, 2, 1, true),
        (1, 2, 2, true),
        (1, 2, 3, true),
