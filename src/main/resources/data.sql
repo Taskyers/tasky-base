@@ -3,7 +3,11 @@ VALUES ('test', '$2a$10$0k1y57DwGGZ8iKY5jpd6fum./qxDxq24lGsi8ChagpXgEHHVV0V6W', 
        ('test1', '$2a$10$0k1y57DwGGZ8iKY5jpd6fum./qxDxq24lGsi8ChagpXgEHHVV0V6W', 'Marcinek', 'Darek',
         'mdarek@gmail.com', 1),
        ('test2', '$2a$10$0k1y57DwGGZ8iKY5jpd6fum./qxDxq24lGsi8ChagpXgEHHVV0V6W', 'Kubus', 'Marjusz',
-        'kmarjusz@gmail.com', 1);
+        'kmarjusz@gmail.com', 1),
+       ('test3', '$2a$10$0k1y57DwGGZ8iKY5jpd6fum./qxDxq24lGsi8ChagpXgEHHVV0V6W', 'Darjusz', 'Marjusz',
+        'dmarjusz@gmail.com', 1),
+       ('test4', '$2a$10$0k1y57DwGGZ8iKY5jpd6fum./qxDxq24lGsi8ChagpXgEHHVV0V6W', 'Marek', 'Jarek',
+        'mjarek@gmail.com', 1);
 INSERT INTO projects(owner_id, name, description, creation_date)
 VALUES (1, 'project', 'project', '2019-11-05 15:00'),
        (1, 'project2', 'project2', '2019-11-05 15:10'),
@@ -24,8 +28,11 @@ VALUES (1, 1),
        (1, 7),
        (1, 8),
        (1, 9),
+       (2, 1),
        (2, 2),
-       (2, 3);
+       (2, 3),
+       (4, 1),
+       (5, 1);
 INSERT INTO roles (`key`, description)
 VALUES ('settings.manage.users', 'User is able to manage manage users in project settings'),
        ('settings.edit.project', 'User is able to edit project name and description'),
@@ -72,4 +79,6 @@ VALUES (1, 1, 1, true),
        (2, 2, 3, false),
        (2, 3, 1, false),
        (2, 3, 2, false),
-       (2, 3, 3, false);
+       (2, 3, 3, false),
+       (4, 1, 2, true),
+       (5, 1, 3, true);
