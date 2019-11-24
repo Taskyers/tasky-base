@@ -56,7 +56,8 @@ VALUES (1, 'test1', 'test1', '2019-11-05 15:00'),
        (1, 'test18', 'test18', '2019-11-05 15:40'),
        (1, 'test19', 'test19', '2019-11-05 15:45'),
        (1, 'projectToBeDeleted', 'projectToBeDeleted', '2019-11-12 15:45'),
-       (1, 'test10', 'test10', '2019-11-05 15:55');
+       (1, 'test10', 'test10', '2019-11-05 15:55'),
+       (1, 'toBeUpdated', 'xd', '2019-11-05 16:55');
 INSERT INTO project_user(project_id, user_id)
 VALUES (1, 5),
        (2, 5),
@@ -103,6 +104,7 @@ VALUES (1, 1, 1, true),
        (1, 8, 2, false),
        (1, 9, 3, false),
        (1, 10, 3, true),
+       (1, 12, 2, true),
        (1, 1, 5, true),
        (2, 1, 4, false),
        (8, 1, 2, false),

@@ -192,4 +192,42 @@ public class UpdatingProjectIntegrationTest extends IntegrationBase {
         assertThat(projectEntityAfter.getDescription(), isEmptyString());
     }
     
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
+    public void givenSameProjectWhenUpdatingProjectShouldReturnStatus200() throws Exception {
+        Long id = 12L;
+        final String newName = "toBeUpdated";
+        String projectJSON = objectMapper.writeValueAsString(new ProjectDTO(newName, "xd"));
+        
+        int sizeBefore = projectRepository.findAll().size();
+        ProjectEntity projectEntityBefore = projectRepository.findById(id).get();
+        String nameBefore = projectEntityBefore.getName();
+        String descriptionBefore = projectEntityBefore.getDescription();
+        Date creationDateBefore = projectEntityBefore.getCreationDate();
+        Long ownerIdBefore = projectEntityBefore.getOwner().getId();
+        int usersSizeBefore = projectEntityBefore.getUsers().size();
+        
+        mockMvc.perform(put("/secure/projects/settings/" + id).contentType(MediaType.APPLICATION_JSON).content(projectJSON))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("Project has been updated")))
+                .andExpect(jsonPath("$.type", is("SUCCESS")))
+                .andExpect(jsonPath("$.object", is(notNullValue())))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isOk());
+        
+        int sizeAfter = projectRepository.findAll().size();
+        ProjectEntity projectEntityAfter = projectRepository.findByName(newName).get();
+        
+        assertEquals(sizeBefore, sizeAfter);
+        assertEquals(id, projectEntityAfter.getId());
+        assertEquals(creationDateBefore, projectEntityAfter.getCreationDate());
+        assertEquals(ownerIdBefore, projectEntityAfter.getOwner().getId());
+        assertEquals(usersSizeBefore, projectEntityAfter.getUsers().size());
+        assertEquals(nameBefore, projectEntityAfter.getName());
+        assertEquals(descriptionBefore, projectEntityAfter.getDescription());
+    }
+    
 }
