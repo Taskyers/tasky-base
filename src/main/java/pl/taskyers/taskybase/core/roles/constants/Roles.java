@@ -33,4 +33,14 @@ public interface Roles {
      */
     String SETTINGS_MANAGE_STATUSES = "settings.manage.statuses";
     
+    /**
+     * @since 0.0.3
+     */
+    String SETTINGS_MANAGE_TYPES = "settings.manage.types";
+    
+    /**
+     * @since 0.0.3
+     */
+    String SETTINGS_MANAGE_PRIORITIES = "settings.manage.priorities";
+    
 }

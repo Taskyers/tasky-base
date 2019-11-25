@@ -7,23 +7,26 @@ import org.springframework.stereotype.Component;
 import pl.taskyers.taskybase.core.messages.MessageCode;
 import pl.taskyers.taskybase.core.messages.container.ValidationMessageContainer;
 import pl.taskyers.taskybase.core.validator.Validator;
-import pl.taskyers.taskybase.entry.entity.StatusEntryEntity;
-import pl.taskyers.taskybase.entry.slo.CustomizableEntrySLO;
+import pl.taskyers.taskybase.entry.entity.EntryEntity;
+import pl.taskyers.taskybase.entry.slo.EntrySLO;
 
 @Component("statusEntryValidator")
 @AllArgsConstructor
 @Slf4j
-public class StatusEntryValidator implements Validator<StatusEntryEntity> {
+public class EntryValidator implements Validator<EntryEntity> {
     
-    private final CustomizableEntrySLO<StatusEntryEntity> statusEntrySLO;
+    private final EntrySLO entityEntrySLO;
     
     @Override
-    public void validate(StatusEntryEntity object, ValidationMessageContainer validationMessageContainer) {
+    public void validate(EntryEntity object, ValidationMessageContainer validationMessageContainer) {
         if ( StringUtils.isBlank(object.getValue()) ) {
-            validationMessageContainer.addError(MessageCode.field_empty.getMessage("Status value"), "value");
-        } else if ( statusEntrySLO.getEntryByValueAndProject(object.getValue(), object.getProject()).isPresent() ) {
+            validationMessageContainer.addError(MessageCode.field_empty.getMessage("Entry value"), "value");
+        } else if ( object.getEntryType() != null &&
+                    entityEntrySLO.getEntryByEntryTypeAndValueAndProject(object.getEntryType(), object.getValue(), object.getProject())
+                            .isPresent() ) {
             final String message =
-                    MessageCode.entry_field_already_exists.getMessage("status", object.getValue(), "value", object.getProject().getName());
+                    MessageCode.entry_field_already_exists.getMessage(object.getEntryType(), object.getValue(), "value",
+                            object.getProject().getName());
             log.error(message);
             validationMessageContainer.addError(message, "value");
         }
@@ -35,6 +38,7 @@ public class StatusEntryValidator implements Validator<StatusEntryEntity> {
         if ( StringUtils.isBlank(object.getBackgroundColor()) ) {
             validationMessageContainer.addError(MessageCode.field_empty.getMessage("Background color"), "backgroundColor");
         }
+        
     }
     
 }

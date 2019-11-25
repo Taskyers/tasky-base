@@ -63,11 +63,12 @@ CREATE TABLE IF NOT EXISTS role_linkers
     role_id        bigint null references roles (role_id),
     user_id        bigint null references users (user_id)
 );
-CREATE TABLE IF NOT EXISTS status_entries
+CREATE TABLE IF NOT EXISTS entry_entities
 (
-    status_entry_id  bigint auto_increment primary key,
+    entry_entity_id  bigint auto_increment primary key,
     background_color varchar(255) not null,
     text_color       varchar(255) not null,
     value            varchar(255) not null,
-    project_id       bigint       not null references projects (project_id)
+    project_id       bigint       not null references projects (project_id),
+    entry_type            varchar(255) not null
 );

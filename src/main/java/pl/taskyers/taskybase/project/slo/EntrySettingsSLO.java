@@ -2,17 +2,20 @@ package pl.taskyers.taskybase.project.slo;
 
 import org.springframework.http.ResponseEntity;
 import pl.taskyers.taskybase.core.roles.slo.EntryEndpoint;
+import pl.taskyers.taskybase.entry.EntryType;
 import pl.taskyers.taskybase.entry.dto.CustomizableEntryDTO;
 
-public interface EntrySettingsSLO extends EntryEndpoint {
+public interface EntrySettingsSLO {
     
-    String STATUSES_PREFIX = "/secure/projects/settings/statuses";
+    String STATUSES_PREFIX = "/secure/projects/settings/entries";
     
     String GET_BY_ENTRY_ID = "/{id}";
     
     String GET_BY_PROJECT_NAME = "/{projectName}";
     
-    String GET_BY_PROJECT_NAME_AND_VALUE = GET_BY_PROJECT_NAME + "/{value}";
+    String GET_BY_PROJECT_NAME_AND_ENTRYTYPE = GET_BY_PROJECT_NAME + "/{type}";
+    
+    String GET_BY_PROJECT_NAME_AND_VALUE_AND_ENTRYTYPE = GET_BY_PROJECT_NAME + "/{value}/{type}";
     
     /**
      * Create new customizable entry from DTO
@@ -51,6 +54,16 @@ public interface EntrySettingsSLO extends EntryEndpoint {
      * @return true if value exists, otherwise false
      * @since 0.0.3
      */
-    ResponseEntity doesValueExistInProject(String value, String projectName);
+    ResponseEntity doesValueExistInProject(String value, String projectName, String type);
+    
+    /**
+     * Check if user has proper role for operation on entry
+     *
+     * @param projectName project's name
+     * @param type        entry type value
+     * @return status 403 if user has no permission, status 404 if project was not found or entry type value is not valid, otherwise status 200
+     * @since 0.0.3
+     */
+    ResponseEntity hasProperRoleOnEntry(String projectName, String type);
     
 }

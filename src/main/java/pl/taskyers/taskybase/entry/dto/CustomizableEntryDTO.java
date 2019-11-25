@@ -17,4 +17,6 @@ public class CustomizableEntryDTO {
     
     private String backgroundColor;
     
+    private String entryType;
+    
 }
