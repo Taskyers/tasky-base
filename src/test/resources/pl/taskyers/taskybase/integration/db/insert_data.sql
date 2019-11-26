@@ -95,12 +95,16 @@ VALUES ('settings.manage.users', 'User is able to manage manage users in project
        ('settings.edit.project', 'User is able to edit project name and description'),
        ('settings.delete.project', 'User is able to delete project'),
        ('project.invite.others', 'User is able to invite others to project'),
-       ('settings.manage.statuses', 'User is able to manage task statuses');
+       ('settings.manage.statuses', 'User is able to manage task statuses'),
+       ('settings.manage.types','User is able to manage task types'),
+       ('settings.manage.priorities','User is able to manage task priorities');
 INSERT INTO role_linkers (user_id, project_id, role_id, checked)
 VALUES (1, 1, 1, true),
        (1, 1, 2, true),
        (1, 1, 3, true),
        (1, 1, 4, true),
+       (1, 1, 6, true),
+       (1, 1, 7, true),
        (1, 8, 2, false),
        (1, 9, 3, false),
        (1, 10, 3, true),
@@ -130,10 +134,10 @@ VALUES (1, 1, 1, true),
        (15, 1, 2, false),
        (15, 1, 3, false),
        (15, 1, 4, false);
-INSERT INTO status_entries (background_color, text_color, value, project_id)
-VALUES ('green', 'white', 'test1', 1),
-       ('green', 'white', 'test2', 1),
-       ('green', 'white', 'test3', 1),
-       ('green', 'white', 'entryToBeUpdated', 1),
-       ('green', 'white', 'entryToBeUpdated1', 1),
-       ('green', 'white', 'entryToBeDeleted', 1);
+INSERT INTO entry_entities (background_color, text_color, value, project_id,entry_type)
+VALUES ('green', 'white', 'test1', 1,'STATUS'),
+       ('green', 'white', 'test2', 1,'PRIORITY'),
+       ('green', 'white', 'test3', 1,'TYPE'),
+       ('green', 'white', 'entryToBeUpdated', 1,'PRIORITY'),
+       ('green', 'white', 'entryToBeUpdated1', 1,'STATUS'),
+       ('green', 'white', 'entryToBeDeleted', 1,'STATUS');

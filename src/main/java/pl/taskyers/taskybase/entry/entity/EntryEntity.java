@@ -4,21 +4,22 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.taskyers.taskybase.entry.EntryType;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "status_entries")
+@Table(name = "entry_entities")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StatusEntryEntity implements Serializable {
+public class EntryEntity implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "status_entry_id")
+    @Column(name = "entry_entity_id")
     private Long id;
     
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = ProjectEntity.class)
@@ -34,5 +35,9 @@ public class StatusEntryEntity implements Serializable {
     
     @Column(name = "background_color", nullable = false)
     private String backgroundColor;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "entry_type", nullable = false)
+    private EntryType entryType;
     
 }

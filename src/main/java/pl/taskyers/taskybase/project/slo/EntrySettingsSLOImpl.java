@@ -13,10 +13,11 @@ import pl.taskyers.taskybase.core.roles.slo.RoleSLO;
 import pl.taskyers.taskybase.core.slo.AuthProvider;
 import pl.taskyers.taskybase.core.utils.UriUtils;
 import pl.taskyers.taskybase.core.validator.Validator;
+import pl.taskyers.taskybase.entry.EntryType;
 import pl.taskyers.taskybase.entry.converter.CustomizableEntryConverter;
 import pl.taskyers.taskybase.entry.dto.CustomizableEntryDTO;
-import pl.taskyers.taskybase.entry.entity.StatusEntryEntity;
-import pl.taskyers.taskybase.entry.slo.CustomizableEntrySLO;
+import pl.taskyers.taskybase.entry.entity.EntryEntity;
+import pl.taskyers.taskybase.entry.slo.EntrySLO;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 
 import java.util.ArrayList;
@@ -27,9 +28,9 @@ import java.util.Optional;
 @AllArgsConstructor
 public class EntrySettingsSLOImpl implements EntrySettingsSLO {
     
-    private final CustomizableEntrySLO<StatusEntryEntity> statusEntrySLO;
+    private final EntrySLO entityEntrySLO;
     
-    private final Validator<StatusEntryEntity> statusEntryValidator;
+    private final Validator<EntryEntity> entryEntityValidator;
     
     private final ProjectSLO projectSLO;
     
@@ -39,19 +40,19 @@ public class EntrySettingsSLOImpl implements EntrySettingsSLO {
     
     @Override
     public ResponseEntity createNewEntry(String projectName, CustomizableEntryDTO customizableEntryDTO) {
-        ResponseEntity isProjectFound = checkForProjectAndRole(projectName);
+        ResponseEntity isProjectFound = checkForProjectAndRole(projectName, customizableEntryDTO.getEntryType());
         if ( isProjectFound == null ) {
             ProjectEntity projectEntity = projectSLO.getProjectEntityByName(projectName).get();
-            StatusEntryEntity statusEntryEntity = CustomizableEntryConverter.convertEntryStatusFromDTO(customizableEntryDTO);
-            statusEntryEntity.setProject(projectEntity);
+            EntryEntity entryEntity = CustomizableEntryConverter.convertEntryStatusFromDTO(customizableEntryDTO);
+            entryEntity.setProject(projectEntity);
             ValidationMessageContainer validationMessageContainer = new ValidationMessageContainer();
-            statusEntryValidator.validate(statusEntryEntity, validationMessageContainer);
+            entryEntityValidator.validate(entryEntity, validationMessageContainer);
             if ( validationMessageContainer.hasErrors() ) {
                 return ResponseEntity.badRequest().body(validationMessageContainer.getErrors());
             }
-            StatusEntryEntity savedEntry = statusEntrySLO.addNewEntry(statusEntryEntity);
+            EntryEntity savedEntry = entityEntrySLO.addNewEntry(entryEntity);
             return ResponseEntity.created(UriUtils.createURIFromId(savedEntry.getId()))
-                    .body(new ResponseMessage<>(MessageCode.entry_created.getMessage("Status"), MessageType.SUCCESS, savedEntry));
+                    .body(new ResponseMessage<>(MessageCode.entry_created.getMessage(entryEntity.getEntryType()), MessageType.SUCCESS, savedEntry));
         }
         return isProjectFound;
     }
@@ -60,14 +61,14 @@ public class EntrySettingsSLOImpl implements EntrySettingsSLO {
     public ResponseEntity updateEntry(Long id, CustomizableEntryDTO customizableEntryDTO) {
         ResponseEntity isEntryFound = checkForEntryAndRole(id);
         if ( isEntryFound == null ) {
-            StatusEntryEntity statusEntryEntity = CustomizableEntryConverter.convertEntryStatusFromDTO(customizableEntryDTO);
-            statusEntryEntity.setProject(statusEntrySLO.getEntryById(id).get().getProject());
+            EntryEntity entryEntity = CustomizableEntryConverter.convertEntryStatusFromDTO(customizableEntryDTO);
+            entryEntity.setProject(entityEntrySLO.getEntryById(id).get().getProject());
             ValidationMessageContainer validationMessageContainer = new ValidationMessageContainer();
-            statusEntryValidator.validate(statusEntryEntity, validationMessageContainer);
+            entryEntityValidator.validate(entryEntity, validationMessageContainer);
             if ( validationMessageContainer.hasErrors() ) {
                 return ResponseEntity.badRequest().body(validationMessageContainer.getErrors());
             }
-            StatusEntryEntity updatedEntry = statusEntrySLO.updateEntry(id, statusEntryEntity);
+            EntryEntity updatedEntry = entityEntrySLO.updateEntry(id, entryEntity);
             return ResponseEntity.ok(new ResponseMessage<>(MessageCode.entry_updated.getMessage("id", id), MessageType.SUCCESS, updatedEntry));
         }
         return isEntryFound;
@@ -77,18 +78,25 @@ public class EntrySettingsSLOImpl implements EntrySettingsSLO {
     public ResponseEntity deleteEntry(Long id) {
         ResponseEntity isEntryFound = checkForEntryAndRole(id);
         if ( isEntryFound == null ) {
-            statusEntrySLO.deleteEntry(id);
-            return ResponseEntity.ok(new ResponseMessage<>(MessageCode.entry_deleted.getMessage("Status"), MessageType.SUCCESS));
+            String entryType = entityEntrySLO.getEntryById(id).get().getEntryType().name();
+            entityEntrySLO.deleteEntry(id);
+            return ResponseEntity.ok(new ResponseMessage<>(MessageCode.entry_deleted.getMessage(entryType), MessageType.SUCCESS));
         }
         return isEntryFound;
     }
     
     @Override
-    public ResponseEntity hasProperRoleOnEntry(String projectName) {
+    public ResponseEntity hasProperRoleOnEntry(String projectName, String type) {
+        EntryType entryType = CustomizableEntryConverter.checkEntryType(type);
+        if ( entryType == null ) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage<>(MessageCode.entry_not_found.getMessage("of type " + type), MessageType.WARN));
+        }
+        
         if ( projectSLO.getProjectEntityByName(projectName).isPresent() ) {
             ProjectEntity projectEntity = projectSLO.getProjectEntityByName(projectName).get();
-            return roleSLO.hasPermission(authProvider.getUserEntity(), projectEntity, Roles.SETTINGS_MANAGE_STATUSES) ?
-                    ResponseEntity.ok(convertToDTOList(projectEntity)) : ResponseEntity.status(HttpStatus.FORBIDDEN)
+            return roleSLO.hasPermission(authProvider.getUserEntity(), projectEntity, getRoleByEntryType(entryType)) ?
+                    ResponseEntity.ok(convertToDTOList(projectEntity, entryType)) : ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(new ResponseMessage<>(MessageCode.project_permission_not_granted.getMessage(), MessageType.ERROR));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -96,45 +104,68 @@ public class EntrySettingsSLOImpl implements EntrySettingsSLO {
     }
     
     @Override
-    public ResponseEntity doesValueExistInProject(String value, String projectName) {
+    public ResponseEntity doesValueExistInProject(String value, String projectName, String type) {
+        EntryType entryType = CustomizableEntryConverter.checkEntryType(type);
+        if ( entryType == null ) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage<>(MessageCode.entry_not_found.getMessage("of type " + type), MessageType.WARN));
+        }
         final Optional<ProjectEntity> projectEntity = projectSLO.getProjectEntityByName(projectName);
+        
         if ( !projectEntity.isPresent() ) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage<>(MessageCode.project_not_found.getMessage("name", projectName), MessageType.WARN));
         }
-        return ResponseEntity.ok(statusEntrySLO.getEntryByValueAndProject(value, projectEntity.get()).isPresent());
+        return ResponseEntity.ok(entityEntrySLO.getEntryByEntryTypeAndValueAndProject(entryType, value, projectEntity.get()).isPresent());
     }
     
-    private ResponseEntity checkForProjectAndRole(String projectName) {
+    private ResponseEntity checkForProjectAndRole(String projectName, String type) {
+        EntryType entryType = CustomizableEntryConverter.checkEntryType(type);
+        if ( entryType == null ) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage<>(MessageCode.entry_not_found.getMessage("of type " + type), MessageType.WARN));
+        }
+        
         if ( !projectSLO.getProjectEntityByName(projectName).isPresent() ) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage<>(MessageCode.project_not_found.getMessage("name", projectName), MessageType.WARN));
         } else if ( !roleSLO.hasPermission(authProvider.getUserEntity(), projectSLO.getProjectEntityByName(projectName).get(),
-                Roles.SETTINGS_MANAGE_STATUSES) ) {
+                getRoleByEntryType(entryType)) ) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(new ResponseMessage<>(MessageCode.project_permission_not_granted.getMessage(), MessageType.ERROR));
         }
+        
         return null;
     }
     
     private ResponseEntity checkForEntryAndRole(Long id) {
-        if ( !statusEntrySLO.getEntryById(id).isPresent() ) {
+        if ( !entityEntrySLO.getEntryById(id).isPresent() ) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseMessage<>(MessageCode.entry_not_found.getMessage("status", "id", id), MessageType.WARN));
-        } else if ( !roleSLO.hasPermission(authProvider.getUserEntity(), statusEntrySLO.getEntryById(id).get().getProject(),
-                Roles.SETTINGS_MANAGE_STATUSES) ) {
+                    .body(new ResponseMessage<>(MessageCode.entry_not_found.getMessage("with id " + id), MessageType.WARN));
+        } else if ( !roleSLO.hasPermission(authProvider.getUserEntity(), entityEntrySLO.getEntryById(id).get().getProject(),
+                getRoleByEntryType(entityEntrySLO.getEntryById(id).get().getEntryType())) ) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(new ResponseMessage<>(MessageCode.project_permission_not_granted.getMessage(), MessageType.ERROR));
         }
         return null;
     }
     
-    private List<CustomizableEntryDTO> convertToDTOList(ProjectEntity projectEntity) {
+    private List<CustomizableEntryDTO> convertToDTOList(ProjectEntity projectEntity, EntryType entryType) {
         List<CustomizableEntryDTO> result = new ArrayList<>();
-        for ( StatusEntryEntity statusEntryEntity : statusEntrySLO.getAllByProject(projectEntity) ) {
-            result.add(CustomizableEntryConverter.convertEntryStatusToDTO(statusEntryEntity));
+        for ( EntryEntity entryEntity : entityEntrySLO.getAllByProjectAndEntryType(projectEntity, entryType) ) {
+            result.add(CustomizableEntryConverter.convertEntryStatusToDTO(entryEntity));
         }
         return result;
+    }
+    
+    private String getRoleByEntryType(EntryType type) {
+        if ( type == EntryType.TYPE ) {
+            return Roles.SETTINGS_MANAGE_TYPES;
+        } else if ( type == EntryType.STATUS ) {
+            return Roles.SETTINGS_MANAGE_STATUSES;
+        } else {
+            return Roles.SETTINGS_MANAGE_PRIORITIES;
+        }
     }
     
 }
