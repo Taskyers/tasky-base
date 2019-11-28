@@ -6,6 +6,7 @@ import lombok.*;
 import pl.taskyers.taskybase.core.roles.entity.RoleLinkerEntity;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.entry.entity.EntryEntity;
+import pl.taskyers.taskybase.sprint.entity.SprintEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -28,6 +29,12 @@ public class ProjectEntity implements Serializable {
     @JoinColumn(nullable = false, name = "owner_id")
     @JsonManagedReference
     private UserEntity owner;
+    
+    @OneToMany(mappedBy = "project", targetEntity = SprintEntity.class, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonBackReference
+    private Set<SprintEntity> sprints;
     
     @ManyToMany(targetEntity = UserEntity.class)
     @JoinTable(name = "project_user",

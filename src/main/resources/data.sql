@@ -39,12 +39,13 @@ VALUES ('settings.manage.users', 'User is able to manage manage users in project
        ('settings.delete.project', 'User is able to delete project'),
        ('project.invite.others', 'User is able to invite others to project'),
        ('settings.manage.statuses', 'User is able to manage task statuses'),
-       ('settings.manage.types','User is able to manage task types'),
-       ('settings.manage.priorities','User is able to manage task priorities');
-INSERT INTO entry_entities (background_color, text_color, value, project_id,entry_type)
-VALUES ('#34eb52', '#ebe834', 'test-status', 1,'STATUS'),
-('#34eb52', '#ebe834', 'test-status', 1,'TYPE'),
-('#34eb52', '#ebe834', 'test-status', 1,'PRIORITY');
+       ('settings.manage.types', 'User is able to manage task types'),
+       ('settings.manage.priorities', 'User is able to manage task priorities'),
+       ('settings.manage.sprints', 'User is able to manage sprints');
+INSERT INTO entry_entities (background_color, text_color, value, project_id, entry_type)
+VALUES ('#34eb52', '#ebe834', 'test-status', 1, 'STATUS'),
+       ('#34eb52', '#ebe834', 'test-status', 1, 'TYPE'),
+       ('#34eb52', '#ebe834', 'test-status', 1, 'PRIORITY');
 INSERT INTO role_linkers (user_id, project_id, role_id, checked)
 VALUES (1, 1, 1, true),
        (1, 1, 2, true),
@@ -53,6 +54,7 @@ VALUES (1, 1, 1, true),
        (1, 1, 5, true),
        (1, 1, 6, true),
        (1, 1, 7, true),
+       (1, 1, 8, true),
        (1, 2, 1, true),
        (1, 2, 2, true),
        (1, 2, 3, true),
@@ -88,3 +90,5 @@ VALUES (1, 1, 1, true),
        (2, 3, 3, false),
        (4, 1, 2, true),
        (5, 1, 3, true);
+INSERT INTO sprints(project_id, name, start, end)
+VALUES (1, 'sprint1', '2019-11-27', '2019-11-30');

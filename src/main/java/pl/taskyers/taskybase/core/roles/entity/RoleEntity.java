@@ -18,7 +18,7 @@ public class RoleEntity implements Serializable {
     @Column(name = "role_id")
     private Long id;
     
-    @OneToMany(mappedBy = "role", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @OneToMany(mappedBy = "role", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<RoleLinkerEntity> projectRoleLinkers;

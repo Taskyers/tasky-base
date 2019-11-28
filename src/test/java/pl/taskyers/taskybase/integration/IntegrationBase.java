@@ -16,6 +16,7 @@ import pl.taskyers.taskybase.entry.dto.CustomizableEntryDTO;
 import pl.taskyers.taskybase.entry.repository.EntryEntityRepository;
 import pl.taskyers.taskybase.project.repository.ProjectInvitationTokenRepository;
 import pl.taskyers.taskybase.project.repository.ProjectRepository;
+import pl.taskyers.taskybase.sprint.repository.SprintRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -43,6 +44,9 @@ public abstract class IntegrationBase {
     
     @Autowired
     protected EntryEntityRepository entryEntityRepository;
+    
+    @Autowired
+    protected SprintRepository sprintRepository;
     
     protected final ObjectMapper objectMapper = new ObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     
