@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class StatusEntriesIntegrationTest extends IntegrationBase {
+public class EntriesIntegrationTest extends IntegrationBase {
     
     protected CustomizableEntryDTO createDTO(String value, String textColor, String backgroundColor, String type) {
         CustomizableEntryDTO customizableEntryDTO = new CustomizableEntryDTO();
@@ -391,6 +391,50 @@ public class StatusEntriesIntegrationTest extends IntegrationBase {
         assertNotEquals(valueBefore, entryEntityAfter.getValue());
         assertNotEquals(textColorBefore, entryEntityAfter.getTextColor());
         assertNotEquals(backgroundColorBefore, entryEntityAfter.getBackgroundColor());
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
+    public void givenSameObjectWhenUpdatingEntryShouldReturnStatus200() throws Exception {
+        final Long id = 5L;
+        final EntryEntity entryEntityBefore = entryEntityRepository.findById(id).get();
+        final CustomizableEntryDTO dto =
+                createDTO(entryEntityBefore.getValue(), entryEntityBefore.getTextColor(), entryEntityBefore.getBackgroundColor(),
+                        entryEntityBefore.getEntryType().name());
+        final String content = objectMapper.writeValueAsString(dto);
+        
+        final Long idBefore = entryEntityBefore.getId();
+        final String valueBefore = entryEntityBefore.getValue();
+        final String textColorBefore = entryEntityBefore.getTextColor();
+        final String backgroundColorBefore = entryEntityBefore.getBackgroundColor();
+        final ProjectEntity projectEntityBefore = entryEntityBefore.getProject();
+        
+        mockMvc.perform(put("/secure/projects/settings/entries/" + id).contentType(MediaType.APPLICATION_JSON).content(content))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("Entry with id " + id + " has been updated")))
+                .andExpect(jsonPath("$.type", is("SUCCESS")))
+                .andExpect(jsonPath("$.object").exists())
+                .andExpect(jsonPath("$.object.id", is(Math.toIntExact(id))))
+                .andExpect(jsonPath("$.object.value", is(dto.getValue())))
+                .andExpect(jsonPath("$.object.textColor", is(entryEntityBefore.getTextColor())))
+                .andExpect(jsonPath("$.object.backgroundColor", is(entryEntityBefore.getBackgroundColor())))
+                .andExpect(jsonPath("$.object.project").exists())
+                .andExpect(jsonPath("$.object.project.id", is(Math.toIntExact(projectEntityBefore.getId()))))
+                .andExpect(jsonPath("$.object.project.owner.id", is(Math.toIntExact(projectEntityBefore.getOwner().getId()))))
+                .andExpect(jsonPath("$.object.project.users.length()", is(projectEntityBefore.getUsers().size())))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isOk());
+        
+        final EntryEntity entryEntityAfter = entryEntityRepository.findById(id).get();
+        
+        assertEquals(idBefore, entryEntityAfter.getId());
+        assertEquals(projectEntityBefore, entryEntityAfter.getProject());
+        assertEquals(textColorBefore, entryEntityAfter.getTextColor());
+        assertEquals(backgroundColorBefore, entryEntityAfter.getBackgroundColor());
+        assertEquals(valueBefore, entryEntityAfter.getValue());
     }
     
     @Test

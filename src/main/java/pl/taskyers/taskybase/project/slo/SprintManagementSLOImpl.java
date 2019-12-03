@@ -52,7 +52,7 @@ public class SprintManagementSLOImpl implements SprintManagementSLO {
             SprintEntity sprintEntity = SprintConverter.convertFromDTO(sprintDTO);
             sprintEntity.setProject(projectEntity);
             ValidationMessageContainer validationMessageContainer = new ValidationMessageContainer();
-            sprintValidator.validate(sprintEntity, validationMessageContainer);
+            sprintValidator.validate(sprintEntity, validationMessageContainer, true);
             if ( validationMessageContainer.hasErrors() ) {
                 return ResponseEntity.badRequest().body(validationMessageContainer.getErrors());
             }
@@ -68,11 +68,16 @@ public class SprintManagementSLOImpl implements SprintManagementSLO {
         ResponseEntity isSprintFound = checkForId(sprintId);
         if ( isSprintFound == null ) {
             SprintEntity sprintEntity = sprintSLO.getById(sprintId).get();
+            final String nameBefore = sprintEntity.getName();
             sprintEntity.setName(sprintDTO.getName());
             sprintEntity.setStart(DateUtils.parseDate(sprintDTO.getStart()));
             sprintEntity.setEnd(DateUtils.parseDate(sprintDTO.getEnd()));
             ValidationMessageContainer validationMessageContainer = new ValidationMessageContainer();
-            sprintValidator.validate(sprintEntity, validationMessageContainer);
+            if ( nameBefore.equals(sprintDTO.getName()) ) {
+                sprintValidator.validate(sprintEntity, validationMessageContainer, false);
+            } else {
+                sprintValidator.validate(sprintEntity, validationMessageContainer, true);
+            }
             if ( validationMessageContainer.hasErrors() ) {
                 return ResponseEntity.badRequest().body(validationMessageContainer.getErrors());
             }

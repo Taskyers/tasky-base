@@ -15,8 +15,9 @@ public interface Validator<T> {
      *
      * @param object                     object to be validated
      * @param validationMessageContainer container that will contain all validation messages
+     * @param checkForDuplicates         if set to true validator will checking for existing values with same unique fields
      * @since 0.0.1
      */
-    void validate(T object, ValidationMessageContainer validationMessageContainer);
+    void validate(T object, ValidationMessageContainer validationMessageContainer, boolean checkForDuplicates);
     
 }
