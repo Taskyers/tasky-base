@@ -96,8 +96,9 @@ VALUES ('settings.manage.users', 'User is able to manage manage users in project
        ('settings.delete.project', 'User is able to delete project'),
        ('project.invite.others', 'User is able to invite others to project'),
        ('settings.manage.statuses', 'User is able to manage task statuses'),
-       ('settings.manage.types','User is able to manage task types'),
-       ('settings.manage.priorities','User is able to manage task priorities');
+       ('settings.manage.types', 'User is able to manage task types'),
+       ('settings.manage.priorities', 'User is able to manage task priorities'),
+       ('settings.manage.sprints', 'User is able to manage sprints');
 INSERT INTO role_linkers (user_id, project_id, role_id, checked)
 VALUES (1, 1, 1, true),
        (1, 1, 2, true),
@@ -105,6 +106,7 @@ VALUES (1, 1, 1, true),
        (1, 1, 4, true),
        (1, 1, 6, true),
        (1, 1, 7, true),
+       (1, 1, 8, true),
        (1, 8, 2, false),
        (1, 9, 3, false),
        (1, 10, 3, true),
@@ -134,10 +136,16 @@ VALUES (1, 1, 1, true),
        (15, 1, 2, false),
        (15, 1, 3, false),
        (15, 1, 4, false);
-INSERT INTO entry_entities (background_color, text_color, value, project_id,entry_type)
-VALUES ('green', 'white', 'test1', 1,'STATUS'),
-       ('green', 'white', 'test2', 1,'PRIORITY'),
-       ('green', 'white', 'test3', 1,'TYPE'),
-       ('green', 'white', 'entryToBeUpdated', 1,'PRIORITY'),
-       ('green', 'white', 'entryToBeUpdated1', 1,'STATUS'),
-       ('green', 'white', 'entryToBeDeleted', 1,'STATUS');
+INSERT INTO entry_entities (background_color, text_color, value, project_id, entry_type)
+VALUES ('green', 'white', 'test1', 1, 'STATUS'),
+       ('green', 'white', 'test2', 1, 'PRIORITY'),
+       ('green', 'white', 'test3', 1, 'TYPE'),
+       ('green', 'white', 'entryToBeUpdated', 1, 'PRIORITY'),
+       ('green', 'white', 'entryToBeUpdated1', 1, 'STATUS'),
+       ('green', 'white', 'entryToBeDeleted', 1, 'STATUS');
+INSERT INTO sprints(project_id, end, name, start)
+VALUES (1, '2019-11-05', 'test', '2019-11-05'),
+       (1, '2019-11-05', 'test1', '2019-11-05'),
+       (1, '2019-11-05', 'test2', '2019-11-05'),
+       (1, '2019-11-05', 'toBeUpdated', '2019-11-05'),
+       (1, '2019-11-05', 'toBeDeleted', '2019-11-05');

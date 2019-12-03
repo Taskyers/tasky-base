@@ -43,4 +43,9 @@ public interface Roles {
      */
     String SETTINGS_MANAGE_PRIORITIES = "settings.manage.priorities";
     
+    /**
+     * @since 0.0.3
+     */
+    String SETTINGS_MANAGE_SPRINTS = "settings.manage.sprints";
+    
 }

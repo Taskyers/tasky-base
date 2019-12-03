@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS projects
 (
     project_id    int primary key auto_increment,
     owner_id      int      not null references users (user_id),
+    sprint_id     int references sprints (sprint_id),
     name          varchar(40) unique,
     description   varchar(50),
     creation_date datetime not null
@@ -70,5 +71,13 @@ CREATE TABLE IF NOT EXISTS entry_entities
     text_color       varchar(255) not null,
     value            varchar(255) not null,
     project_id       bigint       not null references projects (project_id),
-    entry_type            varchar(255) not null
+    entry_type       varchar(255) not null
 );
+CREATE TABLE IF NOT EXISTS sprints
+(
+    sprint_id  bigint auto_increment primary key,
+    end        date         not null,
+    name       varchar(255) not null,
+    start      date         not null,
+    project_id bigint       not null
+)
