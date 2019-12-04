@@ -39,7 +39,7 @@ public class RegistrationSLOImpl implements RegistrationSLO {
     @Transactional(rollbackOn = MailConnectException.class)
     public ResponseEntity register(AccountDTO accountDTO) {
         ValidationMessageContainer validationMessageContainer = new ValidationMessageContainer();
-        registrationValidator.validate(accountDTO, validationMessageContainer);
+        registrationValidator.validate(accountDTO, validationMessageContainer, true);
         if ( validationMessageContainer.hasErrors() ) {
             return ResponseEntity.badRequest().body(validationMessageContainer.getErrors());
         }

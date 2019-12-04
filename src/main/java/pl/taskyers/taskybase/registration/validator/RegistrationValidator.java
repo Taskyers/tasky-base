@@ -29,7 +29,7 @@ public class RegistrationValidator implements Validator<AccountDTO> {
     private final UserSLO userSLO;
     
     @Override
-    public void validate(AccountDTO accountDTO, ValidationMessageContainer validationMessageContainer) {
+    public void validate(AccountDTO accountDTO, ValidationMessageContainer validationMessageContainer, boolean checkForDuplicates) {
         String username = accountDTO.getUsername();
         String email = accountDTO.getEmail();
         String password = accountDTO.getPassword();

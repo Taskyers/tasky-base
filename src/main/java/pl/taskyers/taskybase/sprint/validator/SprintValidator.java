@@ -18,10 +18,10 @@ public class SprintValidator implements Validator<SprintEntity> {
     private final SprintSLO sprintSLO;
     
     @Override
-    public void validate(SprintEntity object, ValidationMessageContainer validationMessageContainer) {
+    public void validate(SprintEntity object, ValidationMessageContainer validationMessageContainer, boolean checkForDuplicates) {
         if ( StringUtils.isBlank(object.getName()) ) {
             validationMessageContainer.addError(MessageCode.field_empty.getMessage("Name"), "name");
-        } else if ( sprintSLO.doesNameExistsInProject(object.getName(), object.getProject()) ) {
+        } else if ( checkForDuplicates && sprintSLO.doesNameExistsInProject(object.getName(), object.getProject()) ) {
             validationMessageContainer.addError(MessageCode.sprint_field_already_exists.getMessage("name", object.getName()), "name");
         }
         

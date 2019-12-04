@@ -18,10 +18,10 @@ public class EntryValidator implements Validator<EntryEntity> {
     private final EntrySLO entityEntrySLO;
     
     @Override
-    public void validate(EntryEntity object, ValidationMessageContainer validationMessageContainer) {
+    public void validate(EntryEntity object, ValidationMessageContainer validationMessageContainer, boolean checkForDuplicates) {
         if ( StringUtils.isBlank(object.getValue()) ) {
             validationMessageContainer.addError(MessageCode.field_empty.getMessage("Entry value"), "value");
-        } else if ( object.getEntryType() != null &&
+        } else if ( checkForDuplicates && object.getEntryType() != null &&
                     entityEntrySLO.getEntryByEntryTypeAndValueAndProject(object.getEntryType(), object.getValue(), object.getProject())
                             .isPresent() ) {
             final String message =

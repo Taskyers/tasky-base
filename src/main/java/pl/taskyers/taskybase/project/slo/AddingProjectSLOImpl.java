@@ -25,7 +25,7 @@ public class AddingProjectSLOImpl implements AddingProjectSLO {
     public ResponseEntity addNewProject(ProjectDTO projectDTO) {
         ProjectEntity projectEntity = ProjectConverter.convertFromDTO(projectDTO);
         ValidationMessageContainer validationMessageContainer = new ValidationMessageContainer();
-        projectValidator.validate(projectEntity, validationMessageContainer);
+        projectValidator.validate(projectEntity, validationMessageContainer, true);
         if ( validationMessageContainer.hasErrors() ) {
             return ResponseEntity.badRequest().body(validationMessageContainer.getErrors());
         }

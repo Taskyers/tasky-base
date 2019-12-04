@@ -18,10 +18,10 @@ public class ProjectValidator implements Validator<ProjectEntity> {
     private final ProjectSLO projectSLO;
     
     @Override
-    public void validate(ProjectEntity object, ValidationMessageContainer validationMessageContainer) {
+    public void validate(ProjectEntity object, ValidationMessageContainer validationMessageContainer, boolean checkForDuplicates) {
         final String name = object.getName();
         String message = null;
-        if ( projectSLO.getProjectEntityByName(name).isPresent() ) {
+        if ( checkForDuplicates && projectSLO.getProjectEntityByName(name).isPresent() ) {
             message = MessageCode.project_field_already_exists.getMessage("name", name);
         } else if ( StringUtils.isBlank(name) ) {
             message = MessageCode.field_empty.getMessage("Name");

@@ -268,6 +268,41 @@ public class SprintManagementIntegrationTest extends IntegrationBase {
     
     @Test
     @WithMockUser(value = DEFAULT_USERNAME)
+    public void givenSameObjectWhenUpdatingSprintShouldReturnStatus200() throws Exception {
+        final int sizeBefore = sprintRepository.findAll().size();
+        final Long id = 4L;
+        final SprintEntity sprintEntityBefore = sprintRepository.findById(id).get();
+        final String nameBefore = sprintEntityBefore.getName();
+        final Date startBefore = sprintEntityBefore.getStart();
+        final Date endBefore = sprintEntityBefore.getEnd();
+        final ProjectEntity projectEntityBefore = sprintEntityBefore.getProject();
+        final String content =
+                objectMapper.writeValueAsString(new SprintDTO(sprintEntityBefore.getName(), DateUtils.parseString(sprintEntityBefore.getStart()),
+                        DateUtils.parseString(sprintEntityBefore.getEnd())));
+        
+        mockMvc.perform(put("/secure/project/settings/sprints/" + id).contentType(MediaType.APPLICATION_JSON).content(content))
+                .andDo(print())
+                .andExpect(jsonPath("$.message", is("Sprint has been updated")))
+                .andExpect(jsonPath("$.type", is("SUCCESS")))
+                .andExpect(jsonPath("$.object").exists())
+                .andExpect(jsonPath("$.object.id", is(Math.toIntExact(id))))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isOk());
+        
+        final int sizeAfter = sprintRepository.findAll().size();
+        final SprintEntity sprintEntityAfter = sprintRepository.findById(id).get();
+        
+        assertEquals(sizeBefore, sizeAfter);
+        assertEquals(sprintEntityAfter.getId(), id);
+        assertEquals(nameBefore, sprintEntityAfter.getName());
+        assertEquals(startBefore, sprintEntityAfter.getStart());
+        assertEquals(endBefore, sprintEntityAfter.getEnd());
+        assertEquals(projectEntityBefore, sprintEntityAfter.getProject());
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
     public void givenValidSprintWhenUpdatingSprintShouldReturnStatus200() throws Exception {
         final int sizeBefore = sprintRepository.findAll().size();
         final Long id = 4L;

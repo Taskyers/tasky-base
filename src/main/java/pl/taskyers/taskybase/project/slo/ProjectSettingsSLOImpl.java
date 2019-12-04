@@ -39,12 +39,14 @@ public class ProjectSettingsSLOImpl implements ProjectSettingsSLO {
             ProjectEntity projectEntity = projectEntityOptional.get();
             if ( roleSLO.hasPermission(authProvider.getUserEntity(), projectEntity, Roles.SETTINGS_EDIT_PROJECT) ) {
                 ProjectEntity projectEntityFromDTO = ProjectConverter.convertFromDTO(projectDTO);
+                ValidationMessageContainer validationMessageContainer = new ValidationMessageContainer();
                 if ( !projectEntity.getName().equals(projectDTO.getName()) ) {
-                    ValidationMessageContainer validationMessageContainer = new ValidationMessageContainer();
-                    projectValidator.validate(projectEntityFromDTO, validationMessageContainer);
-                    if ( validationMessageContainer.hasErrors() ) {
-                        return ResponseEntity.badRequest().body(validationMessageContainer.getErrors());
-                    }
+                    projectValidator.validate(projectEntityFromDTO, validationMessageContainer, true);
+                } else {
+                    projectValidator.validate(projectEntityFromDTO, validationMessageContainer, false);
+                }
+                if ( validationMessageContainer.hasErrors() ) {
+                    return ResponseEntity.badRequest().body(validationMessageContainer.getErrors());
                 }
                 ProjectEntity updatedProject = projectSLO.updateProject(projectEntity, projectDTO.getName(), projectDTO.getDescription());
                 return ResponseEntity.ok(new ResponseMessage<>(MessageCode.project_updated.getMessage(), MessageType.SUCCESS, updatedProject));

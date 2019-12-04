@@ -57,7 +57,7 @@ public class RegistrationValidatorStepdefs {
     
     @When("^I validate user for registration$")
     public void iValidateUserForRegistration() {
-        registrationValidator.validate(entry, result);
+        registrationValidator.validate(entry, result, true);
     }
     
     @Then("^Container contains following messages$")

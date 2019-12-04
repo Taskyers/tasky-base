@@ -46,7 +46,7 @@ public class EntrySettingsSLOImpl implements EntrySettingsSLO {
             EntryEntity entryEntity = CustomizableEntryConverter.convertEntryStatusFromDTO(customizableEntryDTO);
             entryEntity.setProject(projectEntity);
             ValidationMessageContainer validationMessageContainer = new ValidationMessageContainer();
-            entryEntityValidator.validate(entryEntity, validationMessageContainer);
+            entryEntityValidator.validate(entryEntity, validationMessageContainer, true);
             if ( validationMessageContainer.hasErrors() ) {
                 return ResponseEntity.badRequest().body(validationMessageContainer.getErrors());
             }
@@ -64,7 +64,11 @@ public class EntrySettingsSLOImpl implements EntrySettingsSLO {
             EntryEntity entryEntity = CustomizableEntryConverter.convertEntryStatusFromDTO(customizableEntryDTO);
             entryEntity.setProject(entityEntrySLO.getEntryById(id).get().getProject());
             ValidationMessageContainer validationMessageContainer = new ValidationMessageContainer();
-            entryEntityValidator.validate(entryEntity, validationMessageContainer);
+            if ( entityEntrySLO.getEntryById(id).get().getValue().equals(customizableEntryDTO.getValue()) ) {
+                entryEntityValidator.validate(entryEntity, validationMessageContainer, false);
+            } else {
+                entryEntityValidator.validate(entryEntity, validationMessageContainer, true);
+            }
             if ( validationMessageContainer.hasErrors() ) {
                 return ResponseEntity.badRequest().body(validationMessageContainer.getErrors());
             }
