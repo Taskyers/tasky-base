@@ -14,6 +14,7 @@ import pl.taskyers.taskybase.core.slo.AuthProvider;
 import pl.taskyers.taskybase.core.utils.DateUtils;
 import pl.taskyers.taskybase.core.utils.UriUtils;
 import pl.taskyers.taskybase.core.validator.Validator;
+import pl.taskyers.taskybase.project.dto.SprintResponseData;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.sprint.converter.SprintConverter;
 import pl.taskyers.taskybase.sprint.dto.SprintDTO;
@@ -41,7 +42,8 @@ public class SprintManagementSLOImpl implements SprintManagementSLO {
     @Override
     public ResponseEntity getData(Long sprintId) {
         ResponseEntity isSprintFound = checkForId(sprintId);
-        return isSprintFound != null ? isSprintFound : ResponseEntity.ok(SprintConverter.convertToDTO(sprintSLO.getById(sprintId).get()));
+        return isSprintFound != null ? isSprintFound : ResponseEntity.ok(
+                pl.taskyers.taskybase.project.converter.SprintConverter.convertToDTO(sprintSLO.getById(sprintId).get()));
     }
     
     @Override
@@ -134,10 +136,10 @@ public class SprintManagementSLOImpl implements SprintManagementSLO {
         return null;
     }
     
-    private List<SprintDTO> convertToList(Set<SprintEntity> entities) {
-        List<SprintDTO> result = new ArrayList<>();
+    private List<SprintResponseData> convertToList(Set<SprintEntity> entities) {
+        List<SprintResponseData> result = new ArrayList<>();
         for ( SprintEntity sprintEntity : entities ) {
-            result.add(SprintConverter.convertToDTO(sprintEntity));
+            result.add(pl.taskyers.taskybase.project.converter.SprintConverter.convertToDTO(sprintEntity));
         }
         return result;
     }

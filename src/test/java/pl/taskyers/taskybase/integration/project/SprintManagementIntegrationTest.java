@@ -64,6 +64,8 @@ public class SprintManagementIntegrationTest extends IntegrationBase {
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()", is(size)))
+                .andExpect(jsonPath("$[0].id").exists())
+                .andExpect(jsonPath("$[0].current").exists())
                 .andExpect(jsonPath("$[0].name").exists())
                 .andExpect(jsonPath("$[0].start").exists())
                 .andExpect(jsonPath("$[0].end").exists())
@@ -75,14 +77,36 @@ public class SprintManagementIntegrationTest extends IntegrationBase {
     
     @Test
     @WithMockUser(value = DEFAULT_USERNAME)
-    public void givenExistingIdWhenGettingDataForSingleSprintShouldReturnStatus200() throws Exception {
+    public void givenExistingIdAndNotActiveSprintWhenGettingDataForSingleSprintShouldReturnStatus200() throws Exception {
         final long id = 1L;
         final SprintEntity sprintEntity = sprintRepository.findById(id).get();
         
         mockMvc.perform(get("/secure/project/settings/sprints/data/" + id))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.length()", is(3)))
+                .andExpect(jsonPath("$.length()", is(5)))
+                .andExpect(jsonPath("$.id", is(Math.toIntExact(id))))
+                .andExpect(jsonPath("$.current", is(false)))
+                .andExpect(jsonPath("$.name", is(sprintEntity.getName())))
+                .andExpect(jsonPath("$.start", is(DateUtils.parseString(sprintEntity.getStart()))))
+                .andExpect(jsonPath("$.end", is(DateUtils.parseString(sprintEntity.getEnd()))))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isOk());
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    public void givenExistingIdAndActiveSprintWhenGettingDataForSingleSprintShouldReturnStatus200() throws Exception {
+        final long id = 6L;
+        final SprintEntity sprintEntity = sprintRepository.findById(id).get();
+        
+        mockMvc.perform(get("/secure/project/settings/sprints/data/" + id))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(5)))
+                .andExpect(jsonPath("$.id", is(Math.toIntExact(id))))
+                .andExpect(jsonPath("$.current", is(true)))
                 .andExpect(jsonPath("$.name", is(sprintEntity.getName())))
                 .andExpect(jsonPath("$.start", is(DateUtils.parseString(sprintEntity.getStart()))))
                 .andExpect(jsonPath("$.end", is(DateUtils.parseString(sprintEntity.getEnd()))))
@@ -166,7 +190,7 @@ public class SprintManagementIntegrationTest extends IntegrationBase {
     @Transactional
     public void givenEmptySprintWhenAddingNewSprintShouldReturnStatus400() throws Exception {
         final int sizeBefore = sprintRepository.findAll().size();
-        final String content = objectMapper.writeValueAsString(new SprintDTO(null, "2019-11-10", "2019-11-23"));
+        final String content = objectMapper.writeValueAsString(new SprintDTO(null, "2019-08-10", "2019-09-23"));
         
         mockMvc.perform(post("/secure/project/settings/sprints/test1").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
@@ -187,13 +211,37 @@ public class SprintManagementIntegrationTest extends IntegrationBase {
     @Test
     @WithMockUser(value = DEFAULT_USERNAME)
     @Transactional
+    public void givenSprintWithExistingPeriodWhenAddingNewSprintShouldReturnStatus400() throws Exception {
+        final int sizeBefore = sprintRepository.findAll().size();
+        final SprintDTO dto = new SprintDTO("unique", "2019-11-05", "2019-11-08");
+        final String content = objectMapper.writeValueAsString(dto);
+        
+        mockMvc.perform(post("/secure/project/settings/sprints/test1").contentType(MediaType.APPLICATION_JSON).content(content))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(1)))
+                .andExpect(jsonPath("$[0].message", is("Sprint with period " + dto.getStart() + " - " + dto.getEnd() + " already exists")))
+                .andExpect(jsonPath("$[0].type", is("ERROR")))
+                .andExpect(jsonPath("$[0].field", is("start, end")))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isBadRequest());
+        
+        final int sizeAfter = sprintRepository.findAll().size();
+        
+        assertEquals(sizeBefore, sizeAfter);
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
     public void givenValidSprintWhenAddingNewSprintShouldReturnStatus201() throws Exception {
         final int sizeBefore = sprintRepository.findAll().size();
         final String projectName = "test1";
         final int sprintsInProjectBefore = sprintRepository.findAllByProject(projectRepository.findByName(projectName).get()).size();
         final String sprintName = "unique";
         final String content = objectMapper.writeValueAsString(
-                new SprintDTO(sprintName, "2019-10-11", "2019-11-11"));
+                new SprintDTO(sprintName, "2019-05-11", "2019-06-11"));
         
         mockMvc.perform(post("/secure/project/settings/sprints/" + projectName).contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
@@ -252,7 +300,7 @@ public class SprintManagementIntegrationTest extends IntegrationBase {
     @Test
     @WithMockUser(value = DEFAULT_USERNAME)
     public void givenInvalidSprintWhenUpdatingSprintShouldReturnStatus400() throws Exception {
-        final String content = objectMapper.writeValueAsString(new SprintDTO(null, "2019-11-10", "2019-11-23"));
+        final String content = objectMapper.writeValueAsString(new SprintDTO(null, "2019-06-10", "2019-07-23"));
         
         mockMvc.perform(put("/secure/project/settings/sprints/1").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
@@ -312,7 +360,7 @@ public class SprintManagementIntegrationTest extends IntegrationBase {
         final Date endBefore = sprintEntityBefore.getEnd();
         final ProjectEntity projectEntityBefore = sprintEntityBefore.getProject();
         final String content =
-                objectMapper.writeValueAsString(new SprintDTO("updating", "2019-11-23", "2019-12-12"));
+                objectMapper.writeValueAsString(new SprintDTO("updating", "2019-01-23", "2019-02-25"));
         
         mockMvc.perform(put("/secure/project/settings/sprints/" + id).contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())

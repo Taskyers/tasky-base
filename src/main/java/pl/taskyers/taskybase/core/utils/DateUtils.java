@@ -1,15 +1,20 @@
 package pl.taskyers.taskybase.core.utils;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateUtils {
     
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     
     public static Date getCurrentTimestamp() {
         return new Date();
+    }
+    
+    public static Date getCurrentDate() {
+        return parseDate(DATE_FORMAT.format(new Date()));
     }
     
     public static Date parseDate(String date) {
