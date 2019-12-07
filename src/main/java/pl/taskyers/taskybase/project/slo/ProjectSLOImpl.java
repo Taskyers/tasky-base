@@ -110,6 +110,11 @@ public class ProjectSLOImpl implements ProjectSLO {
         }
     }
     
+    @Override
+    public Optional<ProjectEntity> getProjectByNameAndOwner(String projectName, UserEntity owner) {
+        return projectRepository.findByNameAndOwner(projectName, owner);
+    }
+    
     private List<ProjectDTO> getProjectsAsDTO(List<ProjectEntity> projectEntities) {
         List<ProjectDTO> result = new ArrayList<>();
         for ( ProjectEntity projectEntity : projectEntities ) {

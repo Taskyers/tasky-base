@@ -135,7 +135,8 @@ VALUES (1, 1, 1, true),
        (15, 1, 1, false),
        (15, 1, 2, false),
        (15, 1, 3, false),
-       (15, 1, 4, false);
+       (15, 1, 4, false),
+       (5, 1, 1, true);
 INSERT INTO entry_entities (background_color, text_color, value, project_id, entry_type)
 VALUES ('green', 'white', 'test1', 1, 'STATUS'),
        ('green', 'white', 'test2', 1, 'PRIORITY'),
