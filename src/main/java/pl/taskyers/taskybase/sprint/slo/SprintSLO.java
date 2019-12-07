@@ -3,6 +3,7 @@ package pl.taskyers.taskybase.sprint.slo;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.sprint.entity.SprintEntity;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,5 +67,16 @@ public interface SprintSLO {
      * @since 0.0.3
      */
     List<SprintEntity> getAllByProject(ProjectEntity projectEntity);
+    
+    /**
+     * Check if sprint between start and date already exists in project
+     *
+     * @param project project
+     * @param start   sprint's start date
+     * @param end     sprint's end date
+     * @return true if sprint between two dates already exists, otherwise false
+     * @since 0.0.3
+     */
+    boolean doesSprintInPeriodExists(ProjectEntity project, Date start, Date end);
     
 }

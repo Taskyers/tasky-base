@@ -144,8 +144,9 @@ VALUES ('green', 'white', 'test1', 1, 'STATUS'),
        ('green', 'white', 'entryToBeUpdated1', 1, 'STATUS'),
        ('green', 'white', 'entryToBeDeleted', 1, 'STATUS');
 INSERT INTO sprints(project_id, end, name, start)
-VALUES (1, '2019-11-05', 'test', '2019-11-05'),
+VALUES (1, '2019-11-05', 'test', '2019-11-10'),
        (1, '2019-11-05', 'test1', '2019-11-05'),
        (1, '2019-11-05', 'test2', '2019-11-05'),
        (1, '2019-11-05', 'toBeUpdated', '2019-11-05'),
-       (1, '2019-11-05', 'toBeDeleted', '2019-11-05');
+       (1, '2019-11-05', 'toBeDeleted', '2019-11-05'),
+       (1, CURRENT_DATE, 'current', CURRENT_DATE  - INTERVAL 2 DAY);

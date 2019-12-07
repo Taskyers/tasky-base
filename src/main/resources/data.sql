@@ -91,4 +91,6 @@ VALUES (1, 1, 1, true),
        (4, 1, 2, true),
        (5, 1, 3, true);
 INSERT INTO sprints(project_id, name, start, end)
-VALUES (1, 'sprint1', '2019-11-27', '2019-11-30');
+VALUES (1, 'sprint1', '2019-11-27', '2019-11-30'),
+       (1, 'sprint2', '2019-12-03', '2019-12-30'),
+       (1, 'sprint3', '2020-01-01', '2019-01-05');

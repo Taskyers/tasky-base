@@ -7,6 +7,7 @@ import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.sprint.entity.SprintEntity;
 import pl.taskyers.taskybase.sprint.repository.SprintRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +49,11 @@ public class SprintSLOImpl implements SprintSLO {
     @Override
     public List<SprintEntity> getAllByProject(ProjectEntity projectEntity) {
         return sprintRepository.findAllByProject(projectEntity);
+    }
+    
+    @Override
+    public boolean doesSprintInPeriodExists(ProjectEntity project, Date start, Date end) {
+        return sprintRepository.findAllByProjectAndStartGreaterThanEqualAndEndLessThanEqual(project, start, end).size() > 0;
     }
     
 }

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import pl.taskyers.taskybase.core.messages.MessageCode;
 import pl.taskyers.taskybase.core.messages.container.ValidationMessageContainer;
+import pl.taskyers.taskybase.core.utils.DateUtils;
 import pl.taskyers.taskybase.core.validator.Validator;
 import pl.taskyers.taskybase.sprint.entity.SprintEntity;
 import pl.taskyers.taskybase.sprint.slo.SprintSLO;
@@ -35,6 +36,12 @@ public class SprintValidator implements Validator<SprintEntity> {
         
         if ( object.getStart() != null & object.getEnd() != null && object.getStart().after(object.getEnd()) ) {
             validationMessageContainer.addError(MessageCode.sprint_invalid_date.getMessage(), "start, end");
+        }
+        
+        if ( checkForDuplicates && sprintSLO.doesSprintInPeriodExists(object.getProject(), object.getStart(), object.getEnd()) ) {
+            validationMessageContainer.addError(
+                    MessageCode.sprint_field_already_exists.getMessage("period",
+                            DateUtils.parseString(object.getStart()) + " - " + DateUtils.parseString(object.getEnd())), "start, end");
         }
         
     }
