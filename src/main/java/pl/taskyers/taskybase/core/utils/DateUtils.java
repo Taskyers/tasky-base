@@ -9,12 +9,18 @@ public class DateUtils {
     
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     
+    private static final long ONE_DAY = 24L * 60L * 60L * 1000L;
+    
     public static Date getCurrentTimestamp() {
         return new Date();
     }
     
     public static Date getCurrentDate() {
         return parseDate(DATE_FORMAT.format(new Date()));
+    }
+    
+    public static Date addDayToDate(Date date) {
+        return parseDate(DATE_FORMAT.format(new Date(date.getTime() + ONE_DAY)));
     }
     
     public static Date parseDate(String date) {

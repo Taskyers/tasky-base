@@ -3,6 +3,7 @@ package pl.taskyers.taskybase.sprint.slo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pl.taskyers.taskybase.core.utils.DateUtils;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.sprint.entity.SprintEntity;
 import pl.taskyers.taskybase.sprint.repository.SprintRepository;
@@ -27,6 +28,8 @@ public class SprintSLOImpl implements SprintSLO {
     @Override
     public SprintEntity update(SprintEntity sprintEntity) {
         log.debug("Updating {} sprint", sprintEntity.getName());
+        sprintEntity.setStart(DateUtils.addDayToDate(sprintEntity.getStart()));
+        sprintEntity.setEnd(DateUtils.addDayToDate(sprintEntity.getEnd()));
         return sprintRepository.save(sprintEntity);
     }
     

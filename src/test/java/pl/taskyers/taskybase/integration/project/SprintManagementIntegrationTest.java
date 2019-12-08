@@ -240,8 +240,8 @@ public class SprintManagementIntegrationTest extends IntegrationBase {
         final String projectName = "test1";
         final int sprintsInProjectBefore = sprintRepository.findAllByProject(projectRepository.findByName(projectName).get()).size();
         final String sprintName = "unique";
-        final String content = objectMapper.writeValueAsString(
-                new SprintDTO(sprintName, "2019-05-11", "2019-06-11"));
+        final SprintDTO dto = new SprintDTO(sprintName, "2019-05-11", "2019-06-11");
+        final String content = objectMapper.writeValueAsString(dto);
         
         mockMvc.perform(post("/secure/project/settings/sprints/" + projectName).contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
@@ -259,9 +259,13 @@ public class SprintManagementIntegrationTest extends IntegrationBase {
         
         final int sizeAfter = sprintRepository.findAll().size();
         final int sprintsInProjectAfter = sprintRepository.findAllByProject(projectRepository.findByName(projectName).get()).size();
+        final SprintEntity sprintEntityAfter =
+                sprintRepository.findByNameAndProject(sprintName, projectRepository.findByName(projectName).get()).get();
         
         assertNotEquals(sizeAfter, sizeBefore);
         assertNotEquals(sprintsInProjectAfter, sprintsInProjectBefore);
+        assertEquals(DateUtils.parseDate(dto.getStart()), sprintEntityAfter.getStart());
+        assertEquals(DateUtils.parseDate(dto.getEnd()), sprintEntityAfter.getEnd());
     }
     
     @Test
@@ -359,8 +363,8 @@ public class SprintManagementIntegrationTest extends IntegrationBase {
         final Date startBefore = sprintEntityBefore.getStart();
         final Date endBefore = sprintEntityBefore.getEnd();
         final ProjectEntity projectEntityBefore = sprintEntityBefore.getProject();
-        final String content =
-                objectMapper.writeValueAsString(new SprintDTO("updating", "2019-01-23", "2019-02-25"));
+        final SprintDTO dto = new SprintDTO("updating", "2019-01-23", "2019-02-25");
+        final String content = objectMapper.writeValueAsString(dto);
         
         mockMvc.perform(put("/secure/project/settings/sprints/" + id).contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
@@ -381,6 +385,8 @@ public class SprintManagementIntegrationTest extends IntegrationBase {
         assertNotEquals(startBefore, sprintEntityAfter.getStart());
         assertNotEquals(endBefore, sprintEntityAfter.getEnd());
         assertEquals(projectEntityBefore, sprintEntityAfter.getProject());
+        assertEquals(dto.getStart(), DateUtils.parseString(sprintEntityAfter.getStart()));
+        assertEquals(dto.getEnd(), DateUtils.parseString(sprintEntityAfter.getEnd()));
     }
     
     @Test
