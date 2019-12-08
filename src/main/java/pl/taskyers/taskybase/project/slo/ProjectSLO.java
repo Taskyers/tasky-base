@@ -107,4 +107,14 @@ public interface ProjectSLO {
      */
     void deleteUserInProject(Long userId, String projectName);
     
+    /**
+     * Get project by name and owner
+     *
+     * @param projectName name
+     * @param owner       project's creator
+     * @return project entity as optional
+     * @since 0.0.3
+     */
+    Optional<ProjectEntity> getProjectByNameAndOwner(String projectName, UserEntity owner);
+    
 }
