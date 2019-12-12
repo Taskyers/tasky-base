@@ -80,4 +80,37 @@ CREATE TABLE IF NOT EXISTS sprints
     name       varchar(255) not null,
     start      date         not null,
     project_id bigint       not null
-)
+);
+CREATE TABLE IF NOT EXISTS comments
+(
+    comment_id    bigint auto_increment primary key,
+    content       varchar(255)         not null,
+    creation_date datetime             not null,
+    edited        tinyint(1) default 0 not null,
+    user_id       bigint               not null references users (user_id),
+    task_id       bigint               not null references tasks (task_id)
+);
+CREATE TABLE IF NOT EXISTS tasks
+(
+    task_id       bigint auto_increment primary key,
+    creation_date datetime     not null,
+    description   varchar(255) not null,
+    fix_version   varchar(255) null,
+    `key`         varchar(255) not null,
+    name          varchar(255) not null,
+    resolution    varchar(255) null,
+    update_date   datetime     null,
+    assignee_id   bigint       not null references users (user_id),
+    creator_id    bigint       not null references users (user_id),
+    priority_id   bigint       not null references entry_entities (entry_entity_id),
+    project_id    bigint       not null references projects (project_id),
+    sprint_id     bigint       not null references sprints (sprint_id),
+    status_id     bigint       not null references entry_entities (entry_entity_id),
+    type_id       bigint       not null references entry_entities (entry_entity_id)
+);
+CREATE TABLE IF NOT EXISTS task_user
+(
+    task_id bigint not null references tasks (task_id),
+    user_id bigint not null references users (user_id),
+    primary key (task_id, user_id)
+);

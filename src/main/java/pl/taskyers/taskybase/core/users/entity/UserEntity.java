@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import pl.taskyers.taskybase.core.roles.entity.RoleLinkerEntity;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
+import pl.taskyers.taskybase.task.entity.TaskEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -33,6 +34,12 @@ public class UserEntity implements Serializable {
     @EqualsAndHashCode.Exclude
     @JsonBackReference
     private Set<RoleLinkerEntity> roleLinkerEntities;
+    
+    @ManyToMany(mappedBy = "watchers", targetEntity = TaskEntity.class)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonBackReference
+    Set<TaskEntity> watchedTasks;
     
     @Column(nullable = false, unique = true)
     private String username;
