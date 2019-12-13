@@ -34,7 +34,7 @@ public class TaskEntity implements Serializable {
     private UserEntity creator;
     
     @ManyToOne(targetEntity = UserEntity.class, fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinColumn(nullable = false, name = "assignee_id")
+    @JoinColumn(name = "assignee_id")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonManagedReference
@@ -57,7 +57,7 @@ public class TaskEntity implements Serializable {
     private ProjectEntity project;
     
     @ManyToOne(targetEntity = SprintEntity.class, fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinColumn(nullable = false, name = "sprint_id")
+    @JoinColumn(name = "sprint_id")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonManagedReference
@@ -86,7 +86,7 @@ public class TaskEntity implements Serializable {
     @Column(nullable = false)
     private String name;
     
-    @Column(nullable = false)
+    @Column
     private String description;
     
     @Column(name = "fix_version")

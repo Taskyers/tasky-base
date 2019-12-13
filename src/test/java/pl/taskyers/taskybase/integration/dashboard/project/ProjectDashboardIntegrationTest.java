@@ -54,6 +54,7 @@ public class ProjectDashboardIntegrationTest extends IntegrationBase {
     public void givenProjectOwnerWhenGettingProjectDashboardShouldReturnStatus200() throws Exception {
         final UserEntity userEntity = userRepository.findByUsername(DEFAULT_USERNAME).get();
         final ProjectEntity projectEntity = projectRepository.findById(1L).get();
+        final int tasksSize = taskRepository.findAllByAssigneeAndProject(userEntity, projectEntity).size();
         final RoleLinkerEntity roleLinkerEditProject = roleLinkerRepository.findByUserAndProjectAndRole_Key(userEntity, projectEntity,
                 Roles.SETTINGS_EDIT_PROJECT).get();
         final RoleLinkerEntity roleLinkerManageUsers = roleLinkerRepository.findByUserAndProjectAndRole_Key(userEntity, projectEntity,
@@ -72,7 +73,14 @@ public class ProjectDashboardIntegrationTest extends IntegrationBase {
         mockMvc.perform(get("/secure/dashboard/" + projectEntity.getName()))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.length()", is(7)))
+                .andExpect(jsonPath("$.length()", is(8)))
+                .andExpect(jsonPath("$.tasks.length()", is(tasksSize)))
+                .andExpect(jsonPath("$.tasks[0].length()", is(5)))
+                .andExpect(jsonPath("$.tasks[0].key").exists())
+                .andExpect(jsonPath("$.tasks[0].name").exists())
+                .andExpect(jsonPath("$.tasks[0].type").exists())
+                .andExpect(jsonPath("$.tasks[0].priority").exists())
+                .andExpect(jsonPath("$.tasks[0].status").exists())
                 .andExpect(jsonPath("$.manageUsers", is(roleLinkerManageUsers.isChecked())))
                 .andExpect(jsonPath("$.editProject", is(roleLinkerEditProject.isChecked())))
                 .andExpect(jsonPath("$.invite", is(roleLinkerInvite.isChecked())))
@@ -91,6 +99,7 @@ public class ProjectDashboardIntegrationTest extends IntegrationBase {
     public void givenProjectUserWhenGettingProjectDashboardShouldReturnStatus200() throws Exception {
         final UserEntity userEntity = userRepository.findByUsername("userWith4Projects").get();
         final ProjectEntity projectEntity = projectRepository.findById(1L).get();
+        final int tasksSize = taskRepository.findAllByAssigneeAndProject(userEntity, projectEntity).size();
         final boolean roleLinkerEditProject = roleLinkerRepository.findByUserAndProjectAndRole_Key(userEntity, projectEntity,
                 Roles.SETTINGS_EDIT_PROJECT).isPresent() && roleLinkerRepository.findByUserAndProjectAndRole_Key(userEntity, projectEntity,
                 Roles.SETTINGS_EDIT_PROJECT).get().isChecked();
@@ -116,7 +125,13 @@ public class ProjectDashboardIntegrationTest extends IntegrationBase {
         mockMvc.perform(get("/secure/dashboard/" + projectEntity.getName()))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.length()", is(7)))
+                .andExpect(jsonPath("$.length()", is(8)))
+                .andExpect(jsonPath("$.tasks.length()", is(tasksSize)))
+                .andExpect(jsonPath("$.tasks[0].key").doesNotExist())
+                .andExpect(jsonPath("$.tasks[0].name").doesNotExist())
+                .andExpect(jsonPath("$.tasks[0].type").doesNotExist())
+                .andExpect(jsonPath("$.tasks[0].priority").doesNotExist())
+                .andExpect(jsonPath("$.tasks[0].status").doesNotExist())
                 .andExpect(jsonPath("$.manageUsers", is(roleLinkerManageUsers)))
                 .andExpect(jsonPath("$.editProject", is(roleLinkerEditProject)))
                 .andExpect(jsonPath("$.invite", is(roleLinkerInvite)))

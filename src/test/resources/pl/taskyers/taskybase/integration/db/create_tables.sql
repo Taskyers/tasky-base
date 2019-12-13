@@ -94,17 +94,17 @@ CREATE TABLE IF NOT EXISTS tasks
 (
     task_id       bigint auto_increment primary key,
     creation_date datetime     not null,
-    description   varchar(255) not null,
+    description   varchar(255),
     fix_version   varchar(255) null,
     `key`         varchar(255) not null,
     name          varchar(255) not null,
     resolution    varchar(255) null,
     update_date   datetime     null,
-    assignee_id   bigint       not null references users (user_id),
+    assignee_id   bigint references users (user_id),
     creator_id    bigint       not null references users (user_id),
     priority_id   bigint       not null references entry_entities (entry_entity_id),
     project_id    bigint       not null references projects (project_id),
-    sprint_id     bigint       not null references sprints (sprint_id),
+    sprint_id     bigint references sprints (sprint_id),
     status_id     bigint       not null references entry_entities (entry_entity_id),
     type_id       bigint       not null references entry_entities (entry_entity_id)
 );
