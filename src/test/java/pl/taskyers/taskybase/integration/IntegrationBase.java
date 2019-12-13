@@ -12,11 +12,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import pl.taskyers.taskybase.core.roles.repository.RoleLinkerRepository;
 import pl.taskyers.taskybase.core.roles.repository.RoleRepository;
 import pl.taskyers.taskybase.core.users.repository.UserRepository;
-import pl.taskyers.taskybase.entry.dto.CustomizableEntryDTO;
 import pl.taskyers.taskybase.entry.repository.EntryEntityRepository;
 import pl.taskyers.taskybase.project.repository.ProjectInvitationTokenRepository;
 import pl.taskyers.taskybase.project.repository.ProjectRepository;
 import pl.taskyers.taskybase.sprint.repository.SprintRepository;
+import pl.taskyers.taskybase.task.repository.TaskRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -47,6 +47,9 @@ public abstract class IntegrationBase {
     
     @Autowired
     protected SprintRepository sprintRepository;
+    
+    @Autowired
+    protected TaskRepository taskRepository;
     
     protected final ObjectMapper objectMapper = new ObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     
