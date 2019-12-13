@@ -5,12 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.taskyers.taskybase.project.dto.ProjectDTO;
 import pl.taskyers.taskybase.project.slo.AddingProjectSLO;
-import pl.taskyers.taskybase.project.slo.ProjectSLO;
+import pl.taskyers.taskybase.project.dao.ProjectDAO;
 
 import java.util.List;
 
 import static pl.taskyers.taskybase.project.slo.AddingProjectSLO.GET_PROJECT_BY_NAME;
-import static pl.taskyers.taskybase.project.slo.ProjectSLO.PROJECTS_PREFIX;
+import static pl.taskyers.taskybase.project.dao.ProjectDAO.PROJECTS_PREFIX;
 
 @RestController
 @RequestMapping(value = PROJECTS_PREFIX)
@@ -19,11 +19,11 @@ public class ProjectsRestController {
     
     private final AddingProjectSLO addingProjectSLO;
     
-    private final ProjectSLO projectSLO;
+    private final ProjectDAO projectDAO;
     
     @RequestMapping(method = RequestMethod.GET)
     public List<pl.taskyers.taskybase.dashboard.main.dto.ProjectDTO> getAllProjects() {
-        return projectSLO.getAllProjects();
+        return projectDAO.getAllProjects();
     }
     
     @RequestMapping(method = RequestMethod.POST)

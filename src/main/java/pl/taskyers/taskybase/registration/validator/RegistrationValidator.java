@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import pl.taskyers.taskybase.core.users.dto.AccountDTO;
 import pl.taskyers.taskybase.core.messages.MessageCode;
 import pl.taskyers.taskybase.core.messages.container.ValidationMessageContainer;
-import pl.taskyers.taskybase.core.users.slo.UserSLO;
+import pl.taskyers.taskybase.core.users.dao.UserDAO;
 import pl.taskyers.taskybase.core.utils.ValidationUtils;
 import pl.taskyers.taskybase.core.validator.Validator;
 
@@ -26,7 +26,7 @@ public class RegistrationValidator implements Validator<AccountDTO> {
     
     private static final String FIELD_SURNAME = "surname";
     
-    private final UserSLO userSLO;
+    private final UserDAO userDAO;
     
     @Override
     public void validate(AccountDTO accountDTO, ValidationMessageContainer validationMessageContainer, boolean checkForDuplicates) {
@@ -45,7 +45,7 @@ public class RegistrationValidator implements Validator<AccountDTO> {
     private void validateUsername(String username, ValidationMessageContainer validationMessageContainer) {
         if ( StringUtils.isBlank(username) ) {
             validationMessageContainer.addError(MessageCode.field_empty.getMessage("Username"), FIELD_USERNAME);
-        } else if ( userSLO.getEntityByUsername(username).isPresent() ) {
+        } else if ( userDAO.getEntityByUsername(username).isPresent() ) {
             String message = MessageCode.user_field_already_exists.getMessage(username, "username");
             validationMessageContainer.addError(message, FIELD_USERNAME);
             log.warn(message);
@@ -57,7 +57,7 @@ public class RegistrationValidator implements Validator<AccountDTO> {
             validationMessageContainer.addError(MessageCode.field_empty.getMessage("Email"), FIELD_EMAIL);
         } else if ( !ValidationUtils.isUserEmailValid(email) ) {
             validationMessageContainer.addError(MessageCode.field_invalid_format.getMessage("email"), FIELD_EMAIL);
-        } else if ( userSLO.getEntityByEmail(email).isPresent() ) {
+        } else if ( userDAO.getEntityByEmail(email).isPresent() ) {
             String message = MessageCode.user_field_already_exists.getMessage(email, "email");
             validationMessageContainer.addError(message, FIELD_EMAIL);
             log.warn(message);

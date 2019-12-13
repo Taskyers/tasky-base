@@ -1,4 +1,4 @@
-package pl.taskyers.taskybase.core.roles.slo;
+package pl.taskyers.taskybase.core.roles.dao;
 
 import pl.taskyers.taskybase.core.roles.entity.RoleEntity;
 import pl.taskyers.taskybase.core.roles.entity.RoleLinkerEntity;
@@ -13,7 +13,7 @@ import java.util.Optional;
  *
  * @author Jakub Sildatk
  */
-public interface RoleSLO {
+public interface RoleDAO {
     
     /**
      * Create all roles that are in the database at the moment of project creation with checked set to false.

@@ -9,7 +9,7 @@ import pl.taskyers.taskybase.core.users.dto.AccountDTO;
 import pl.taskyers.taskybase.core.messages.Message;
 import pl.taskyers.taskybase.core.messages.ValidationMessage;
 import pl.taskyers.taskybase.core.messages.container.ValidationMessageContainer;
-import pl.taskyers.taskybase.core.users.slo.UserSLO;
+import pl.taskyers.taskybase.core.users.dao.UserDAO;
 import pl.taskyers.taskybase.core.validator.Validator;
 
 import java.util.ArrayList;
@@ -30,13 +30,13 @@ public class RegistrationValidatorStepdefs {
     
     private Validator<AccountDTO> registrationValidator;
     
-    private UserSLO userSLO;
+    private UserDAO userDAO;
     
     @Before
     public void setUp() {
         MessageCodeProvider.setMessageSource();
-        userSLO = mock(UserSLO.class);
-        registrationValidator = new RegistrationValidator(userSLO);
+        userDAO = mock(UserDAO.class);
+        registrationValidator = new RegistrationValidator(userDAO);
     }
     
     @Given("^I have following users in database$")
@@ -48,10 +48,10 @@ public class RegistrationValidatorStepdefs {
     public void iHaveFollowingUser(List<AccountDTO> user) {
         entry = user.get(0);
         if ( usernameExists(entry.getUsername()) != null ) {
-            when(userSLO.getEntityByUsername(anyString()).isPresent()).thenAnswer(invocationOnMock -> Optional.of(entry));
+            when(userDAO.getEntityByUsername(anyString()).isPresent()).thenAnswer(invocationOnMock -> Optional.of(entry));
         }
         if ( emailExists(entry.getEmail()) != null ) {
-            when(userSLO.getEntityByEmail(anyString()).isPresent()).thenAnswer(invocationOnMock -> Optional.of(entry));
+            when(userDAO.getEntityByEmail(anyString()).isPresent()).thenAnswer(invocationOnMock -> Optional.of(entry));
         }
     }
     

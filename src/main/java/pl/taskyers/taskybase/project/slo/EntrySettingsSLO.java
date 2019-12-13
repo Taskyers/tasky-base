@@ -1,8 +1,6 @@
 package pl.taskyers.taskybase.project.slo;
 
 import org.springframework.http.ResponseEntity;
-import pl.taskyers.taskybase.core.roles.slo.EntryEndpoint;
-import pl.taskyers.taskybase.entry.EntryType;
 import pl.taskyers.taskybase.entry.dto.CustomizableEntryDTO;
 
 public interface EntrySettingsSLO {

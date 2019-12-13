@@ -10,6 +10,7 @@ import pl.taskyers.taskybase.core.messages.container.ValidationMessageContainer;
 import pl.taskyers.taskybase.core.utils.UriUtils;
 import pl.taskyers.taskybase.core.validator.Validator;
 import pl.taskyers.taskybase.project.converter.ProjectConverter;
+import pl.taskyers.taskybase.project.dao.ProjectDAO;
 import pl.taskyers.taskybase.project.dto.ProjectDTO;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 
@@ -17,7 +18,7 @@ import pl.taskyers.taskybase.project.entity.ProjectEntity;
 @AllArgsConstructor
 public class AddingProjectSLOImpl implements AddingProjectSLO {
     
-    private final ProjectSLO projectSLO;
+    private final ProjectDAO projectDAO;
     
     private final Validator<ProjectEntity> projectValidator;
     
@@ -29,14 +30,14 @@ public class AddingProjectSLOImpl implements AddingProjectSLO {
         if ( validationMessageContainer.hasErrors() ) {
             return ResponseEntity.badRequest().body(validationMessageContainer.getErrors());
         }
-        ProjectEntity savedProject = projectSLO.addNewProject(projectEntity);
+        ProjectEntity savedProject = projectDAO.addNewProject(projectEntity);
         return ResponseEntity.created(UriUtils.createURIFromId(savedProject.getId()))
                 .body(new ResponseMessage<>(MessageCode.project_created.getMessage(), MessageType.SUCCESS, savedProject));
     }
     
     @Override
     public boolean projectExistsByName(String name) {
-        return projectSLO.getProjectEntityByName(name).isPresent();
+        return projectDAO.getProjectEntityByName(name).isPresent();
     }
     
 }

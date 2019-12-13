@@ -9,17 +9,18 @@ import pl.taskyers.taskybase.core.messages.MessageType;
 import pl.taskyers.taskybase.core.messages.ResponseMessage;
 import pl.taskyers.taskybase.core.messages.container.ValidationMessageContainer;
 import pl.taskyers.taskybase.core.roles.constants.Roles;
-import pl.taskyers.taskybase.core.roles.slo.RoleSLO;
+import pl.taskyers.taskybase.core.roles.dao.RoleDAO;
 import pl.taskyers.taskybase.core.slo.AuthProvider;
 import pl.taskyers.taskybase.core.utils.DateUtils;
 import pl.taskyers.taskybase.core.utils.UriUtils;
 import pl.taskyers.taskybase.core.validator.Validator;
+import pl.taskyers.taskybase.project.dao.ProjectDAO;
 import pl.taskyers.taskybase.project.dto.SprintResponseData;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.sprint.converter.SprintConverter;
 import pl.taskyers.taskybase.sprint.dto.SprintDTO;
 import pl.taskyers.taskybase.sprint.entity.SprintEntity;
-import pl.taskyers.taskybase.sprint.slo.SprintSLO;
+import pl.taskyers.taskybase.sprint.dao.SprintDAO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +32,11 @@ public class SprintManagementSLOImpl implements SprintManagementSLO {
     
     private final AuthProvider authProvider;
     
-    private final RoleSLO roleSLO;
+    private final RoleDAO roleDAO;
     
-    private final SprintSLO sprintSLO;
+    private final SprintDAO sprintDAO;
     
-    private final ProjectSLO projectSLO;
+    private final ProjectDAO projectDAO;
     
     private final Validator<SprintEntity> sprintValidator;
     
@@ -43,14 +44,14 @@ public class SprintManagementSLOImpl implements SprintManagementSLO {
     public ResponseEntity getData(Long sprintId) {
         ResponseEntity isSprintFound = checkForId(sprintId);
         return isSprintFound != null ? isSprintFound : ResponseEntity.ok(
-                pl.taskyers.taskybase.project.converter.SprintConverter.convertToDTO(sprintSLO.getById(sprintId).get()));
+                pl.taskyers.taskybase.project.converter.SprintConverter.convertToDTO(sprintDAO.getById(sprintId).get()));
     }
     
     @Override
     public ResponseEntity createNew(SprintDTO sprintDTO, String projectName) {
         ResponseEntity isProjectFound = checkForProject(projectName);
         if ( isProjectFound == null ) {
-            ProjectEntity projectEntity = projectSLO.getProjectEntityByName(projectName).get();
+            ProjectEntity projectEntity = projectDAO.getProjectEntityByName(projectName).get();
             SprintEntity sprintEntity = SprintConverter.convertFromDTO(sprintDTO);
             sprintEntity.setProject(projectEntity);
             ValidationMessageContainer validationMessageContainer = new ValidationMessageContainer();
@@ -58,7 +59,7 @@ public class SprintManagementSLOImpl implements SprintManagementSLO {
             if ( validationMessageContainer.hasErrors() ) {
                 return ResponseEntity.badRequest().body(validationMessageContainer.getErrors());
             }
-            SprintEntity savedSprint = sprintSLO.addNew(sprintEntity);
+            SprintEntity savedSprint = sprintDAO.addNew(sprintEntity);
             return ResponseEntity.created(UriUtils.createURIFromId(savedSprint.getId()))
                     .body(new ResponseMessage<>(MessageCode.sprint_created.getMessage(), MessageType.SUCCESS, savedSprint));
         }
@@ -69,7 +70,7 @@ public class SprintManagementSLOImpl implements SprintManagementSLO {
     public ResponseEntity update(Long sprintId, SprintDTO sprintDTO) {
         ResponseEntity isSprintFound = checkForId(sprintId);
         if ( isSprintFound == null ) {
-            SprintEntity sprintEntity = sprintSLO.getById(sprintId).get();
+            SprintEntity sprintEntity = sprintDAO.getById(sprintId).get();
             final String nameBefore = sprintEntity.getName();
             sprintEntity.setName(sprintDTO.getName());
             sprintEntity.setStart(DateUtils.parseDate(sprintDTO.getStart()));
@@ -83,7 +84,7 @@ public class SprintManagementSLOImpl implements SprintManagementSLO {
             if ( validationMessageContainer.hasErrors() ) {
                 return ResponseEntity.badRequest().body(validationMessageContainer.getErrors());
             }
-            SprintEntity updatedSprint = sprintSLO.update(sprintEntity);
+            SprintEntity updatedSprint = sprintDAO.update(sprintEntity);
             return ResponseEntity.ok(new ResponseMessage<>(MessageCode.sprint_updated.getMessage(), MessageType.SUCCESS, updatedSprint));
         }
         return isSprintFound;
@@ -93,7 +94,7 @@ public class SprintManagementSLOImpl implements SprintManagementSLO {
     public ResponseEntity delete(Long sprintId) {
         ResponseEntity isSprintFound = checkForId(sprintId);
         if ( isSprintFound == null ) {
-            sprintSLO.delete(sprintId);
+            sprintDAO.delete(sprintId);
             return ResponseEntity.ok(new ResponseMessage<>(MessageCode.sprint_deleted.getMessage(), MessageType.SUCCESS));
         }
         return isSprintFound;
@@ -103,21 +104,21 @@ public class SprintManagementSLOImpl implements SprintManagementSLO {
     public ResponseEntity checkForNameInProject(String name, String projectName) {
         ResponseEntity isProjectFound = checkForProject(projectName);
         return isProjectFound != null ? isProjectFound :
-                ResponseEntity.ok(sprintSLO.doesNameExistsInProject(name, projectSLO.getProjectEntityByName(projectName).get()));
+                ResponseEntity.ok(sprintDAO.doesNameExistsInProject(name, projectDAO.getProjectEntityByName(projectName).get()));
     }
     
     @Override
     public ResponseEntity hasProperRoleOnEntry(String projectName) {
         ResponseEntity isProjectFound = checkForProject(projectName);
         return isProjectFound != null ? isProjectFound :
-                ResponseEntity.ok(convertToList(projectSLO.getProjectEntityByName(projectName).get().getSprints()));
+                ResponseEntity.ok(convertToList(projectDAO.getProjectEntityByName(projectName).get().getSprints()));
     }
     
     private ResponseEntity checkForId(Long id) {
-        if ( !sprintSLO.getById(id).isPresent() ) {
+        if ( !sprintDAO.getById(id).isPresent() ) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage<>(MessageCode.sprint_not_found.getMessage("id", id), MessageType.WARN));
-        } else if ( !roleSLO.hasPermission(authProvider.getUserEntity(), sprintSLO.getById(id).get().getProject(), Roles.SETTINGS_MANAGE_SPRINTS) ) {
+        } else if ( !roleDAO.hasPermission(authProvider.getUserEntity(), sprintDAO.getById(id).get().getProject(), Roles.SETTINGS_MANAGE_SPRINTS) ) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(new ResponseMessage<>(MessageCode.project_permission_not_granted.getMessage(), MessageType.ERROR));
         }
@@ -125,10 +126,10 @@ public class SprintManagementSLOImpl implements SprintManagementSLO {
     }
     
     private ResponseEntity checkForProject(String projectName) {
-        if ( !projectSLO.getProjectEntityByName(projectName).isPresent() ) {
+        if ( !projectDAO.getProjectEntityByName(projectName).isPresent() ) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage<>(MessageCode.project_not_found.getMessage("name", projectName), MessageType.WARN));
-        } else if ( !roleSLO.hasPermission(authProvider.getUserEntity(), projectSLO.getProjectEntityByName(projectName).get(),
+        } else if ( !roleDAO.hasPermission(authProvider.getUserEntity(), projectDAO.getProjectEntityByName(projectName).get(),
                 Roles.SETTINGS_MANAGE_SPRINTS) ) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(new ResponseMessage<>(MessageCode.project_permission_not_granted.getMessage(), MessageType.ERROR));

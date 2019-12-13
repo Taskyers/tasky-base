@@ -1,4 +1,4 @@
-package pl.taskyers.taskybase.core.roles.slo;
+package pl.taskyers.taskybase.core.roles;
 
 import org.springframework.http.ResponseEntity;
 

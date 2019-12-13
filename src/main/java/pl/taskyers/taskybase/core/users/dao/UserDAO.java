@@ -1,4 +1,4 @@
-package pl.taskyers.taskybase.core.users.slo;
+package pl.taskyers.taskybase.core.users.dao;
 
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
 
@@ -10,7 +10,7 @@ import java.util.Optional;
  *
  * @author Jakub Sildatk
  */
-public interface UserSLO {
+public interface UserDAO {
     
     /**
      * Add new user to database with encoded password

@@ -8,21 +8,21 @@ import pl.taskyers.taskybase.core.messages.MessageCode;
 import pl.taskyers.taskybase.core.messages.container.ValidationMessageContainer;
 import pl.taskyers.taskybase.core.validator.Validator;
 import pl.taskyers.taskybase.entry.entity.EntryEntity;
-import pl.taskyers.taskybase.entry.slo.EntrySLO;
+import pl.taskyers.taskybase.entry.dao.EntryDAO;
 
 @Component("statusEntryValidator")
 @AllArgsConstructor
 @Slf4j
 public class EntryValidator implements Validator<EntryEntity> {
     
-    private final EntrySLO entityEntrySLO;
+    private final EntryDAO entityEntryDAO;
     
     @Override
     public void validate(EntryEntity object, ValidationMessageContainer validationMessageContainer, boolean checkForDuplicates) {
         if ( StringUtils.isBlank(object.getValue()) ) {
             validationMessageContainer.addError(MessageCode.field_empty.getMessage("Entry value"), "value");
         } else if ( checkForDuplicates && object.getEntryType() != null &&
-                    entityEntrySLO.getEntryByEntryTypeAndValueAndProject(object.getEntryType(), object.getValue(), object.getProject())
+                    entityEntryDAO.getEntryByEntryTypeAndValueAndProject(object.getEntryType(), object.getValue(), object.getProject())
                             .isPresent() ) {
             final String message =
                     MessageCode.entry_field_already_exists.getMessage(object.getEntryType(), object.getValue(), "value",

@@ -1,4 +1,4 @@
-package pl.taskyers.taskybase.sprint.slo;
+package pl.taskyers.taskybase.sprint.dao;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class SprintSLOImpl implements SprintSLO {
+public class SprintDAOImpl implements SprintDAO {
     
     private final SprintRepository sprintRepository;
     

@@ -9,20 +9,20 @@ import pl.taskyers.taskybase.core.messages.container.ValidationMessageContainer;
 import pl.taskyers.taskybase.core.utils.DateUtils;
 import pl.taskyers.taskybase.core.validator.Validator;
 import pl.taskyers.taskybase.sprint.entity.SprintEntity;
-import pl.taskyers.taskybase.sprint.slo.SprintSLO;
+import pl.taskyers.taskybase.sprint.dao.SprintDAO;
 
 @Component("sprintValidator")
 @AllArgsConstructor
 @Slf4j
 public class SprintValidator implements Validator<SprintEntity> {
     
-    private final SprintSLO sprintSLO;
+    private final SprintDAO sprintDAO;
     
     @Override
     public void validate(SprintEntity object, ValidationMessageContainer validationMessageContainer, boolean checkForDuplicates) {
         if ( StringUtils.isBlank(object.getName()) ) {
             validationMessageContainer.addError(MessageCode.field_empty.getMessage("Name"), "name");
-        } else if ( checkForDuplicates && sprintSLO.doesNameExistsInProject(object.getName(), object.getProject()) ) {
+        } else if ( checkForDuplicates && sprintDAO.doesNameExistsInProject(object.getName(), object.getProject()) ) {
             validationMessageContainer.addError(MessageCode.sprint_field_already_exists.getMessage("name", object.getName()), "name");
         }
         
@@ -38,7 +38,7 @@ public class SprintValidator implements Validator<SprintEntity> {
             validationMessageContainer.addError(MessageCode.sprint_invalid_date.getMessage(), "start, end");
         }
         
-        if ( checkForDuplicates && sprintSLO.doesSprintInPeriodExists(object.getProject(), object.getStart(), object.getEnd()) ) {
+        if ( checkForDuplicates && sprintDAO.doesSprintInPeriodExists(object.getProject(), object.getStart(), object.getEnd()) ) {
             validationMessageContainer.addError(
                     MessageCode.sprint_field_already_exists.getMessage("period",
                             DateUtils.parseString(object.getStart()) + " - " + DateUtils.parseString(object.getEnd())), "start, end");

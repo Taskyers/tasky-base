@@ -1,7 +1,7 @@
 package pl.taskyers.taskybase.project.slo;
 
 import org.springframework.http.ResponseEntity;
-import pl.taskyers.taskybase.core.roles.slo.EntryEndpoint;
+import pl.taskyers.taskybase.core.roles.EntryEndpoint;
 import pl.taskyers.taskybase.project.dto.RolesWrapper;
 
 public interface UserManagementSLO extends EntryEndpoint {

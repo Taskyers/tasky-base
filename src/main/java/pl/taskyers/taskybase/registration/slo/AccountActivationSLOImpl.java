@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import pl.taskyers.taskybase.core.messages.MessageCode;
 import pl.taskyers.taskybase.core.messages.MessageType;
 import pl.taskyers.taskybase.core.messages.ResponseMessage;
-import pl.taskyers.taskybase.core.slo.TokenSLO;
-import pl.taskyers.taskybase.core.users.slo.UserSLO;
+import pl.taskyers.taskybase.core.dao.TokenDAO;
+import pl.taskyers.taskybase.core.users.dao.UserDAO;
 import pl.taskyers.taskybase.registration.entity.VerificationTokenEntity;
 
 @Service
@@ -17,13 +17,13 @@ import pl.taskyers.taskybase.registration.entity.VerificationTokenEntity;
 @Slf4j
 public class AccountActivationSLOImpl implements AccountActivationSLO {
     
-    private final UserSLO userSLO;
+    private final UserDAO userDAO;
     
-    private final TokenSLO verificationTokenSLO;
+    private final TokenDAO verificationTokenDAO;
     
     @Override
     public ResponseEntity activateAccount(String token) {
-        VerificationTokenEntity verificationTokenEntity = (VerificationTokenEntity) verificationTokenSLO.getTokenEntity(token);
+        VerificationTokenEntity verificationTokenEntity = (VerificationTokenEntity) verificationTokenDAO.getTokenEntity(token);
         if ( verificationTokenEntity != null ) {
             return ResponseEntity.ok(activateAccount(verificationTokenEntity));
         }
@@ -31,8 +31,8 @@ public class AccountActivationSLOImpl implements AccountActivationSLO {
     }
     
     private ResponseMessage activateAccount(VerificationTokenEntity verificationTokenEntity) {
-        verificationTokenSLO.deleteToken(verificationTokenEntity.getToken());
-        userSLO.enableUser(verificationTokenEntity.getUser());
+        verificationTokenDAO.deleteToken(verificationTokenEntity.getToken());
+        userDAO.enableUser(verificationTokenEntity.getUser());
         return new ResponseMessage<>(MessageCode.account_activated.getMessage(), MessageType.SUCCESS);
     }
     

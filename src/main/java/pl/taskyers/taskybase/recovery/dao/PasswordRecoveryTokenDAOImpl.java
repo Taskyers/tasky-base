@@ -1,10 +1,10 @@
-package pl.taskyers.taskybase.recovery.slo;
+package pl.taskyers.taskybase.recovery.dao;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
-import pl.taskyers.taskybase.core.slo.TokenSLO;
+import pl.taskyers.taskybase.core.dao.TokenDAO;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.recovery.entity.PasswordRecoveryTokenEntity;
 import pl.taskyers.taskybase.recovery.repository.PasswordRecoveryTokenRepository;
@@ -12,10 +12,10 @@ import pl.taskyers.taskybase.recovery.repository.PasswordRecoveryTokenRepository
 import java.util.Optional;
 import java.util.UUID;
 
-@Service("passwordRecoveryTokenSLO")
+@Service("passwordRecoveryTokenDAO")
 @AllArgsConstructor
 @Slf4j
-public class PasswordRecoveryTokenSLOImpl implements TokenSLO<PasswordRecoveryTokenEntity> {
+public class PasswordRecoveryTokenDAOImpl implements TokenDAO<PasswordRecoveryTokenEntity> {
     
     private final PasswordRecoveryTokenRepository passwordRecoveryTokenRepository;
     

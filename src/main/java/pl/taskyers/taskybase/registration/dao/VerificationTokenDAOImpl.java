@@ -1,10 +1,10 @@
-package pl.taskyers.taskybase.registration.slo;
+package pl.taskyers.taskybase.registration.dao;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
-import pl.taskyers.taskybase.core.slo.TokenSLO;
+import pl.taskyers.taskybase.core.dao.TokenDAO;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.registration.entity.VerificationTokenEntity;
 import pl.taskyers.taskybase.registration.repository.VerificationTokenRepository;
@@ -12,10 +12,10 @@ import pl.taskyers.taskybase.registration.repository.VerificationTokenRepository
 import java.util.Optional;
 import java.util.UUID;
 
-@Service("verificationTokenSLO")
+@Service("verificationTokenDAO")
 @AllArgsConstructor
 @Slf4j
-public class VerificationTokenSLOImpl implements TokenSLO<VerificationTokenEntity> {
+public class VerificationTokenDAOImpl implements TokenDAO<VerificationTokenEntity> {
     
     private final VerificationTokenRepository verificationTokenRepository;
     

@@ -12,8 +12,8 @@ import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.core.messages.MessageCode;
 import pl.taskyers.taskybase.core.messages.MessageType;
 import pl.taskyers.taskybase.core.messages.ResponseMessage;
-import pl.taskyers.taskybase.core.slo.TokenSLO;
-import pl.taskyers.taskybase.core.users.slo.UserSLO;
+import pl.taskyers.taskybase.core.dao.TokenDAO;
+import pl.taskyers.taskybase.core.users.dao.UserDAO;
 import pl.taskyers.taskybase.recovery.entity.PasswordRecoveryTokenEntity;
 
 @Service
@@ -21,24 +21,24 @@ import pl.taskyers.taskybase.recovery.entity.PasswordRecoveryTokenEntity;
 @Slf4j
 public class PasswordRecoverySLOImpl implements PasswordRecoverySLO {
     
-    private final UserSLO userSLO;
+    private final UserDAO userDAO;
     
     private final EmailSLO emailSLO;
     
-    private final TokenSLO passwordRecoveryTokenSLO;
+    private final TokenDAO passwordRecoveryTokenDAO;
     
     @Override
     public ResponseEntity sendEmailWithToken(String email) {
-        if ( userSLO.getEntityByEmail(email).isPresent() ) {
-            UserEntity userEntity = userSLO.getEntityByEmail(email).get();
-            passwordRecoveryTokenSLO.createToken(userEntity);
+        if ( userDAO.getEntityByEmail(email).isPresent() ) {
+            UserEntity userEntity = userDAO.getEntityByEmail(email).get();
+            passwordRecoveryTokenDAO.createToken(userEntity);
             boolean emailWasSent = emailSLO.sendEmailWithTemplateToSingleAddressee(AccountConverter.convertToDTO(userEntity),
                     MessageCode.email_subject_password_recovery.getMessage(),
                     EmailConstants.PASSWORD_RECOVERY_PATH,
                     new String[]{ "token" },
                     new Object[]{
                             EmailConstants.PASSWORD_RECOVERY_URL_TOKEN.replace("{tokenPlaceholder}",
-                                    passwordRecoveryTokenSLO.getToken(userEntity)) });
+                                    passwordRecoveryTokenDAO.getToken(userEntity)) });
             
             return emailWasSent ?
                     ResponseEntity.ok(new ResponseMessage<String>(MessageCode.email_with_token_sent.getMessage(email), MessageType.SUCCESS)) :
@@ -51,14 +51,14 @@ public class PasswordRecoverySLOImpl implements PasswordRecoverySLO {
     
     @Override
     public ResponseEntity setNewPassword(String token, String password) {
-        PasswordRecoveryTokenEntity passwordRecoveryTokenEntity = (PasswordRecoveryTokenEntity) passwordRecoveryTokenSLO.getTokenEntity(token);
+        PasswordRecoveryTokenEntity passwordRecoveryTokenEntity = (PasswordRecoveryTokenEntity) passwordRecoveryTokenDAO.getTokenEntity(token);
         if ( passwordRecoveryTokenEntity == null ) {
             log.warn("Token " + token + " was not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage<String>(MessageCode.field_not_found.getMessage("Token", token), MessageType.WARN));
         }
-        userSLO.updatePassword(passwordRecoveryTokenEntity.getUser(), password);
-        passwordRecoveryTokenSLO.deleteToken(token);
+        userDAO.updatePassword(passwordRecoveryTokenEntity.getUser(), password);
+        passwordRecoveryTokenDAO.deleteToken(token);
         return ResponseEntity.ok(new ResponseMessage<String>(MessageCode.field_updated.getMessage("Password"), MessageType.SUCCESS));
     }
     

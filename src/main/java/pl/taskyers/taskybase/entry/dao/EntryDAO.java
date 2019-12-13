@@ -1,4 +1,4 @@
-package pl.taskyers.taskybase.entry.slo;
+package pl.taskyers.taskybase.entry.dao;
 
 import pl.taskyers.taskybase.entry.EntryType;
 import pl.taskyers.taskybase.entry.entity.EntryEntity;
@@ -12,7 +12,7 @@ import java.util.Optional;
  *
  * @author Jakub Sildatk
  */
-public interface EntrySLO {
+public interface EntryDAO {
     
     /**
      * Add new customizable entry

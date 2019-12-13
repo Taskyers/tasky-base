@@ -1,4 +1,4 @@
-package pl.taskyers.taskybase.core.roles.slo;
+package pl.taskyers.taskybase.core.roles.dao;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class RoleSLOImpl implements RoleSLO {
+public class RoleDAOImpl implements RoleDAO {
     
     private final RoleRepository roleRepository;
     

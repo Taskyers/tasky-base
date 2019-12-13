@@ -1,4 +1,4 @@
-package pl.taskyers.taskybase.entry.slo;
+package pl.taskyers.taskybase.entry.dao;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service("statusEntrySLO")
 @AllArgsConstructor
 @Slf4j
-public class EntrySLOImpl implements EntrySLO {
+public class EntryDAOImpl implements EntryDAO {
     
     private final EntryEntityRepository entryEntityRepository;
     

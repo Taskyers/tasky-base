@@ -3,7 +3,7 @@ package pl.taskyers.taskybase.dashboard.main.slo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.taskyers.taskybase.dashboard.main.dto.ProjectDTO;
-import pl.taskyers.taskybase.project.slo.ProjectSLO;
+import pl.taskyers.taskybase.project.dao.ProjectDAO;
 
 import java.util.List;
 
@@ -11,11 +11,11 @@ import java.util.List;
 @AllArgsConstructor
 public class MainDashboardSLOImpl implements MainDashboardSLO {
     
-    private final ProjectSLO projectSLO;
+    private final ProjectDAO projectDAO;
     
     @Override
     public List<ProjectDTO> getProjects(int n) {
-        return projectSLO.getProjects(n);
+        return projectDAO.getProjects(n);
     }
     
 }

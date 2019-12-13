@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
-import pl.taskyers.taskybase.core.users.slo.UserSLO;
+import pl.taskyers.taskybase.core.users.dao.UserDAO;
 
 import java.util.Set;
 
@@ -13,7 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class AuthProviderImpl implements AuthProvider {
     
-    private final UserSLO userSLO;
+    private final UserDAO userDAO;
     
     @Override
     public String getUserLogin() {
@@ -22,7 +22,7 @@ public class AuthProviderImpl implements AuthProvider {
     
     @Override
     public UserEntity getUserEntity() {
-        return userSLO.getEntityByUsername(getUserLogin()).get();
+        return userDAO.getEntityByUsername(getUserLogin()).get();
     }
     
     @Override

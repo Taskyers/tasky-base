@@ -1,4 +1,4 @@
-package pl.taskyers.taskybase.core.slo;
+package pl.taskyers.taskybase.core.dao;
 
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
@@ -9,7 +9,7 @@ import pl.taskyers.taskybase.project.entity.ProjectEntity;
  * @param <T> token entity
  * @author Jakub Sildatk
  */
-public interface TokenSLO<T> {
+public interface TokenDAO<T> {
     
     /**
      * Generating token based on UUID until it is unique

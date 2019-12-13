@@ -1,4 +1,4 @@
-package pl.taskyers.taskybase.core.users.slo;
+package pl.taskyers.taskybase.core.users.dao;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class UserSLOImpl implements UserSLO {
+public class UserDAOImpl implements UserDAO {
     
     private final UserRepository userRepository;
     

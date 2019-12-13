@@ -1,6 +1,6 @@
 package pl.taskyers.taskybase.dashboard.project.slo;
 
-import pl.taskyers.taskybase.core.roles.slo.EntryEndpoint;
+import pl.taskyers.taskybase.core.roles.EntryEndpoint;
 
 /**
  * Interface for project dashboard

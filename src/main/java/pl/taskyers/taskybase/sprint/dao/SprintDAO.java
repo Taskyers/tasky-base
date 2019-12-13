@@ -1,4 +1,4 @@
-package pl.taskyers.taskybase.sprint.slo;
+package pl.taskyers.taskybase.sprint.dao;
 
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.sprint.entity.SprintEntity;
@@ -12,7 +12,7 @@ import java.util.Optional;
  *
  * @author Jakub Sildatk
  */
-public interface SprintSLO {
+public interface SprintDAO {
     
     /**
      * Save new sprint to the database

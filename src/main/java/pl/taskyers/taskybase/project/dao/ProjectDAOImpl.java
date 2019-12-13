@@ -1,16 +1,17 @@
-package pl.taskyers.taskybase.project.slo;
+package pl.taskyers.taskybase.project.dao;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import pl.taskyers.taskybase.core.roles.slo.RoleSLO;
+import pl.taskyers.taskybase.core.roles.dao.RoleDAO;
 import pl.taskyers.taskybase.core.slo.AuthProvider;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
-import pl.taskyers.taskybase.core.users.slo.UserSLO;
+import pl.taskyers.taskybase.core.users.dao.UserDAO;
 import pl.taskyers.taskybase.core.utils.DateUtils;
 import pl.taskyers.taskybase.dashboard.main.converter.ProjectConverter;
 import pl.taskyers.taskybase.dashboard.main.dto.ProjectDTO;
+import pl.taskyers.taskybase.project.dao.ProjectDAO;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.project.repository.ProjectRepository;
 
@@ -19,15 +20,15 @@ import java.util.*;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class ProjectSLOImpl implements ProjectSLO {
+public class ProjectDAOImpl implements ProjectDAO {
     
     private final AuthProvider authProvider;
     
     private final ProjectRepository projectRepository;
     
-    private final RoleSLO roleSLO;
+    private final RoleDAO roleDAO;
     
-    private final UserSLO userSLO;
+    private final UserDAO userDAO;
     
     @Override
     public List<ProjectDTO> getProjects(int n) {
@@ -48,7 +49,7 @@ public class ProjectSLOImpl implements ProjectSLO {
             add(userEntity);
         }});
         projectEntity.setCreationDate(DateUtils.getCurrentTimestamp());
-        roleSLO.createAllRolesForOwner(userEntity, projectEntity);
+        roleDAO.createAllRolesForOwner(userEntity, projectEntity);
         return projectRepository.save(projectEntity);
     }
     
@@ -64,7 +65,7 @@ public class ProjectSLOImpl implements ProjectSLO {
             return null;
         }
         projectEntity.getUsers().add(loggedUser);
-        roleSLO.createAllRolesForUser(loggedUser, projectEntity);
+        roleDAO.createAllRolesForUser(loggedUser, projectEntity);
         return projectRepository.save(projectEntity);
     }
     
@@ -94,7 +95,7 @@ public class ProjectSLOImpl implements ProjectSLO {
     public void deleteUserInProject(Long userId, String projectName) {
         log.debug("Try to delete user with id = {} and project with name {}", userId, projectName);
         final ProjectEntity projectEntity = this.getProjectEntityByName(projectName).get();
-        final UserEntity userEntity = userSLO.getEntityById(userId).get();
+        final UserEntity userEntity = userDAO.getEntityById(userId).get();
         
         for ( UserEntity user : projectEntity.getUsers() ) {
             if ( user.getId().equals(userId) ) {
@@ -102,7 +103,7 @@ public class ProjectSLOImpl implements ProjectSLO {
                 userEntity.getProjects().remove(projectEntity);
                 
                 projectRepository.flush();
-                userSLO.flushRepository();
+                userDAO.flushRepository();
                 
                 log.debug("User has been removed");
                 break;

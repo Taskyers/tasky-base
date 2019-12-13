@@ -3,20 +3,19 @@ package pl.taskyers.taskybase.project.slo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pl.taskyers.taskybase.core.slo.TokenSLO;
+import pl.taskyers.taskybase.core.dao.TokenDAO;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.project.entity.ProjectInvitationTokenEntity;
 import pl.taskyers.taskybase.project.repository.ProjectInvitationTokenRepository;
-import pl.taskyers.taskybase.recovery.entity.PasswordRecoveryTokenEntity;
 
 import java.util.Optional;
 import java.util.UUID;
 
-@Service("projectInvitationTokenSLO")
+@Service("projectInvitationTokenDAO")
 @AllArgsConstructor
 @Slf4j
-public class ProjectInvitationTokenSLOImpl implements TokenSLO<ProjectInvitationTokenEntity> {
+public class ProjectInvitationTokenDAOImpl implements TokenDAO<ProjectInvitationTokenEntity> {
     
     private final ProjectInvitationTokenRepository projectInvitationTokenRepository;
     

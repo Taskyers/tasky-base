@@ -1,4 +1,4 @@
-package pl.taskyers.taskybase.project.slo;
+package pl.taskyers.taskybase.project.dao;
 
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.dashboard.main.dto.ProjectDTO;
@@ -12,7 +12,7 @@ import java.util.Optional;
  *
  * @author Jakub Sildatk
  */
-public interface ProjectSLO {
+public interface ProjectDAO {
     
     String PROJECTS_PREFIX = "/secure/projects";
     
