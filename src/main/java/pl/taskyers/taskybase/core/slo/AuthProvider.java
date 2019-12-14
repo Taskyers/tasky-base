@@ -68,4 +68,12 @@ public interface AuthProvider {
      */
     Set<UserEntity> getUserEntityAsSet();
     
+    /**
+     * Check if user is logged in
+     *
+     * @return true if user is logged in otherwise false
+     * @since 0.0.7
+     */
+    boolean isLoggedIn();
+    
 }
