@@ -59,7 +59,15 @@ VALUES (1, 'test1', 'test1', '2019-11-05 15:00'),
        (1, 'test10', 'test10', '2019-11-05 15:55'),
        (1, 'toBeUpdated', 'xd', '2019-11-05 16:55');
 INSERT INTO project_user(project_id, user_id)
-VALUES (1, 5),
+VALUES (2, 1),
+       (3, 1),
+       (4, 1),
+       (5, 1),
+       (6, 1),
+       (7, 1),
+       (8, 1),
+       (9, 1),
+       (1, 5),
        (2, 5),
        (3, 5),
        (4, 5),
@@ -79,7 +87,6 @@ VALUES (1, 5),
        (9, 7),
        (1, 8),
        (1, 9),
-       (2, 1),
        (11, 10),
        (1, 11),
        (2, 11),
@@ -143,16 +150,22 @@ VALUES ('green', 'white', 'test1', 1, 'STATUS'),
        ('green', 'white', 'test3', 1, 'TYPE'),
        ('green', 'white', 'entryToBeUpdated', 1, 'PRIORITY'),
        ('green', 'white', 'entryToBeUpdated1', 1, 'STATUS'),
-       ('green', 'white', 'entryToBeDeleted', 1, 'STATUS');
+       ('green', 'white', 'entryToBeDeleted', 1, 'STATUS'),
+       ('green', 'white', 'test4', 2, 'PRIORITY'),
+       ('green', 'white', 'test5', 2, 'STATUS'),
+       ('green', 'white', 'test6', 2, 'TYPE');
 INSERT INTO sprints(project_id, end, name, start)
 VALUES (1, '2019-11-05', 'test', '2019-11-10'),
        (1, '2019-11-05', 'test1', '2019-11-05'),
        (1, '2019-11-05', 'test2', '2019-11-05'),
        (1, '2019-11-05', 'toBeUpdated', '2019-11-05'),
        (1, '2019-11-05', 'toBeDeleted', '2019-11-05'),
-       (1, CURRENT_DATE, 'current', CURRENT_DATE - INTERVAL 2 DAY);
+       (1, CURRENT_DATE, 'current', CURRENT_DATE - INTERVAL 2 DAY),
+       (2, '2019-11-05', 'test', '2019-11-05'),
+       (2, CURRENT_DATE, 'current', CURRENT_DATE - INTERVAL 2 DAY);
 INSERT INTO tasks(creation_date, description, fix_version, `key`, name, assignee_id,
                   creator_id, priority_id, project_id, sprint_id, status_id, type_id)
 VALUES ('2019-12-13 15:00', 'Test 1', '1.0', 'PROJECT-1', 'Testing tasks1', 1, 1, 1, 1, 1, 1, 1),
        ('2019-12-13 15:10', 'Test 2', '1.0', 'PROJECT-2', 'Testing tasks2', 1, 1, 1, 1, 1, 1, 1),
-       ('2019-12-13 15:20', 'Test 3', '1.0', 'PROJECT-3', 'Testing tasks3', 1, 1, 1, 1, 1, 1, 1);
+       ('2019-12-13 15:20', 'Test 3', '1.0', 'PROJECT-3', 'Testing tasks3', 1, 1, 1, 1, 1, 1, 1),
+       ('2019-12-13 15:20', 'Test 3', '1.0', 'PROJECT-3', 'Testing tasks1', 1, 1, 1, 2, 1, 1, 1);

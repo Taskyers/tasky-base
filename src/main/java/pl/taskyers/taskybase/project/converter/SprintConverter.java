@@ -13,7 +13,7 @@ public class SprintConverter {
         boolean isCurrentSprint = false;
         final Date start = sprintEntity.getStart();
         final Date end = sprintEntity.getEnd();
-        if ( (current.after(start) || current.equals(start)) && (current.before(end) || current.equals(end)) ) {
+        if ( DateUtils.checkIfDateBetweenTwoDates(current, start, end) ) {
             isCurrentSprint = true;
         }
         return new SprintResponseData(sprintEntity.getId(), isCurrentSprint, sprintEntity.getName(), DateUtils.parseString(sprintEntity.getStart()),

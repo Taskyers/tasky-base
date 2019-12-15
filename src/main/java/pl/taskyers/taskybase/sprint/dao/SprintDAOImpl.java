@@ -59,4 +59,9 @@ public class SprintDAOImpl implements SprintDAO {
         return sprintRepository.findAllByProjectAndStartGreaterThanEqualAndEndLessThanEqual(project, start, end).size() > 0;
     }
     
+    @Override
+    public Optional<SprintEntity> getByNameAndProject(String name, ProjectEntity projectEntity) {
+        return sprintRepository.findByNameAndProject(name, projectEntity);
+    }
+    
 }
