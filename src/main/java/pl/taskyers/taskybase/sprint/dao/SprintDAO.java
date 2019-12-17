@@ -79,4 +79,14 @@ public interface SprintDAO {
      */
     boolean doesSprintInPeriodExists(ProjectEntity project, Date start, Date end);
     
+    /**
+     * Get sprint entity by name and project
+     *
+     * @param name          name
+     * @param projectEntity project
+     * @return sprint entity as optional
+     * @since 0.0.7
+     */
+    Optional<SprintEntity> getByNameAndProject(String name, ProjectEntity projectEntity);
+    
 }

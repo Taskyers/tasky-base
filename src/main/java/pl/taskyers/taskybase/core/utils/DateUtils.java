@@ -36,4 +36,8 @@ public class DateUtils {
         return DATE_FORMAT.format(date);
     }
     
+    public static boolean checkIfDateBetweenTwoDates(Date toCheck, Date start, Date end) {
+        return (toCheck.after(start) || toCheck.equals(start)) && (toCheck.before(end) || toCheck.equals(end));
+    }
+    
 }
