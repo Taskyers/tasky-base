@@ -5,7 +5,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import pl.taskyers.taskybase.core.utils.DateUtils;
 import pl.taskyers.taskybase.core.utils.UserUtils;
+import pl.taskyers.taskybase.entry.EntryType;
 import pl.taskyers.taskybase.integration.IntegrationBase;
+import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.task.entity.TaskEntity;
 
 import javax.transaction.Transactional;
@@ -87,6 +89,54 @@ public class TaskDetailsIntegrationTest extends IntegrationBase {
                                 taskEntity.getSprint().getEnd()))))
                 .andExpect(jsonPath("$.watchers.length()", is(taskEntity.getWatchers().size())))
                 .andExpect(jsonPath("$.comments.length()", is(taskEntity.getComments().size())))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isOk());
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
+    public void givenProperUserWhenGettingStatusesShouldReturnStatus200() throws Exception {
+        final ProjectEntity projectEntity = projectRepository.findById(2L).get();
+        final int size = entryEntityRepository.findAllByProjectAndEntryType(projectEntity, EntryType.STATUS).size();
+        
+        mockMvc.perform(get("/secure/tasks/PROJECT-4/statuses"))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(size)))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isOk());
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
+    public void givenProperUserWhenGettingTypesShouldReturnStatus200() throws Exception {
+        final ProjectEntity projectEntity = projectRepository.findById(2L).get();
+        final int size = entryEntityRepository.findAllByProjectAndEntryType(projectEntity, EntryType.TYPE).size();
+        
+        mockMvc.perform(get("/secure/tasks/PROJECT-4/types"))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(size)))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isOk());
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
+    public void givenProperUserWhenGettingPrioritiesShouldReturnStatus200() throws Exception {
+        final ProjectEntity projectEntity = projectRepository.findById(2L).get();
+        final int size = entryEntityRepository.findAllByProjectAndEntryType(projectEntity, EntryType.PRIORITY).size();
+        
+        mockMvc.perform(get("/secure/tasks/PROJECT-4/priorities"))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(size)))
                 .andExpect(redirectedUrl(null))
                 .andExpect(forwardedUrl(null))
                 .andExpect(status().isOk());

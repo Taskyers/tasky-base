@@ -153,7 +153,10 @@ VALUES ('green', 'white', 'test1', 1, 'STATUS'),
        ('green', 'white', 'entryToBeDeleted', 1, 'STATUS'),
        ('green', 'white', 'test4', 2, 'PRIORITY'),
        ('green', 'white', 'test5', 2, 'STATUS'),
-       ('green', 'white', 'test6', 2, 'TYPE');
+       ('green', 'white', 'test6', 2, 'TYPE'),
+       ('green', 'white', 'test44', 2, 'PRIORITY'),
+       ('green', 'white', 'test55', 2, 'STATUS'),
+       ('green', 'white', 'test66', 2, 'TYPE');
 INSERT INTO sprints(project_id, end, name, start)
 VALUES (1, '2019-11-05', 'test', '2019-11-10'),
        (1, '2019-11-05', 'test1', '2019-11-05'),
