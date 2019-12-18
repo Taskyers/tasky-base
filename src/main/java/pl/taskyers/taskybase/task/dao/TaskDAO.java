@@ -58,4 +58,13 @@ public interface TaskDAO {
      */
     TaskEntity createTask(TaskEntity taskEntity, UserEntity userEntity, String type, String status, String priority, String sprint);
     
+    /**
+     * Get task entity only by key
+     *
+     * @param key key
+     * @return task entity as optional
+     * @since 0.0.7
+     */
+    Optional<TaskEntity> getTaskByKey(String key);
+    
 }

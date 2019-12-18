@@ -163,9 +163,13 @@ VALUES (1, '2019-11-05', 'test', '2019-11-10'),
        (1, CURRENT_DATE, 'current', CURRENT_DATE - INTERVAL 2 DAY),
        (2, '2019-11-05', 'test', '2019-11-05'),
        (2, CURRENT_DATE, 'current', CURRENT_DATE - INTERVAL 2 DAY);
-INSERT INTO tasks(creation_date, description, fix_version, `key`, name, assignee_id,
+INSERT INTO tasks(creation_date, update_date, description, fix_version, `key`, name, assignee_id,
                   creator_id, priority_id, project_id, sprint_id, status_id, type_id)
-VALUES ('2019-12-13 15:00', 'Test 1', '1.0', 'PROJECT-1', 'Testing tasks1', 1, 1, 1, 1, 1, 1, 1),
-       ('2019-12-13 15:10', 'Test 2', '1.0', 'PROJECT-2', 'Testing tasks2', 1, 1, 1, 1, 1, 1, 1),
-       ('2019-12-13 15:20', 'Test 3', '1.0', 'PROJECT-3', 'Testing tasks3', 1, 1, 1, 1, 1, 1, 1),
-       ('2019-12-13 15:20', 'Test 3', '1.0', 'PROJECT-3', 'Testing tasks1', 1, 1, 1, 2, 1, 1, 1);
+VALUES ('2019-12-13 15:00', '2019-12-13 15:00', 'Test 1', '1.0', 'PROJECT-1', 'Testing tasks1', 1, 1, 1, 1, 1, 1, 1),
+       ('2019-12-13 15:10', '2019-12-13 15:10', 'Test 2', '1.0', 'PROJECT-2', 'Testing tasks2', 1, 1, 1, 1, 1, 1, 1),
+       ('2019-12-13 15:20', '2019-12-13 15:20', 'Test 3', '1.0', 'PROJECT-3', 'Testing tasks3', 1, 1, 1, 1, 1, 1, 1),
+       ('2019-12-13 15:20', '2019-12-13 15:20', 'Test 3', '1.0', 'PROJECT-4', 'Testing tasks1', 1, 1, 1, 2, 7, 1, 1);
+INSERT INTO comments(content, user_id, task_id, creation_date)
+VALUES ('test1', 1, 4, '2019-12-13 16:00'),
+       ('test1', 1, 4, '2019-12-13 16:00'),
+       ('other user comment', 2, 4, '2019-12-13 16:00');

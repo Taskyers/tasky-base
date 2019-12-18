@@ -65,6 +65,11 @@ public class TaskDAOImpl implements TaskDAO {
         return taskRepository.save(taskEntity);
     }
     
+    @Override
+    public Optional<TaskEntity> getTaskByKey(String key) {
+        return taskRepository.findByKey(key);
+    }
+    
     private String generateKey(ProjectEntity projectEntity) {
         final String projectName = projectEntity.getName();
         String key = combine(projectName, ThreadLocalRandom.current().nextInt(KEY_MIN_RANGE, KEY_MAX_RANGE));

@@ -18,4 +18,6 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
     
     Optional<TaskEntity> findByKeyAndProject(String key, ProjectEntity project);
     
+    Optional<TaskEntity> findByKey(String key);
+    
 }

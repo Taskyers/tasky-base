@@ -41,6 +41,7 @@ public enum MessageCode {
     server_problem_occured,
     task_created,
     task_field_already_exists,
+    task_not_found,
     user_already_in_project,
     user_field_already_exists,
     user_not_found,
