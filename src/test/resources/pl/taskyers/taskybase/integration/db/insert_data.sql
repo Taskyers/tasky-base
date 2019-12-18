@@ -171,7 +171,8 @@ INSERT INTO tasks(creation_date, update_date, description, fix_version, `key`, n
 VALUES ('2019-12-13 15:00', '2019-12-13 15:00', 'Test 1', '1.0', 'PROJECT-1', 'Testing tasks1', 1, 1, 1, 1, 1, 1, 1),
        ('2019-12-13 15:10', '2019-12-13 15:10', 'Test 2', '1.0', 'PROJECT-2', 'Testing tasks2', 1, 1, 1, 1, 1, 1, 1),
        ('2019-12-13 15:20', '2019-12-13 15:20', 'Test 3', '1.0', 'PROJECT-3', 'Testing tasks3', 1, 1, 1, 1, 1, 1, 1),
-       ('2019-12-13 15:20', '2019-12-13 15:20', 'Test 3', '1.0', 'PROJECT-4', 'Testing tasks1', 1, 1, 1, 2, 7, 1, 1);
+       ('2019-12-13 15:20', '2019-12-13 15:20', 'Test 3', '1.0', 'PROJECT-4', 'Testing tasks1', 4, 1, 1, 2, 7, 1, 1),
+       ('2019-12-13 15:20', '2019-12-13 15:20', 'Test 3', '1.0', 'PROJECT-5', 'Testing tasks123', 1, 1, 1, 2, 7, 1, 1);
 INSERT INTO comments(content, user_id, task_id, creation_date)
 VALUES ('test1', 1, 4, '2019-12-13 16:00'),
        ('test1', 1, 4, '2019-12-13 16:00'),

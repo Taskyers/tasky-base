@@ -67,4 +67,33 @@ public interface TaskDAO {
      */
     Optional<TaskEntity> getTaskByKey(String key);
     
+    /**
+     * Get task entity by id
+     *
+     * @param id id
+     * @return task entity as optional
+     * @since 0.0.7
+     */
+    Optional<TaskEntity> getTaskById(Long id);
+    
+    /**
+     * Set new assignee to given task
+     *
+     * @param taskEntity  task
+     * @param newAssignee user entity
+     * @return updated task entity
+     * @since 0.0.7
+     */
+    TaskEntity setAssignee(TaskEntity taskEntity, UserEntity newAssignee);
+    
+    /**
+     * Add new user to watchers collection to given task
+     *
+     * @param taskEntity task
+     * @param userEntity user
+     * @return updated task entity
+     * @since 0.0.7
+     */
+    TaskEntity addWatcher(TaskEntity taskEntity, UserEntity userEntity);
+    
 }

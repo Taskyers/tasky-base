@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.core.utils.DateUtils;
+import pl.taskyers.taskybase.core.utils.UserUtils;
 import pl.taskyers.taskybase.entry.EntryType;
 import pl.taskyers.taskybase.entry.dao.EntryDAO;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
@@ -68,6 +69,31 @@ public class TaskDAOImpl implements TaskDAO {
     @Override
     public Optional<TaskEntity> getTaskByKey(String key) {
         return taskRepository.findByKey(key);
+    }
+    
+    @Override
+    public Optional<TaskEntity> getTaskById(Long id) {
+        return taskRepository.findById(id);
+    }
+    
+    @Override
+    public TaskEntity setAssignee(TaskEntity taskEntity, UserEntity newAssignee) {
+        log.debug("Setting new assignee {} to task {}", UserUtils.getPersonals(newAssignee), taskEntity.getKey());
+        taskEntity.setAssignee(newAssignee);
+        setUpdateDate(taskEntity);
+        return taskRepository.save(taskEntity);
+    }
+    
+    @Override
+    public TaskEntity addWatcher(TaskEntity taskEntity, UserEntity userEntity) {
+        log.debug("Adding watcher {} to task {}", UserUtils.getPersonals(userEntity), taskEntity.getKey());
+        taskEntity.getWatchers().add(userEntity);
+        setUpdateDate(taskEntity);
+        return taskRepository.save(taskEntity);
+    }
+    
+    private void setUpdateDate(TaskEntity taskEntity) {
+        taskEntity.setUpdateDate(DateUtils.getCurrentTimestamp());
     }
     
     private String generateKey(ProjectEntity projectEntity) {
