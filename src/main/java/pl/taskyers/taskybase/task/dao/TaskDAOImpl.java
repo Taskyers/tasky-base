@@ -9,8 +9,11 @@ import pl.taskyers.taskybase.core.utils.DateUtils;
 import pl.taskyers.taskybase.core.utils.UserUtils;
 import pl.taskyers.taskybase.entry.EntryType;
 import pl.taskyers.taskybase.entry.dao.EntryDAO;
+import pl.taskyers.taskybase.entry.entity.EntryEntity;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.sprint.dao.SprintDAO;
+import pl.taskyers.taskybase.sprint.entity.SprintEntity;
+import pl.taskyers.taskybase.task.ResolutionType;
 import pl.taskyers.taskybase.task.entity.TaskEntity;
 import pl.taskyers.taskybase.task.repository.TaskRepository;
 
@@ -88,6 +91,37 @@ public class TaskDAOImpl implements TaskDAO {
     public TaskEntity addWatcher(TaskEntity taskEntity, UserEntity userEntity) {
         log.debug("Adding watcher {} to task {}", UserUtils.getPersonals(userEntity), taskEntity.getKey());
         taskEntity.getWatchers().add(userEntity);
+        setUpdateDate(taskEntity);
+        return taskRepository.save(taskEntity);
+    }
+    
+    @Override
+    public TaskEntity updateEntry(TaskEntity taskEntity, EntryEntity entryEntity) {
+        final EntryType entryType = entryEntity.getEntryType();
+        log.debug("Updating entry of type {} with value {} in project {}", entryType, entryEntity.getValue(),
+                taskEntity.getProject().getName());
+        
+        if ( EntryType.STATUS.equals(entryType) ) {
+            taskEntity.setStatus(entryEntity);
+        } else if ( EntryType.TYPE.equals(entryType) ) {
+            taskEntity.setType(entryEntity);
+        } else {
+            taskEntity.setPriority(entryEntity);
+        }
+        
+        setUpdateDate(taskEntity);
+        return taskRepository.save(taskEntity);
+    }
+    
+    @Override
+    public TaskEntity updateTask(TaskEntity taskEntity, String name, String description, String fixVersion, SprintEntity sprintEntity,
+            ResolutionType resolution) {
+        log.debug("Updating task with id {}", taskEntity.getId());
+        taskEntity.setName(name);
+        taskEntity.setDescription(description);
+        taskEntity.setFixVersion(fixVersion);
+        taskEntity.setSprint(sprintEntity);
+        taskEntity.setResolution(resolution);
         setUpdateDate(taskEntity);
         return taskRepository.save(taskEntity);
     }

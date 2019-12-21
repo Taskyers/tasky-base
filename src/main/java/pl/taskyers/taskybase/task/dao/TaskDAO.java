@@ -1,7 +1,10 @@
 package pl.taskyers.taskybase.task.dao;
 
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
+import pl.taskyers.taskybase.entry.entity.EntryEntity;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
+import pl.taskyers.taskybase.sprint.entity.SprintEntity;
+import pl.taskyers.taskybase.task.ResolutionType;
 import pl.taskyers.taskybase.task.entity.TaskEntity;
 
 import java.util.List;
@@ -95,5 +98,30 @@ public interface TaskDAO {
      * @since 0.0.7
      */
     TaskEntity addWatcher(TaskEntity taskEntity, UserEntity userEntity);
+    
+    /**
+     * Update entry in task
+     *
+     * @param taskEntity  task
+     * @param entryEntity entry
+     * @return updated task entity
+     * @since 0.0.7
+     */
+    TaskEntity updateEntry(TaskEntity taskEntity, EntryEntity entryEntity);
+    
+    /**
+     * Update other task data
+     *
+     * @param taskEntity   task
+     * @param name         new task's name
+     * @param description  new task's description
+     * @param fixVersion   new task's fix version
+     * @param sprintEntity new task's sprint
+     * @param resolution   new task's resolution type
+     * @return updated task entity
+     * @since 0.0.7
+     */
+    TaskEntity updateTask(TaskEntity taskEntity, String name, String description, String fixVersion, SprintEntity sprintEntity,
+            ResolutionType resolution);
     
 }
