@@ -15,6 +15,7 @@ import pl.taskyers.taskybase.entry.dao.EntryDAO;
 import pl.taskyers.taskybase.entry.entity.EntryEntity;
 import pl.taskyers.taskybase.project.dao.ProjectDAO;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
+import pl.taskyers.taskybase.task.ResolutionType;
 import pl.taskyers.taskybase.task.converter.TaskConverter;
 import pl.taskyers.taskybase.task.dao.TaskDAO;
 import pl.taskyers.taskybase.task.dto.TaskDetailsDTO;
@@ -59,6 +60,13 @@ public class TaskDetailsSLOImpl implements TaskDetailsSLO {
         return isTaskFound;
     }
     
+    @Override
+    public ResponseEntity getResolutionTypes(String key) {
+        final UserEntity userEntity = authProvider.getUserEntity();
+        ResponseEntity isTaskFound = checkForTaskAndProject(key, userEntity);
+        return isTaskFound == null ? ResponseEntity.ok(convertResolutionTypes()) : isTaskFound;
+    }
+    
     private ResponseEntity checkForTaskAndProject(String key, UserEntity userEntity) {
         if ( !taskDAO.getTaskByKey(key).isPresent() ) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -77,6 +85,14 @@ public class TaskDetailsSLOImpl implements TaskDetailsSLO {
             entries.add(entryEntity.getValue());
         }
         return entries;
+    }
+    
+    private List<String> convertResolutionTypes() {
+        List<String> types = new ArrayList<>();
+        for ( ResolutionType resolutionType : ResolutionType.values() ) {
+            types.add(resolutionType.getValue());
+        }
+        return types;
     }
     
 }

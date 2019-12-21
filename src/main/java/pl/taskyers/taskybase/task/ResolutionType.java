@@ -9,6 +9,7 @@ import java.util.Arrays;
 @Getter
 public enum ResolutionType {
     
+    UNRESOLVED("Unresolved"),
     DONE("Done"),
     FIXED("Fixed"),
     DUPLICATED("Duplicated"),

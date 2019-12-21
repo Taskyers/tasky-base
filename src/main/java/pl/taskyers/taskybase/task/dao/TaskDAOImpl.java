@@ -65,6 +65,7 @@ public class TaskDAOImpl implements TaskDAO {
         taskEntity.setWatchers(Sets.newHashSet(userEntity));
         taskEntity.setCreationDate(DateUtils.getCurrentTimestamp());
         taskEntity.setUpdateDate(DateUtils.getCurrentTimestamp());
+        taskEntity.setResolution(ResolutionType.UNRESOLVED);
         log.debug("Saving task with name: {} and key: {}", taskEntity.getName(), taskEntity.getKey());
         return taskRepository.save(taskEntity);
     }

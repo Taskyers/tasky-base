@@ -20,6 +20,8 @@ public interface TaskDetailsSLO {
     
     String GET_PRIORITIES = GET_TASK_BY_KEY + "/priorities";
     
+    String GET_RESOLUTION_TYPES = GET_TASK_BY_KEY + "/resolutions";
+    
     /**
      * Return task details
      *
@@ -38,5 +40,14 @@ public interface TaskDetailsSLO {
      * @since 0.0.7
      */
     ResponseEntity getEntries(String key, EntryType entryType);
+    
+    /**
+     * Get all resolution types
+     *
+     * @param key task's key
+     * @return list of string as resolution types
+     * @since 0.0.7
+     */
+    ResponseEntity getResolutionTypes(String key);
     
 }

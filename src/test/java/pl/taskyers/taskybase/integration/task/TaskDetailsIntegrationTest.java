@@ -8,6 +8,7 @@ import pl.taskyers.taskybase.core.utils.UserUtils;
 import pl.taskyers.taskybase.entry.EntryType;
 import pl.taskyers.taskybase.integration.IntegrationBase;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
+import pl.taskyers.taskybase.task.ResolutionType;
 import pl.taskyers.taskybase.task.entity.TaskEntity;
 
 import javax.transaction.Transactional;
@@ -134,6 +135,22 @@ public class TaskDetailsIntegrationTest extends IntegrationBase {
         final int size = entryEntityRepository.findAllByProjectAndEntryType(projectEntity, EntryType.PRIORITY).size();
         
         mockMvc.perform(get("/secure/tasks/PROJECT-4/priorities"))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(size)))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isOk());
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
+    public void givenProperUserWhenGettingResolutionTypesShouldReturnStatus200() throws Exception {
+        final ProjectEntity projectEntity = projectRepository.findById(2L).get();
+        final int size = ResolutionType.values().length;
+        
+        mockMvc.perform(get("/secure/tasks/PROJECT-4/resolutions"))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()", is(size)))

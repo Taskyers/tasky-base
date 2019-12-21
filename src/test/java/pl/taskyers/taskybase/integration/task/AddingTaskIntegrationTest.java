@@ -8,6 +8,7 @@ import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.entry.EntryType;
 import pl.taskyers.taskybase.integration.IntegrationBase;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
+import pl.taskyers.taskybase.task.ResolutionType;
 import pl.taskyers.taskybase.task.dto.TaskDTO;
 import pl.taskyers.taskybase.task.entity.TaskEntity;
 
@@ -193,7 +194,7 @@ public class AddingTaskIntegrationTest extends IntegrationBase {
         assertNotNull(taskEntity.getKey());
         assertEquals(taskEntity.getCreationDate(), taskEntity.getUpdateDate());
         assertNull(taskEntity.getAssignee());
-        assertNull(taskEntity.getResolution());
+        assertEquals(taskEntity.getResolution(), ResolutionType.UNRESOLVED);
         assertNotNull(taskEntity.getWatchers());
         assertNotNull(taskEntity.getCreator());
         assertTrue(assertKeyFormat(taskEntity.getKey()));

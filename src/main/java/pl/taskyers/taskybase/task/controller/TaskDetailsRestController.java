@@ -38,4 +38,9 @@ public class TaskDetailsRestController {
         return taskDetailsSLO.getEntries(key, EntryType.PRIORITY);
     }
     
+    @RequestMapping(value = GET_RESOLUTION_TYPES, method = RequestMethod.GET)
+    public ResponseEntity getResolutionTypes(@PathVariable String key) {
+        return taskDetailsSLO.getResolutionTypes(key);
+    }
+    
 }
