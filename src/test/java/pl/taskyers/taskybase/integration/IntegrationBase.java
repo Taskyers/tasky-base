@@ -16,6 +16,7 @@ import pl.taskyers.taskybase.entry.repository.EntryEntityRepository;
 import pl.taskyers.taskybase.project.repository.ProjectInvitationTokenRepository;
 import pl.taskyers.taskybase.project.repository.ProjectRepository;
 import pl.taskyers.taskybase.sprint.repository.SprintRepository;
+import pl.taskyers.taskybase.task.repository.CommentRepository;
 import pl.taskyers.taskybase.task.repository.TaskRepository;
 
 @RunWith(SpringRunner.class)
@@ -50,6 +51,9 @@ public abstract class IntegrationBase {
     
     @Autowired
     protected TaskRepository taskRepository;
+    
+    @Autowired
+    protected CommentRepository commentRepository;
     
     protected final ObjectMapper objectMapper = new ObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     

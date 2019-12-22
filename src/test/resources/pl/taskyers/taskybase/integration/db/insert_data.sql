@@ -176,4 +176,6 @@ VALUES ('2019-12-13 15:00', '2019-12-13 15:00', 'Test 1', '1.0', 'PROJECT-1', 'T
 INSERT INTO comments(content, user_id, task_id, creation_date)
 VALUES ('test1', 1, 4, '2019-12-13 16:00'),
        ('test1', 1, 4, '2019-12-13 16:00'),
-       ('other user comment', 2, 4, '2019-12-13 16:00');
+       ('other user comment', 2, 4, '2019-12-13 16:00'),
+       ('to be updated', 1, 4, '2019-12-13 16:00'),
+       ('to be deleted', 1, 4, '2019-12-13 16:00');

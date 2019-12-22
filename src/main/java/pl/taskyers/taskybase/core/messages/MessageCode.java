@@ -9,6 +9,11 @@ import java.util.Locale;
 @Slf4j
 public enum MessageCode {
     account_activated,
+    comment_created,
+    comment_deleted,
+    comment_edited,
+    comment_not_found,
+    comment_not_yours,
     email_subject_registration,
     email_subject_password_recovery,
     email_subject_project_invitation,
