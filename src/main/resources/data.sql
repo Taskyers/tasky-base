@@ -110,3 +110,8 @@ INSERT INTO comments(content, user_id, task_id, creation_date)
 VALUES ('Testing comments 1', 1, 1, '2019-12-13 16:00'),
        ('Testing comments 2', 1, 1, '2019-12-13 16:10'),
        ('Testing comments 3', 1, 1, '2019-12-13 16:20');
+INSERT INTO task_user(task_id, user_id)
+VALUES (1, 1),
+       (1, 2),
+       (1, 3),
+       (1, 4);

@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.taskyers.taskybase.core.emails.AddressConverter;
+import pl.taskyers.taskybase.core.emails.EmailSLO;
 import pl.taskyers.taskybase.core.messages.MessageCode;
 import pl.taskyers.taskybase.core.messages.MessageType;
 import pl.taskyers.taskybase.core.messages.ResponseMessage;
@@ -45,6 +47,8 @@ public class EditTaskSLOImpl implements EditTaskSLO {
     
     private final Validator<UpdateTaskData> updateTaskDataValidator;
     
+    private final EmailSLO emailSLO;
+    
     @Override
     public ResponseEntity assignToMe(Long id) {
         final UserEntity userEntity = authProvider.getUserEntity();
@@ -57,6 +61,7 @@ public class EditTaskSLOImpl implements EditTaskSLO {
                 return ResponseEntity.badRequest().body(new ResponseMessage<>(MessageCode.task_same_assignee.getMessage(), MessageType.ERROR));
             }
             final TaskEntity updated = taskDAO.setAssignee(taskEntity, userEntity);
+            sendEmails(updated);
             return ResponseEntity.ok(
                     new ResponseMessage<>(MessageCode.task_assigned.getMessage(), MessageType.SUCCESS, TaskConverter.convertToDetailsDTO(updated,
                             UserUtils.getPersonals(userEntity))));
@@ -77,8 +82,9 @@ public class EditTaskSLOImpl implements EditTaskSLO {
             }
             final TaskEntity updated = taskDAO.addWatcher(taskEntity, userEntity);
             return ResponseEntity.ok(
-                    new ResponseMessage<>(MessageCode.task_watcher_added.getMessage(), MessageType.SUCCESS, TaskConverter.convertToDetailsDTO(updated,
-                            UserUtils.getPersonals(userEntity))));
+                    new ResponseMessage<>(MessageCode.task_watcher_added.getMessage(), MessageType.SUCCESS,
+                            TaskConverter.convertToDetailsDTO(updated,
+                                    UserUtils.getPersonals(userEntity))));
         }
         return isTaskFound;
     }
@@ -92,6 +98,7 @@ public class EditTaskSLOImpl implements EditTaskSLO {
             final ProjectEntity projectEntity = taskEntity.getProject();
             final EntryEntity entryEntity = entryDAO.getEntryByEntryTypeAndValueAndProject(entryType, value, projectEntity).get();
             final TaskEntity updated = taskDAO.updateEntry(taskEntity, entryEntity);
+            sendEmails(updated);
             return ResponseEntity.ok(new ResponseMessage<>(MessageCode.task_entry_updated.getMessage(entryType), MessageType.SUCCESS,
                     TaskConverter.convertToDetailsDTO(updated,
                             UserUtils.getPersonals(userEntity))));
@@ -116,11 +123,20 @@ public class EditTaskSLOImpl implements EditTaskSLO {
             final TaskEntity updated =
                     taskDAO.updateTask(toUpdate, taskData.getName(), taskData.getDescription(), taskData.getFixVersion(), sprintEntity,
                             resolutionType);
+            sendEmails(updated);
             
             return ResponseEntity.ok(new ResponseMessage<>(MessageCode.task_updated.getMessage(), MessageType.SUCCESS,
                     TaskConverter.convertToDetailsDTO(updated, UserUtils.getPersonals(userEntity))));
         }
         return isTaskFound;
+    }
+    
+    private void sendEmails(TaskEntity taskEntity) {
+        if ( taskEntity.getWatchers().size() > 0 ) {
+            emailSLO.sendEmailToWatchers(AddressConverter.convertToDTOList(taskEntity.getWatchers()), authProvider.getUserPersonal(), taskEntity);
+            log.debug("Sending emails to watchers");
+        }
+        log.debug("Watchers size is 0 - not sending emails");
     }
     
     private ResponseEntity checkForTask(Long id, UserEntity userEntity) {

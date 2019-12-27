@@ -18,6 +18,7 @@ public enum MessageCode {
     email_subject_password_recovery,
     email_subject_project_invitation,
     email_with_token_sent,
+    email_task_changed,
     entry_created,
     entry_deleted,
     entry_field_already_exists,

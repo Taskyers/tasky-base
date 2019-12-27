@@ -179,3 +179,4 @@ VALUES ('test1', 1, 4, '2019-12-13 16:00'),
        ('other user comment', 2, 4, '2019-12-13 16:00'),
        ('to be updated', 1, 4, '2019-12-13 16:00'),
        ('to be deleted', 1, 4, '2019-12-13 16:00');
+INSERT INTO task_user (task_id, user_id) VALUES (4, 6), (4, 7);
