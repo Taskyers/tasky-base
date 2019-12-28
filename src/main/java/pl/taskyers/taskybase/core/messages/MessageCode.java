@@ -41,6 +41,7 @@ public enum MessageCode {
     sprint_created,
     sprint_deleted,
     sprint_field_already_exists,
+    sprint_not_current,
     sprint_not_found,
     sprint_invalid_date,
     sprint_updated,

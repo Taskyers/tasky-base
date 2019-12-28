@@ -124,4 +124,15 @@ public interface TaskDAO {
     TaskEntity updateTask(TaskEntity taskEntity, String name, String description, String fixVersion, SprintEntity sprintEntity,
             ResolutionType resolution);
     
+    /**
+     * Get all tasks by project, status and sprint
+     *
+     * @param projectEntity project
+     * @param status        status value
+     * @param sprintEntity  sprint
+     * @return list of tasks entities
+     * @since 0.0.7
+     */
+    List<TaskEntity> getAllTasksByProjectAndStatusAndSprint(ProjectEntity projectEntity, String status, SprintEntity sprintEntity);
+    
 }

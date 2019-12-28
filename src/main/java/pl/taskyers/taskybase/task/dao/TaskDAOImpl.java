@@ -127,6 +127,11 @@ public class TaskDAOImpl implements TaskDAO {
         return taskRepository.save(taskEntity);
     }
     
+    @Override
+    public List<TaskEntity> getAllTasksByProjectAndStatusAndSprint(ProjectEntity projectEntity, String status, SprintEntity sprintEntity) {
+        return taskRepository.findAllByProjectAndStatus_ValueAndSprint(projectEntity, status, sprintEntity);
+    }
+    
     private void setUpdateDate(TaskEntity taskEntity) {
         taskEntity.setUpdateDate(DateUtils.getCurrentTimestamp());
     }
