@@ -132,6 +132,11 @@ public class TaskDAOImpl implements TaskDAO {
         return taskRepository.findAllByProjectAndStatus_ValueAndSprint(projectEntity, status, sprintEntity);
     }
     
+    @Override
+    public List<TaskEntity> getUserTasksByNameLike(UserEntity assignee, String name) {
+        return taskRepository.findTop5ByAssigneeAndNameIgnoreCaseContaining(assignee, name);
+    }
+    
     private void setUpdateDate(TaskEntity taskEntity) {
         taskEntity.setUpdateDate(DateUtils.getCurrentTimestamp());
     }

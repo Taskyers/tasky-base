@@ -159,4 +159,32 @@ public class TaskDetailsIntegrationTest extends IntegrationBase {
                 .andExpect(status().isOk());
     }
     
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    public void givenValidTaskNameWhenSearchingTasksShouldReturnNotEmptyList() throws Exception {
+        final String taskName = "Testing";
+        
+        mockMvc.perform(get("/secure/tasks/search/" + taskName))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(5)))
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isOk());
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    public void givenNotValidTaskNameWhenSearchingTasksShouldReturnEmptyList() throws Exception {
+        final String taskName = "Lama";
+        
+        mockMvc.perform(get("/secure/tasks/search/" + taskName))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(0)))
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isOk());
+    }
+    
 }
