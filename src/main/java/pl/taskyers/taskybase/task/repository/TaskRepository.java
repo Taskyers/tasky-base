@@ -10,6 +10,7 @@ import pl.taskyers.taskybase.task.entity.TaskEntity;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
@@ -24,6 +25,6 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
     
     List<TaskEntity> findAllByProjectAndStatus_ValueAndSprint(ProjectEntity project, String value, SprintEntity sprint);
     
-    List<TaskEntity> findTop5ByAssigneeAndNameIgnoreCaseContaining(UserEntity assignee, String name);
+    List<TaskEntity> findTop5ByProjectInAndNameIgnoreCaseContaining(List<ProjectEntity> projectEntities, String name);
     
 }

@@ -167,7 +167,7 @@ public class TaskDetailsIntegrationTest extends IntegrationBase {
         mockMvc.perform(get("/secure/tasks/search/" + taskName))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.length()", is(5)))
+                .andExpect(jsonPath("$.length()", is(4)))
                 .andExpect(forwardedUrl(null))
                 .andExpect(redirectedUrl(null))
                 .andExpect(status().isOk());

@@ -117,4 +117,12 @@ public interface ProjectDAO {
      */
     Optional<ProjectEntity> getProjectByNameAndOwner(String projectName, UserEntity owner);
     
+    /**
+     * Get all project entities for currently logged in user
+     *
+     * @return all project entities
+     * @since 0.0.7
+     */
+    List<ProjectEntity> getAllProjectsEntities();
+    
 }

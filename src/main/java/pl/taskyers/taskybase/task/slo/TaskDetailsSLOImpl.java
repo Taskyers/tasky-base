@@ -10,6 +10,8 @@ import pl.taskyers.taskybase.core.messages.ResponseMessage;
 import pl.taskyers.taskybase.core.slo.AuthProvider;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.core.utils.UserUtils;
+import pl.taskyers.taskybase.dashboard.main.converter.ProjectConverter;
+import pl.taskyers.taskybase.dashboard.main.dto.ProjectDTO;
 import pl.taskyers.taskybase.entry.EntryType;
 import pl.taskyers.taskybase.entry.dao.EntryDAO;
 import pl.taskyers.taskybase.entry.entity.EntryEntity;
@@ -24,6 +26,7 @@ import pl.taskyers.taskybase.task.entity.TaskEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -70,11 +73,9 @@ public class TaskDetailsSLOImpl implements TaskDetailsSLO {
     
     @Override
     public List<TaskDTO> getUserTasksByName(String name) {
-        final UserEntity userEntity = authProvider.getUserEntity();
-        List<TaskEntity> taskEntities = taskDAO.getUserTasksByNameLike(userEntity, name);
+        List<TaskEntity> taskEntities = taskDAO.getUserTasksByNameLike(projectDAO.getAllProjectsEntities(), name);
         
         return convertTasksToDTO(taskEntities);
-        
     }
     
     private ResponseEntity checkForTaskAndProject(String key, UserEntity userEntity) {

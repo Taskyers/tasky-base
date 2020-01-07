@@ -116,6 +116,11 @@ public class ProjectDAOImpl implements ProjectDAO {
         return projectRepository.findByNameAndOwner(projectName, owner);
     }
     
+    @Override
+    public List<ProjectEntity> getAllProjectsEntities() {
+        return projectRepository.findAllByUsersContaining(authProvider.getUserEntityAsSet());
+    }
+    
     private List<ProjectDTO> getProjectsAsDTO(List<ProjectEntity> projectEntities) {
         List<ProjectDTO> result = new ArrayList<>();
         for ( ProjectEntity projectEntity : projectEntities ) {
