@@ -24,4 +24,6 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
     
     List<TaskEntity> findAllByProjectAndStatus_ValueAndSprint(ProjectEntity project, String value, SprintEntity sprint);
     
+    List<TaskEntity> findTop5ByAssigneeAndNameIgnoreCaseContaining(UserEntity assignee, String name);
+    
 }

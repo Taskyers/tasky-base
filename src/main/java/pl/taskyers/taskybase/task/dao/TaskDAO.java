@@ -135,4 +135,14 @@ public interface TaskDAO {
      */
     List<TaskEntity> getAllTasksByProjectAndStatusAndSprint(ProjectEntity projectEntity, String status, SprintEntity sprintEntity);
     
+    /**
+     * Get task entities by name
+     *
+     * @param userEntity user
+     * @param name       task name
+     * @return list of tasks entities
+     * @since 0.0.7
+     */
+    List<TaskEntity> getUserTasksByNameLike(UserEntity userEntity, String name);
+    
 }

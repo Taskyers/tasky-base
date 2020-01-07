@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import pl.taskyers.taskybase.entry.EntryType;
+import pl.taskyers.taskybase.task.dto.TaskDTO;
 import pl.taskyers.taskybase.task.slo.TaskDetailsSLO;
+
+import java.util.List;
 
 import static pl.taskyers.taskybase.task.slo.TaskDetailsSLO.*;
 
@@ -41,6 +44,11 @@ public class TaskDetailsRestController {
     @RequestMapping(value = GET_RESOLUTION_TYPES, method = RequestMethod.GET)
     public ResponseEntity getResolutionTypes(@PathVariable String key) {
         return taskDetailsSLO.getResolutionTypes(key);
+    }
+    
+    @RequestMapping(value = GET_TASKS_BY_NAME, method = RequestMethod.GET)
+    public List<TaskDTO> getUserTasks(@PathVariable String name) {
+        return taskDetailsSLO.getUserTasksByName(name);
     }
     
 }

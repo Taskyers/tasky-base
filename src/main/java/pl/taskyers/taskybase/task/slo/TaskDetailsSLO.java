@@ -2,6 +2,9 @@ package pl.taskyers.taskybase.task.slo;
 
 import org.springframework.http.ResponseEntity;
 import pl.taskyers.taskybase.entry.EntryType;
+import pl.taskyers.taskybase.task.dto.TaskDTO;
+
+import java.util.List;
 
 /**
  * Interface for returning task details
@@ -21,6 +24,8 @@ public interface TaskDetailsSLO {
     String GET_PRIORITIES = GET_TASK_BY_KEY + "/priorities";
     
     String GET_RESOLUTION_TYPES = GET_TASK_BY_KEY + "/resolutions";
+    
+    String GET_TASKS_BY_NAME = "/search/{name}";
     
     /**
      * Return task details
@@ -49,5 +54,14 @@ public interface TaskDetailsSLO {
      * @since 0.0.7
      */
     ResponseEntity getResolutionTypes(String key);
+    
+    /**
+     * Get tasks by name
+     *
+     * @param name
+     * @return TaskDTO list
+     * @since 0.0.7
+     */
+    List<TaskDTO> getUserTasksByName(String name);
     
 }
