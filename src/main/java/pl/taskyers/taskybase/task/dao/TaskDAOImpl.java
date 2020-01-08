@@ -19,6 +19,7 @@ import pl.taskyers.taskybase.task.repository.TaskRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -133,8 +134,8 @@ public class TaskDAOImpl implements TaskDAO {
     }
     
     @Override
-    public List<TaskEntity> getUserTasksByNameLike(UserEntity assignee, String name) {
-        return taskRepository.findTop5ByAssigneeAndNameIgnoreCaseContaining(assignee, name);
+    public List<TaskEntity> getUserTasksByNameLike(List<ProjectEntity> projectEntities, String name) {
+        return taskRepository.findTop5ByProjectInAndNameIgnoreCaseContaining(projectEntities, name);
     }
     
     private void setUpdateDate(TaskEntity taskEntity) {

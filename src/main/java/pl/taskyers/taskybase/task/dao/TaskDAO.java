@@ -9,6 +9,7 @@ import pl.taskyers.taskybase.task.entity.TaskEntity;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Interface for database operations on task entity
@@ -136,13 +137,13 @@ public interface TaskDAO {
     List<TaskEntity> getAllTasksByProjectAndStatusAndSprint(ProjectEntity projectEntity, String status, SprintEntity sprintEntity);
     
     /**
-     * Get task entities by name
+     * Get task entities by project entities and name
      *
-     * @param userEntity user
-     * @param name       task name
+     * @param projectEntities project entities
+     * @param name            task name
      * @return list of tasks entities
      * @since 0.0.7
      */
-    List<TaskEntity> getUserTasksByNameLike(UserEntity userEntity, String name);
+    List<TaskEntity> getUserTasksByNameLike(List<ProjectEntity> projectEntities, String name);
     
 }
