@@ -12,6 +12,7 @@ import pl.taskyers.taskybase.task.entity.CommentEntity;
 import pl.taskyers.taskybase.task.entity.TaskEntity;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -61,8 +62,10 @@ public class TaskConverter {
     }
     
     private static List<CommentDTO> convertComments(Set<CommentEntity> commentEntities, String personals) {
+        List<CommentEntity> entities = new ArrayList<>(commentEntities);
+        entities.sort(Comparator.comparing(CommentEntity::getCreationDate));
         List<CommentDTO> comments = new ArrayList<>();
-        for ( CommentEntity commentEntity : commentEntities ) {
+        for ( CommentEntity commentEntity : entities ) {
             comments.add(CommentConverter.convertToDTO(commentEntity, personals));
         }
         return comments;
