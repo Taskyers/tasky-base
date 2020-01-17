@@ -168,6 +168,7 @@ public class TaskDetailsIntegrationTest extends IntegrationBase {
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()", is(4)))
+                .andExpect(jsonPath("$[0].key").exists())
                 .andExpect(forwardedUrl(null))
                 .andExpect(redirectedUrl(null))
                 .andExpect(status().isOk());

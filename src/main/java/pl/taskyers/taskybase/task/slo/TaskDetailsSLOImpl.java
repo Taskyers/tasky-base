@@ -12,6 +12,7 @@ import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.core.utils.UserUtils;
 import pl.taskyers.taskybase.dashboard.main.converter.ProjectConverter;
 import pl.taskyers.taskybase.dashboard.main.dto.ProjectDTO;
+import pl.taskyers.taskybase.dashboard.project.dto.TaskDTO;
 import pl.taskyers.taskybase.entry.EntryType;
 import pl.taskyers.taskybase.entry.dao.EntryDAO;
 import pl.taskyers.taskybase.entry.entity.EntryEntity;
@@ -20,7 +21,6 @@ import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.task.ResolutionType;
 import pl.taskyers.taskybase.task.converter.TaskConverter;
 import pl.taskyers.taskybase.task.dao.TaskDAO;
-import pl.taskyers.taskybase.task.dto.TaskDTO;
 import pl.taskyers.taskybase.task.dto.TaskDetailsDTO;
 import pl.taskyers.taskybase.task.entity.TaskEntity;
 
@@ -72,9 +72,8 @@ public class TaskDetailsSLOImpl implements TaskDetailsSLO {
     }
     
     @Override
-    public List<TaskDTO> getUserTasksByName(String name) {
+    public List<pl.taskyers.taskybase.dashboard.project.dto.TaskDTO> getUserTasksByName(String name) {
         List<TaskEntity> taskEntities = taskDAO.getUserTasksByNameLike(projectDAO.getAllProjectsEntities(), name);
-        
         return convertTasksToDTO(taskEntities);
     }
     
@@ -106,10 +105,10 @@ public class TaskDetailsSLOImpl implements TaskDetailsSLO {
         return types;
     }
     
-    private List<TaskDTO> convertTasksToDTO(List<TaskEntity> entities) {
+    private List<pl.taskyers.taskybase.dashboard.project.dto.TaskDTO> convertTasksToDTO(List<TaskEntity> entities) {
         List<TaskDTO> tasks = new ArrayList<>();
         for ( TaskEntity taskEntity : entities ) {
-            tasks.add(TaskConverter.convertToDTO(taskEntity));
+            tasks.add(pl.taskyers.taskybase.dashboard.project.converter.TaskConverter.convertToDTO(taskEntity));
         }
         return tasks;
     }

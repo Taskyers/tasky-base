@@ -1,8 +1,8 @@
 package pl.taskyers.taskybase.task.slo;
 
 import org.springframework.http.ResponseEntity;
+import pl.taskyers.taskybase.dashboard.project.dto.TaskDTO;
 import pl.taskyers.taskybase.entry.EntryType;
-import pl.taskyers.taskybase.task.dto.TaskDTO;
 
 import java.util.List;
 
