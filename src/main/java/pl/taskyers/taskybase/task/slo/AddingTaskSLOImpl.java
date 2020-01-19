@@ -93,12 +93,12 @@ public class AddingTaskSLOImpl implements AddingTaskSLO {
         if ( !projectDAO.getProjectEntityByName(projectName).isPresent() ) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ResponseMessage<>(MessageCode.project_not_found.getMessage("name", projectName), MessageType.WARN));
-        } else if ( !projectDAO.getProjectByNameAndUser(projectName, userEntity).isPresent() ||
-                    !projectDAO.getProjectByNameAndOwner(projectName, userEntity).isPresent() ) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new ResponseMessage<>(MessageCode.project_permission_not_granted.getMessage(), MessageType.ERROR));
+        } else if ( projectDAO.getProjectByNameAndUser(projectName, userEntity).isPresent() ||
+                    projectDAO.getProjectByNameAndOwner(projectName, userEntity).isPresent() ) {
+            return null;
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ResponseMessage<>(MessageCode.project_permission_not_granted.getMessage(), MessageType.ERROR));
     }
     
     private List<String> convertProjects(Set<ProjectEntity> projects) {
