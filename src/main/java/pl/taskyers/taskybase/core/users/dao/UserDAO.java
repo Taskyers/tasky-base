@@ -1,6 +1,8 @@
 package pl.taskyers.taskybase.core.users.dao;
 
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
+import pl.taskyers.taskybase.core.users.repository.UserRepository;
+import pl.taskyers.taskybase.settings.user.dto.UserDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -80,5 +82,24 @@ public interface UserDAO {
      * @since 0.0.3
      */
     List<UserEntity> findUsersByUsernameLike(String username);
+    
+    /**
+     * Update user data
+     *
+     * @param userEntity logged user as entity
+     * @param userDTO    DTO
+     * @return UserEntity
+     * @since 0.0.7
+     */
+    UserEntity updateUser(UserEntity userEntity, UserDTO userDTO);
+    
+    /**
+     * Update user email
+     *
+     * @param userEntity logged user as entity
+     * @param email      new email
+     * @since 0.0.7
+     */
+    void updateEmail(UserEntity userEntity, String email);
     
 }

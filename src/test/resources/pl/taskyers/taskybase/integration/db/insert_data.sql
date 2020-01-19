@@ -6,6 +6,8 @@ INSERT INTO password_recovery_tokens(user_id, token)
 VALUES (1, 'tested-token');
 INSERT INTO project_invitation_tokens(user_id, project_id, token)
 VALUES (1, 1, 'tested-token');
+INSERT INTO email_update_tokens(user_id, token, email)
+VALUES (1, 'tested-token', 'new@email.com');
 INSERT INTO users(username, password, name, surname, email, enabled)
 VALUES ('enabled', '$2a$10$0k1y57DwGGZ8iKY5jpd6fum./qxDxq24lGsi8ChagpXgEHHVV0V6W', 'Tester', 'Good',
         'enabled@gmail.com', 1);

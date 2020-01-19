@@ -17,6 +17,7 @@ public enum MessageCode {
     email_subject_registration,
     email_subject_password_recovery,
     email_subject_project_invitation,
+    email_subject_email_update,
     email_with_token_sent,
     email_task_changed,
     entry_created,
@@ -29,6 +30,8 @@ public enum MessageCode {
     field_not_found,
     field_updated,
     password_invalid_format,
+    password_invalid_current,
+    password_new_repeated,
     project_created,
     project_deleted,
     project_field_already_exists,
@@ -61,7 +64,9 @@ public enum MessageCode {
     user_field_already_exists,
     user_not_found,
     user_in_project_not_found,
-    user_removed_from_project;
+    user_removed_from_project,
+    user_updated,
+    user_email_repeated;
     
     private static MessageSource messageSource;
     
