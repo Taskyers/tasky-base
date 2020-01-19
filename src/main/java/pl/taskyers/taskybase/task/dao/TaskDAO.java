@@ -110,6 +110,8 @@ public interface TaskDAO {
      */
     TaskEntity updateEntry(TaskEntity taskEntity, EntryEntity entryEntity);
     
+    TaskEntity updateResolution(TaskEntity taskEntity, ResolutionType resolution);
+    
     /**
      * Update other task data
      *
@@ -118,12 +120,10 @@ public interface TaskDAO {
      * @param description  new task's description
      * @param fixVersion   new task's fix version
      * @param sprintEntity new task's sprint
-     * @param resolution   new task's resolution type
      * @return updated task entity
      * @since 0.0.7
      */
-    TaskEntity updateTask(TaskEntity taskEntity, String name, String description, String fixVersion, SprintEntity sprintEntity,
-            ResolutionType resolution);
+    TaskEntity updateTask(TaskEntity taskEntity, String name, String description, String fixVersion, SprintEntity sprintEntity);
     
     /**
      * Get all tasks by project, status and sprint

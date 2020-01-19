@@ -19,7 +19,6 @@ import pl.taskyers.taskybase.task.repository.TaskRepository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -116,14 +115,20 @@ public class TaskDAOImpl implements TaskDAO {
     }
     
     @Override
-    public TaskEntity updateTask(TaskEntity taskEntity, String name, String description, String fixVersion, SprintEntity sprintEntity,
-            ResolutionType resolution) {
+    public TaskEntity updateResolution(TaskEntity taskEntity, ResolutionType resolution) {
+        log.debug("Setting new resolution: {} in {} task", resolution, taskEntity.getKey());
+        taskEntity.setResolution(resolution);
+        setUpdateDate(taskEntity);
+        return taskRepository.save(taskEntity);
+    }
+    
+    @Override
+    public TaskEntity updateTask(TaskEntity taskEntity, String name, String description, String fixVersion, SprintEntity sprintEntity) {
         log.debug("Updating task with id {}", taskEntity.getId());
         taskEntity.setName(name);
         taskEntity.setDescription(description);
         taskEntity.setFixVersion(fixVersion);
         taskEntity.setSprint(sprintEntity);
-        taskEntity.setResolution(resolution);
         setUpdateDate(taskEntity);
         return taskRepository.save(taskEntity);
     }

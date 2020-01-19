@@ -268,7 +268,7 @@ public class EditTaskIntegrationTest extends IntegrationBase {
     public void givenNotExistingSprintNameWhenEditingTaskShouldReturnStatus404() throws Exception {
         final long id = 5L;
         final String name = "asdffg";
-        final String content = objectMapper.writeValueAsString(new UpdateTaskData(null, null, null, name, null));
+        final String content = objectMapper.writeValueAsString(new UpdateTaskData(null, null, null, name));
         
         mockMvc.perform(put("/secure/tasks/edit/" + id).contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
@@ -285,7 +285,7 @@ public class EditTaskIntegrationTest extends IntegrationBase {
     @WithMockUser(value = DEFAULT_USERNAME)
     public void givenNullNameWhenEditingTaskShouldReturnStatus400() throws Exception {
         final long id = 5L;
-        final String content = objectMapper.writeValueAsString(new UpdateTaskData(null, null, null, "test", null));
+        final String content = objectMapper.writeValueAsString(new UpdateTaskData(null, null, null, "test"));
         
         mockMvc.perform(put("/secure/tasks/edit/" + id).contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
@@ -309,11 +309,9 @@ public class EditTaskIntegrationTest extends IntegrationBase {
         final String nameBefore = taskEntity.getName();
         final String descriptionBefore = taskEntity.getDescription();
         final String fixVersionBefore = taskEntity.getFixVersion();
-        final ResolutionType resolutionTypeBefore = taskEntity.getResolution();
         final Date dateBefore = taskEntity.getUpdateDate();
         final String content = objectMapper.writeValueAsString(
-                new UpdateTaskData(nameBefore, descriptionBefore, fixVersionBefore, sprintNameBefore,
-                        resolutionTypeBefore == null ? "" : resolutionTypeBefore.toString()));
+                new UpdateTaskData(nameBefore, descriptionBefore, fixVersionBefore, sprintNameBefore));
         
         mockMvc.perform(put("/secure/tasks/edit/" + id).contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
@@ -328,7 +326,6 @@ public class EditTaskIntegrationTest extends IntegrationBase {
         final TaskEntity taskEntityAfter = taskRepository.findById(id).get();
         
         assertEquals(taskEntityAfter.getId(), id);
-        assertEquals(taskEntityAfter.getResolution(), resolutionTypeBefore);
         assertEquals(taskEntityAfter.getName(), nameBefore);
         assertEquals(taskEntityAfter.getDescription(), descriptionBefore);
         assertEquals(taskEntityAfter.getSprint().getName(), sprintNameBefore);
@@ -346,10 +343,9 @@ public class EditTaskIntegrationTest extends IntegrationBase {
         final String nameBefore = taskEntity.getName();
         final String descriptionBefore = taskEntity.getDescription();
         final String fixVersionBefore = taskEntity.getFixVersion();
-        final ResolutionType resolutionTypeBefore = taskEntity.getResolution();
         final Date dateBefore = taskEntity.getUpdateDate();
         final String content = objectMapper.writeValueAsString(
-                new UpdateTaskData("new name", "new Description", "new fix version", "current", ResolutionType.FIXED.getValue()));
+                new UpdateTaskData("new name", "new Description", "new fix version", "current"));
         
         mockMvc.perform(put("/secure/tasks/edit/" + id).contentType(MediaType.APPLICATION_JSON).content(content))
                 .andDo(print())
@@ -366,10 +362,72 @@ public class EditTaskIntegrationTest extends IntegrationBase {
         assertEquals(taskEntityAfter.getId(), id);
         assertNotEquals(taskEntityAfter.getName(), nameBefore);
         assertNotEquals(taskEntityAfter.getDescription(), descriptionBefore);
-        assertNotEquals(taskEntityAfter.getResolution(), resolutionTypeBefore);
         assertNotEquals(taskEntityAfter.getSprint().getName(), sprintNameBefore);
         assertNotEquals(taskEntityAfter.getFixVersion(), fixVersionBefore);
         assertNotEquals(taskEntityAfter.getUpdateDate(), dateBefore);
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    public void givenNotExistingResolutionValueWhenUpdatingResolutionShouldReturnStatus404() throws Exception {
+        final long id = 5L;
+        final String value = "tasdasd";
+        
+        mockMvc.perform(patch("/secure/tasks/edit/resolution/" + id).contentType(MediaType.APPLICATION_FORM_URLENCODED).param("value", value))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("Resolution with value " + value + " was not found")))
+                .andExpect(jsonPath("$.type", is("WARN")))
+                .andExpect(jsonPath("$.object", is(nullValue())))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isNotFound());
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
+    public void givenExistingResolutionValueWithOneWordWhenUpdatingResolutionShouldReturnStatus200() throws Exception {
+        final long id = 5L;
+        final ResolutionType resolution = ResolutionType.FIXED;
+        
+        mockMvc.perform(
+                patch("/secure/tasks/edit/resolution/" + id).contentType(MediaType.APPLICATION_FORM_URLENCODED).param("value", resolution.getValue()))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("Resolution has been updated")))
+                .andExpect(jsonPath("$.type", is("SUCCESS")))
+                .andExpect(jsonPath("$.object", is(notNullValue())))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isOk());
+        
+        final TaskEntity taskEntity = taskRepository.findById(id).get();
+        
+        assertEquals(resolution, taskEntity.getResolution());
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
+    public void givenExistingResolutionValueWithMultipleWordsWhenUpdatingResolutionShouldReturnStatus200() throws Exception {
+        final long id = 5L;
+        final ResolutionType resolution = ResolutionType.NO_ACTION_REQUIRED;
+        
+        mockMvc.perform(
+                patch("/secure/tasks/edit/resolution/" + id).contentType(MediaType.APPLICATION_FORM_URLENCODED).param("value", resolution.getValue()))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("Resolution has been updated")))
+                .andExpect(jsonPath("$.type", is("SUCCESS")))
+                .andExpect(jsonPath("$.object", is(notNullValue())))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isOk());
+        
+        final TaskEntity taskEntity = taskRepository.findById(id).get();
+        
+        assertEquals(resolution, taskEntity.getResolution());
     }
     
 }

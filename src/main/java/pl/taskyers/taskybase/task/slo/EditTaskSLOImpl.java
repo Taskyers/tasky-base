@@ -107,6 +107,20 @@ public class EditTaskSLOImpl implements EditTaskSLO {
     }
     
     @Override
+    public ResponseEntity updateResolution(Long id, String value) {
+        final UserEntity userEntity = authProvider.getUserEntity();
+        ResponseEntity isResolutionFound = checkForResolution(id, userEntity, value);
+        if ( isResolutionFound == null ) {
+            final ResolutionType resolutionType = ResolutionType.getByValue(value);
+            final TaskEntity taskEntity = taskDAO.getTaskById(id).get();
+            final TaskEntity updated = taskDAO.updateResolution(taskEntity, resolutionType);
+            return ResponseEntity.ok(new ResponseMessage<>(MessageCode.resolution_updated.getMessage(), MessageType.SUCCESS,
+                    TaskConverter.convertToDetailsDTO(updated, UserUtils.getPersonals(userEntity))));
+        }
+        return isResolutionFound;
+    }
+    
+    @Override
     public ResponseEntity updateData(Long id, UpdateTaskData taskData) {
         final UserEntity userEntity = authProvider.getUserEntity();
         ResponseEntity isTaskFound = checkForSprint(id, userEntity, taskData.getSprint());
@@ -116,13 +130,11 @@ public class EditTaskSLOImpl implements EditTaskSLO {
             if ( validationMessageContainer.hasErrors() ) {
                 return ResponseEntity.badRequest().body(validationMessageContainer.getErrors());
             }
-            final ResolutionType resolutionType = ResolutionType.getByValue(taskData.getResolution());
             final TaskEntity toUpdate = taskDAO.getTaskById(id).get();
             final ProjectEntity projectEntity = toUpdate.getProject();
             final SprintEntity sprintEntity = sprintDAO.getByNameAndProject(taskData.getSprint(), projectEntity).get();
             final TaskEntity updated =
-                    taskDAO.updateTask(toUpdate, taskData.getName(), taskData.getDescription(), taskData.getFixVersion(), sprintEntity,
-                            resolutionType);
+                    taskDAO.updateTask(toUpdate, taskData.getName(), taskData.getDescription(), taskData.getFixVersion(), sprintEntity);
             sendEmails(updated);
             
             return ResponseEntity.ok(new ResponseMessage<>(MessageCode.task_updated.getMessage(), MessageType.SUCCESS,
@@ -132,9 +144,10 @@ public class EditTaskSLOImpl implements EditTaskSLO {
     }
     
     private void sendEmails(TaskEntity taskEntity) {
-        if ( taskEntity.getWatchers().size() > 0 ) {
+        final int size = taskEntity.getWatchers().size();
+        if ( size > 0 ) {
             emailSLO.sendEmailToWatchers(AddressConverter.convertToDTOList(taskEntity.getWatchers()), authProvider.getUserPersonal(), taskEntity);
-            log.debug("Sending emails to watchers");
+            log.debug("Sending emails to {} watchers", size);
         }
         log.debug("Watchers size is 0 - not sending emails");
     }
@@ -149,6 +162,15 @@ public class EditTaskSLOImpl implements EditTaskSLO {
                     .body(new ResponseMessage<>(MessageCode.project_permission_not_granted.getMessage(), MessageType.ERROR));
         }
         return null;
+    }
+    
+    private ResponseEntity checkForResolution(Long id, UserEntity userEntity, String value) {
+        ResponseEntity isTaskFound = checkForTask(id, userEntity);
+        if ( isTaskFound == null ) {
+            return ResolutionType.getByValue(value) != null ? null : ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseMessage<>(MessageCode.resolution_not_found.getMessage(value), MessageType.WARN));
+        }
+        return isTaskFound;
     }
     
     private ResponseEntity checkForEntry(Long id, UserEntity userEntity, String value, EntryType entryType) {

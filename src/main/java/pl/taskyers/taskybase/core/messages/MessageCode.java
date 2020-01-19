@@ -37,6 +37,8 @@ public enum MessageCode {
     project_permission_not_granted,
     project_updated,
     registration_successful,
+    resolution_not_found,
+    resolution_updated,
     roles_updated,
     sprint_created,
     sprint_deleted,

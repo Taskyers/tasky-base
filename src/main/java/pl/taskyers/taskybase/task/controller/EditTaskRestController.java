@@ -41,6 +41,11 @@ public class EditTaskRestController {
         return editTaskSLO.updateEntry(id, value, EntryType.PRIORITY);
     }
     
+    @RequestMapping(value = UPDATE_RESOLUTION, method = RequestMethod.PATCH)
+    public ResponseEntity updateResolution(@PathVariable Long id, @RequestParam String value) {
+        return editTaskSLO.updateResolution(id, value);
+    }
+    
     @RequestMapping(value = UPDATE_DATA, method = RequestMethod.PUT)
     public ResponseEntity updateData(@PathVariable Long id, @RequestBody UpdateTaskData taskData) {
         return editTaskSLO.updateData(id, taskData);

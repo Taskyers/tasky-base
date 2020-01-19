@@ -17,6 +17,4 @@ public class UpdateTaskData {
     
     private String sprint;
     
-    private String resolution;
-    
 }

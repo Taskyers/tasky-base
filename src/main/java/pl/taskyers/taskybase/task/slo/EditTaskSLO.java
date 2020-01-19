@@ -24,6 +24,8 @@ public interface EditTaskSLO {
     
     String UPDATE_PRIORITY = "/priority/{id}";
     
+    String UPDATE_RESOLUTION = "/resolution/{id}";
+    
     String UPDATE_DATA = "/{id}";
     
     /**
@@ -54,6 +56,16 @@ public interface EditTaskSLO {
      * @since 0.0.7
      */
     ResponseEntity updateEntry(Long id, String value, EntryType entryType);
+    
+    /**
+     * Update task resolution type
+     *
+     * @param id    task's id
+     * @param value resolution value
+     * @return status 404 if task was not found, 404 if value was not found, 403 if user is not in project otherwise 200
+     * @since 0.0.7
+     */
+    ResponseEntity updateResolution(Long id, String value);
     
     /**
      * Update rest of task data
