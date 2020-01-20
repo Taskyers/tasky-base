@@ -25,6 +25,8 @@ public interface TaskDetailsSLO {
     
     String GET_RESOLUTION_TYPES = GET_TASK_BY_KEY + "/resolutions";
     
+    String GET_SPRINTS = GET_TASK_BY_KEY + "/sprints";
+    
     String GET_TASKS_BY_NAME = "/search/{name}";
     
     /**
@@ -63,5 +65,14 @@ public interface TaskDetailsSLO {
      * @since 0.0.7
      */
     List<TaskDTO> getUserTasksByName(String name);
+    
+    /**
+     * Get all sprints as DTOs from project from given task
+     *
+     * @param key task's key
+     * @return status 404 if task was not found, 403 if user is not in project otherwise 200
+     * @since 0.0.7
+     */
+    ResponseEntity getSprintsByTask(String key);
     
 }
