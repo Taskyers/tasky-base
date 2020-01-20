@@ -15,14 +15,18 @@ import pl.taskyers.taskybase.entry.dao.EntryDAO;
 import pl.taskyers.taskybase.entry.entity.EntryEntity;
 import pl.taskyers.taskybase.project.dao.ProjectDAO;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
+import pl.taskyers.taskybase.sprint.entity.SprintEntity;
 import pl.taskyers.taskybase.task.ResolutionType;
+import pl.taskyers.taskybase.task.converter.SprintConverter;
 import pl.taskyers.taskybase.task.converter.TaskConverter;
 import pl.taskyers.taskybase.task.dao.TaskDAO;
+import pl.taskyers.taskybase.task.dto.SprintDTO;
 import pl.taskyers.taskybase.task.dto.TaskDetailsDTO;
 import pl.taskyers.taskybase.task.entity.TaskEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -73,6 +77,17 @@ public class TaskDetailsSLOImpl implements TaskDetailsSLO {
         return convertTasksToDTO(taskEntities);
     }
     
+    @Override
+    public ResponseEntity getSprintsByTask(String key) {
+        final UserEntity userEntity = authProvider.getUserEntity();
+        ResponseEntity isTaskFound = checkForTaskAndProject(key, userEntity);
+        if ( isTaskFound == null ) {
+            final ProjectEntity projectEntity = taskDAO.getTaskByKey(key).get().getProject();
+            return ResponseEntity.ok(convertSprints(projectEntity.getSprints()));
+        }
+        return isTaskFound;
+    }
+    
     private ResponseEntity checkForTaskAndProject(String key, UserEntity userEntity) {
         if ( !taskDAO.getTaskByKey(key).isPresent() ) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -107,6 +122,14 @@ public class TaskDetailsSLOImpl implements TaskDetailsSLO {
             tasks.add(pl.taskyers.taskybase.dashboard.project.converter.TaskConverter.convertToDTO(taskEntity));
         }
         return tasks;
+    }
+    
+    private List<SprintDTO> convertSprints(Set<SprintEntity> sprintEntities) {
+        List<SprintDTO> sprints = new ArrayList<>();
+        for ( SprintEntity sprintEntity : sprintEntities ) {
+            sprints.add(SprintConverter.convertToDTO(sprintEntity));
+        }
+        return sprints;
     }
     
 }

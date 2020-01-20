@@ -192,4 +192,23 @@ public class TaskDetailsIntegrationTest extends IntegrationBase {
                 .andExpect(status().isOk());
     }
     
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
+    public void givenExistingTaskKeyWhenGettingSprintsShouldReturnStatus200() throws Exception {
+        final String key = "PROJECT-4";
+        final TaskEntity taskEntity = taskRepository.findByKey(key).get();
+        final ProjectEntity projectEntity = taskEntity.getProject();
+        
+        mockMvc.perform(get("/secure/tasks/" + key + " /sprints"))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(projectEntity.getSprints().size())))
+                .andExpect(jsonPath("$[0].name").exists())
+                .andExpect(jsonPath("$[0].current").exists())
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isOk());
+    }
+    
 }

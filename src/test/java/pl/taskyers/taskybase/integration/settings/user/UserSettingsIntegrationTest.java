@@ -48,7 +48,7 @@ public class UserSettingsIntegrationTest extends IntegrationBase {
         String newName = "Newname";
         String newSurname = "Newsurname";
         
-        String projectJSON = objectMapper.writeValueAsString(new UserDTO(newName, newSurname));
+        String projectJSON = objectMapper.writeValueAsString(new UserDTO("",newName, newSurname,""));
         mockMvc.perform(put("/secure/settings/user").contentType(MediaType.APPLICATION_JSON).content(projectJSON))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -70,7 +70,7 @@ public class UserSettingsIntegrationTest extends IntegrationBase {
         String newName = "";
         String newSurname = "";
         
-        String projectJSON = objectMapper.writeValueAsString(new UserDTO(newName, newSurname));
+        String projectJSON = objectMapper.writeValueAsString(new UserDTO("",newName, newSurname,""));
         mockMvc.perform(put("/secure/settings/user").contentType(MediaType.APPLICATION_JSON).content(projectJSON))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -95,7 +95,7 @@ public class UserSettingsIntegrationTest extends IntegrationBase {
         String invalidSurname = "invalid";
         String invalidName = "invalid";
         UserEntity userEntity = userRepository.findByUsername(DEFAULT_USERNAME).get();
-        String projectJSON = objectMapper.writeValueAsString(new UserDTO(invalidName, invalidSurname));
+        String projectJSON = objectMapper.writeValueAsString(new UserDTO("",invalidName, invalidSurname,""));
         mockMvc.perform(put("/secure/settings/user").contentType(MediaType.APPLICATION_JSON).content(projectJSON))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
