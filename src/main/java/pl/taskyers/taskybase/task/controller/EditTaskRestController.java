@@ -26,6 +26,11 @@ public class EditTaskRestController {
         return editTaskSLO.watchThisTask(id);
     }
     
+    @RequestMapping(value = STOP_WATCHING_THIS_TASK, method = RequestMethod.PATCH)
+    public ResponseEntity stopWatchingTask(@PathVariable Long id) {
+        return editTaskSLO.stopWatchingTask(id);
+    }
+    
     @RequestMapping(value = UPDATE_STATUS, method = RequestMethod.PATCH)
     public ResponseEntity updateStatus(@PathVariable Long id, @RequestParam String value) {
         return editTaskSLO.updateEntry(id, value, EntryType.STATUS);

@@ -6,7 +6,7 @@ import pl.taskyers.taskybase.task.dto.UpdateTaskData;
 
 /**
  * Interface for all operations related to editing tasks:
- * 'assign to me', 'watch this task', 'update status', 'update type', 'update priority', 'update data'
+ * 'assign to me', 'watch this task', 'stop watching task', 'update resolution', 'update status', 'update type', 'update priority', 'update data'
  *
  * @author Jakub Sildatk
  */
@@ -17,6 +17,8 @@ public interface EditTaskSLO {
     String ASSIGN_TO_ME = "/assignToMe/{id}";
     
     String WATCH_THIS_TASK = "/watch/{id}";
+    
+    String STOP_WATCHING_THIS_TASK = "/stopWatching/{id}";
     
     String UPDATE_STATUS = "/status/{id}";
     
@@ -45,6 +47,15 @@ public interface EditTaskSLO {
      * @since 0.0.7
      */
     ResponseEntity watchThisTask(Long id);
+    
+    /**
+     * Remove currently logged in user from task's watchers collection
+     *
+     * @param id task's id
+     * @return status 404 if task was not found, 403 if user is not in project otherwise 200
+     * @since 0.0.7
+     */
+    ResponseEntity stopWatchingTask(Long id);
     
     /**
      * Update task status

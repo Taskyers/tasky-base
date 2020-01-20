@@ -63,7 +63,8 @@ public class EditTaskSLOImpl implements EditTaskSLO {
             final TaskEntity updated = taskDAO.setAssignee(taskEntity, userEntity);
             sendEmails(updated);
             return ResponseEntity.ok(
-                    new ResponseMessage<>(MessageCode.task_assigned.getMessage(), MessageType.SUCCESS, TaskConverter.convertToDetailsDTO(updated, userEntity)));
+                    new ResponseMessage<>(MessageCode.task_assigned.getMessage(), MessageType.SUCCESS,
+                            TaskConverter.convertToDetailsDTO(updated, userEntity)));
         }
         return isTaskFound;
     }
@@ -140,13 +141,31 @@ public class EditTaskSLOImpl implements EditTaskSLO {
         return isTaskFound;
     }
     
+    @Override
+    public ResponseEntity stopWatchingTask(Long id) {
+        final UserEntity userEntity = authProvider.getUserEntity();
+        ResponseEntity isTaskFound = checkForTask(id, userEntity);
+        if ( isTaskFound == null ) {
+            final TaskEntity taskEntity = taskDAO.getTaskById(id).get();
+            if ( watcherExists(taskEntity.getWatchers(), userEntity) == null ) {
+                log.warn("Attempt to remove user that is not in watchers");
+                return ResponseEntity.badRequest().body(new ResponseMessage<>(MessageCode.task_watcher_not_in.getMessage(), MessageType.WARN));
+            }
+            final TaskEntity updated = taskDAO.removeFromWatchers(taskEntity, userEntity);
+            return ResponseEntity.ok(new ResponseMessage<>(MessageCode.task_watcher_removed.getMessage(), MessageType.SUCCESS,
+                    TaskConverter.convertToDetailsDTO(updated, userEntity)));
+        }
+        return isTaskFound;
+    }
+    
     private void sendEmails(TaskEntity taskEntity) {
         final int size = taskEntity.getWatchers().size();
         if ( size > 0 ) {
             emailSLO.sendEmailToWatchers(AddressConverter.convertToDTOList(taskEntity.getWatchers()), authProvider.getUserPersonal(), taskEntity);
             log.debug("Sending emails to {} watchers", size);
+        } else {
+            log.debug("Watchers size is 0 - not sending emails");
         }
-        log.debug("Watchers size is 0 - not sending emails");
     }
     
     private ResponseEntity checkForTask(Long id, UserEntity userEntity) {
@@ -197,7 +216,7 @@ public class EditTaskSLOImpl implements EditTaskSLO {
     }
     
     private UserEntity watcherExists(Set<UserEntity> watchers, UserEntity userEntity) {
-        return watchers.stream().filter(watcher -> watcher.getId().equals(userEntity.getId())).findFirst().orElse(null);
+        return watchers.isEmpty() ? null : watchers.stream().filter(watcher -> watcher.getId().equals(userEntity.getId())).findFirst().orElse(null);
     }
     
 }

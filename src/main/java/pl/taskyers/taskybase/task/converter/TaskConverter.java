@@ -56,7 +56,7 @@ public class TaskConverter {
     }
     
     private static UserEntity watcherExists(Set<UserEntity> watchers, UserEntity userEntity) {
-        return watchers.stream().filter(watcher -> watcher.getId().equals(userEntity.getId())).findFirst().orElse(null);
+        return watchers.isEmpty() ? null : watchers.stream().filter(watcher -> watcher.getId().equals(userEntity.getId())).findFirst().orElse(null);
     }
     
     private static List<String> convertWatchers(Set<UserEntity> users) {
