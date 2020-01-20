@@ -26,6 +26,13 @@ CREATE TABLE IF NOT EXISTS password_recovery_tokens
     user_id                    int not null references users (user_id),
     token                      varchar(200) unique
 );
+CREATE TABLE IF NOT EXISTS email_update_tokens
+(
+    email_update_token_id      int primary key auto_increment,
+    user_id                    int not null references users (user_id),
+    token                      varchar(200) unique,
+    email                      varchar(200) unique
+);
 CREATE TABLE IF NOT EXISTS projects
 (
     project_id    int primary key auto_increment,

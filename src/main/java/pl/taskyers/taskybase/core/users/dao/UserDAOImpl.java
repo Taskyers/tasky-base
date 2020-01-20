@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.core.users.repository.UserRepository;
+import pl.taskyers.taskybase.settings.user.dto.UserDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,6 +59,19 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<UserEntity> findUsersByUsernameLike(String username) {
         return userRepository.findTop5ByUsernameIgnoreCaseContaining(username);
+    }
+    
+    @Override
+    public UserEntity updateUser(UserEntity userEntity, UserDTO userDTO) {
+        userEntity.setName(userDTO.getName());
+        userEntity.setSurname(userDTO.getSurname());
+        return userRepository.save(userEntity);
+    }
+    
+    @Override
+    public void updateEmail(UserEntity userEntity, String email) {
+        userEntity.setEmail(email);
+        userRepository.save(userEntity);
     }
     
 }

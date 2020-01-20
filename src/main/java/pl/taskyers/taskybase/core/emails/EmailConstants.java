@@ -22,4 +22,8 @@ public interface EmailConstants {
     
     String TASK_UPDATED_PATH = "/emails/taskUpdated.ftl";
     
+    String EMAIL_UPDATE_PATH = "/emails/emailUpdate.ftl";
+    
+    String EMAIL_UPDATE_URL_TOKEN = "/secure/settings/user/email/{tokenPlaceholder}";
+    
 }
