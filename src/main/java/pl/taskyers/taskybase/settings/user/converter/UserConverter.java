@@ -13,7 +13,7 @@ public class UserConverter {
     }
     
     public static UserDTO convertToDTO(UserEntity userEntity) {
-        return new UserDTO(userEntity.getName(), userEntity.getSurname());
+        return new UserDTO(userEntity.getUsername(), userEntity.getName(), userEntity.getSurname(), userEntity.getEmail());
     }
     
 }
