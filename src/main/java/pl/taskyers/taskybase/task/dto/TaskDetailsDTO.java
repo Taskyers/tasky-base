@@ -23,9 +23,13 @@ public class TaskDetailsDTO {
     
     private String assignee;
     
+    private boolean assignedToMe;
+    
     private String creator;
     
     private List<String> watchers;
+    
+    private boolean watching;
     
     private List<CommentDTO> comments;
     

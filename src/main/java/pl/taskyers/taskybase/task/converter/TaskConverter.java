@@ -32,7 +32,7 @@ public class TaskConverter {
                 taskEntity.getType().getValue(), taskEntity.getFixVersion(), taskEntity.getSprint().getName());
     }
     
-    public static TaskDetailsDTO convertToDetailsDTO(TaskEntity taskEntity, String personals) {
+    public static TaskDetailsDTO convertToDetailsDTO(TaskEntity taskEntity, UserEntity userEntity) {
         TaskDetailsDTO taskDetailsDTO = new TaskDetailsDTO();
         taskDetailsDTO.setId(taskEntity.getId());
         taskDetailsDTO.setKey(taskEntity.getKey());
@@ -41,7 +41,7 @@ public class TaskConverter {
         taskDetailsDTO.setAssignee(UserUtils.getPersonals(taskEntity.getAssignee()));
         taskDetailsDTO.setCreator(UserUtils.getPersonals(taskEntity.getCreator()));
         taskDetailsDTO.setWatchers(convertWatchers(taskEntity.getWatchers()));
-        taskDetailsDTO.setComments(convertComments(taskEntity.getComments(), personals));
+        taskDetailsDTO.setComments(convertComments(taskEntity.getComments(), UserUtils.getPersonals(userEntity)));
         taskDetailsDTO.setStatus(EntryConverter.convertToDTO(taskEntity.getStatus()));
         taskDetailsDTO.setType(EntryConverter.convertToDTO(taskEntity.getType()));
         taskDetailsDTO.setPriority(EntryConverter.convertToDTO(taskEntity.getPriority()));
@@ -50,7 +50,13 @@ public class TaskConverter {
         taskDetailsDTO.setCreationDate(DateUtils.parseStringDatetime(taskEntity.getCreationDate()));
         taskDetailsDTO.setUpdateDate(DateUtils.parseStringDatetime(taskEntity.getUpdateDate()));
         taskDetailsDTO.setResolution(taskEntity.getResolution());
+        taskDetailsDTO.setAssignedToMe(taskEntity.getAssignee() != null && taskEntity.getAssignee().getId().equals(userEntity.getId()));
+        taskDetailsDTO.setWatching(watcherExists(taskEntity.getWatchers(), userEntity) != null);
         return taskDetailsDTO;
+    }
+    
+    private static UserEntity watcherExists(Set<UserEntity> watchers, UserEntity userEntity) {
+        return watchers.stream().filter(watcher -> watcher.getId().equals(userEntity.getId())).findFirst().orElse(null);
     }
     
     private static List<String> convertWatchers(Set<UserEntity> users) {

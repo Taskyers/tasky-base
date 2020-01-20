@@ -63,8 +63,7 @@ public class EditTaskSLOImpl implements EditTaskSLO {
             final TaskEntity updated = taskDAO.setAssignee(taskEntity, userEntity);
             sendEmails(updated);
             return ResponseEntity.ok(
-                    new ResponseMessage<>(MessageCode.task_assigned.getMessage(), MessageType.SUCCESS, TaskConverter.convertToDetailsDTO(updated,
-                            UserUtils.getPersonals(userEntity))));
+                    new ResponseMessage<>(MessageCode.task_assigned.getMessage(), MessageType.SUCCESS, TaskConverter.convertToDetailsDTO(updated, userEntity)));
         }
         return isTaskFound;
     }
@@ -83,8 +82,7 @@ public class EditTaskSLOImpl implements EditTaskSLO {
             final TaskEntity updated = taskDAO.addWatcher(taskEntity, userEntity);
             return ResponseEntity.ok(
                     new ResponseMessage<>(MessageCode.task_watcher_added.getMessage(), MessageType.SUCCESS,
-                            TaskConverter.convertToDetailsDTO(updated,
-                                    UserUtils.getPersonals(userEntity))));
+                            TaskConverter.convertToDetailsDTO(updated, userEntity)));
         }
         return isTaskFound;
     }
@@ -100,8 +98,7 @@ public class EditTaskSLOImpl implements EditTaskSLO {
             final TaskEntity updated = taskDAO.updateEntry(taskEntity, entryEntity);
             sendEmails(updated);
             return ResponseEntity.ok(new ResponseMessage<>(MessageCode.task_entry_updated.getMessage(entryType), MessageType.SUCCESS,
-                    TaskConverter.convertToDetailsDTO(updated,
-                            UserUtils.getPersonals(userEntity))));
+                    TaskConverter.convertToDetailsDTO(updated, userEntity)));
         }
         return isEntryFound;
     }
@@ -115,7 +112,7 @@ public class EditTaskSLOImpl implements EditTaskSLO {
             final TaskEntity taskEntity = taskDAO.getTaskById(id).get();
             final TaskEntity updated = taskDAO.updateResolution(taskEntity, resolutionType);
             return ResponseEntity.ok(new ResponseMessage<>(MessageCode.resolution_updated.getMessage(), MessageType.SUCCESS,
-                    TaskConverter.convertToDetailsDTO(updated, UserUtils.getPersonals(userEntity))));
+                    TaskConverter.convertToDetailsDTO(updated, userEntity)));
         }
         return isResolutionFound;
     }
@@ -138,7 +135,7 @@ public class EditTaskSLOImpl implements EditTaskSLO {
             sendEmails(updated);
             
             return ResponseEntity.ok(new ResponseMessage<>(MessageCode.task_updated.getMessage(), MessageType.SUCCESS,
-                    TaskConverter.convertToDetailsDTO(updated, UserUtils.getPersonals(userEntity))));
+                    TaskConverter.convertToDetailsDTO(updated, userEntity)));
         }
         return isTaskFound;
     }

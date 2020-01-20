@@ -3,6 +3,7 @@ package pl.taskyers.taskybase.integration.task;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.core.utils.DateUtils;
 import pl.taskyers.taskybase.core.utils.UserUtils;
 import pl.taskyers.taskybase.entry.EntryType;
@@ -61,6 +62,7 @@ public class TaskDetailsIntegrationTest extends IntegrationBase {
     @Transactional
     public void givenProperUserWhenGettingTaskDetailsShouldReturnStatus200() throws Exception {
         final TaskEntity taskEntity = taskRepository.findByKey("PROJECT-4").get();
+        final UserEntity userEntity = userRepository.findByUsername(DEFAULT_USERNAME).get();
         
         mockMvc.perform(get("/secure/tasks/" + taskEntity.getKey()))
                 .andDo(print())
@@ -70,6 +72,8 @@ public class TaskDetailsIntegrationTest extends IntegrationBase {
                 .andExpect(jsonPath("$.name", is(taskEntity.getName())))
                 .andExpect(jsonPath("$.description", is(taskEntity.getDescription())))
                 .andExpect(jsonPath("$.assignee", is(UserUtils.getPersonals(taskEntity.getAssignee()))))
+                .andExpect(jsonPath("$.assignedToMe", is(taskEntity.getAssignee().getId().equals(userEntity.getId()))))
+                .andExpect(jsonPath("$.watching", is(taskEntity.getWatchers().contains(userEntity))))
                 .andExpect(jsonPath("$.creator", is(UserUtils.getPersonals(taskEntity.getCreator()))))
                 .andExpect(jsonPath("$.fixVersion", is(taskEntity.getFixVersion())))
                 .andExpect(jsonPath("$.creationDate", is(DateUtils.parseStringDatetime(taskEntity.getCreationDate()))))

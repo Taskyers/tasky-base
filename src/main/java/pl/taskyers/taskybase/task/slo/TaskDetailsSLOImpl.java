@@ -9,9 +9,6 @@ import pl.taskyers.taskybase.core.messages.MessageType;
 import pl.taskyers.taskybase.core.messages.ResponseMessage;
 import pl.taskyers.taskybase.core.slo.AuthProvider;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
-import pl.taskyers.taskybase.core.utils.UserUtils;
-import pl.taskyers.taskybase.dashboard.main.converter.ProjectConverter;
-import pl.taskyers.taskybase.dashboard.main.dto.ProjectDTO;
 import pl.taskyers.taskybase.dashboard.project.dto.TaskDTO;
 import pl.taskyers.taskybase.entry.EntryType;
 import pl.taskyers.taskybase.entry.dao.EntryDAO;
@@ -26,7 +23,6 @@ import pl.taskyers.taskybase.task.entity.TaskEntity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -46,7 +42,7 @@ public class TaskDetailsSLOImpl implements TaskDetailsSLO {
         ResponseEntity isTaskFound = checkForTaskAndProject(key, userEntity);
         if ( isTaskFound == null ) {
             final TaskEntity taskEntity = taskDAO.getTaskByKey(key).get();
-            TaskDetailsDTO detailsDTO = TaskConverter.convertToDetailsDTO(taskEntity, UserUtils.getPersonals(userEntity));
+            TaskDetailsDTO detailsDTO = TaskConverter.convertToDetailsDTO(taskEntity, userEntity);
             return ResponseEntity.ok(detailsDTO);
         }
         return isTaskFound;
