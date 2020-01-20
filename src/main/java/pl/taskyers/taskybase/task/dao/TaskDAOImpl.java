@@ -143,6 +143,14 @@ public class TaskDAOImpl implements TaskDAO {
         return taskRepository.findTop5ByProjectInAndNameIgnoreCaseContaining(projectEntities, name);
     }
     
+    @Override
+    public TaskEntity removeFromWatchers(TaskEntity taskEntity, UserEntity userEntity) {
+        log.debug("Removing user: {} from watchers from task: {}", UserUtils.getPersonals(userEntity), taskEntity.getKey());
+        taskEntity.getWatchers().remove(userEntity);
+        setUpdateDate(taskEntity);
+        return taskRepository.save(taskEntity);
+    }
+    
     private void setUpdateDate(TaskEntity taskEntity) {
         taskEntity.setUpdateDate(DateUtils.getCurrentTimestamp());
     }

@@ -9,7 +9,6 @@ import pl.taskyers.taskybase.task.entity.TaskEntity;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * Interface for database operations on task entity
@@ -145,5 +144,15 @@ public interface TaskDAO {
      * @since 0.0.7
      */
     List<TaskEntity> getUserTasksByNameLike(List<ProjectEntity> projectEntities, String name);
+    
+    /**
+     * Remove user from watchers collection from given task entity
+     *
+     * @param taskEntity task
+     * @param userEntity user that will be removed from watchers
+     * @return updated task entity
+     * @since 0.0.7
+     */
+    TaskEntity removeFromWatchers(TaskEntity taskEntity, UserEntity userEntity);
     
 }

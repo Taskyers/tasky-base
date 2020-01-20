@@ -430,4 +430,50 @@ public class EditTaskIntegrationTest extends IntegrationBase {
         assertEquals(resolution, taskEntity.getResolution());
     }
     
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
+    public void givenUserNotInWatchersWhenRemovingFromWatchersShouldReturnStatus400() throws Exception {
+        final long id = 5L;
+        final TaskEntity taskEntity = taskRepository.findById(id).get();
+        final UserEntity userEntity = userRepository.findByUsername(DEFAULT_USERNAME).get();
+        
+        mockMvc.perform(patch("/secure/tasks/edit/stopWatching/" + id))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("You are not watching this task")))
+                .andExpect(jsonPath("$.type", is("WARN")))
+                .andExpect(jsonPath("$.object", is(nullValue())))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isBadRequest());
+        
+        assertFalse(taskEntity.getWatchers().contains(userEntity));
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
+    public void givenUserInWatchersWhenRemovingFromWatchersShouldReturnStatus200() throws Exception {
+        final long id = 4L;
+        final TaskEntity taskEntity = taskRepository.findById(id).get();
+        final UserEntity userEntity = userRepository.findByUsername(DEFAULT_USERNAME).get();
+        final int watchersSizeBefore = taskEntity.getWatchers().size();
+        
+        assertTrue(taskEntity.getWatchers().contains(userEntity));
+        
+        mockMvc.perform(patch("/secure/tasks/edit/stopWatching/" + id))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("You have stopped watching this task")))
+                .andExpect(jsonPath("$.type", is("SUCCESS")))
+                .andExpect(jsonPath("$.object", is(notNullValue())))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isOk());
+        
+        assertFalse(taskEntity.getWatchers().contains(userEntity));
+        assertNotEquals(watchersSizeBefore, taskRepository.findById(id).get().getWatchers().size());
+    }
+    
 }

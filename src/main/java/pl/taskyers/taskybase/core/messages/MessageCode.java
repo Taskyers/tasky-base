@@ -60,6 +60,8 @@ public enum MessageCode {
     task_same_watcher,
     task_updated,
     task_watcher_added,
+    task_watcher_not_in,
+    task_watcher_removed,
     user_already_in_project,
     user_field_already_exists,
     user_not_found,
