@@ -51,4 +51,9 @@ public class TaskDetailsRestController {
         return taskDetailsSLO.getUserTasksByName(name);
     }
     
+    @RequestMapping(value = GET_SPRINTS, method = RequestMethod.GET)
+    public ResponseEntity getSprints(@PathVariable String key) {
+        return taskDetailsSLO.getSprintsByTask(key);
+    }
+    
 }
