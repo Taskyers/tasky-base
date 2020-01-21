@@ -6,6 +6,7 @@ import pl.taskyers.taskybase.core.utils.UserUtils;
 import pl.taskyers.taskybase.dashboard.project.converter.EntryConverter;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.task.dto.CommentDTO;
+import pl.taskyers.taskybase.task.dto.SprintDTO;
 import pl.taskyers.taskybase.task.dto.TaskDTO;
 import pl.taskyers.taskybase.task.dto.TaskDetailsDTO;
 import pl.taskyers.taskybase.task.entity.CommentEntity;
@@ -46,7 +47,7 @@ public class TaskConverter {
         taskDetailsDTO.setType(EntryConverter.convertToDTO(taskEntity.getType()));
         taskDetailsDTO.setPriority(EntryConverter.convertToDTO(taskEntity.getPriority()));
         taskDetailsDTO.setFixVersion(taskEntity.getFixVersion());
-        taskDetailsDTO.setSprint(SprintConverter.convertToDTO(taskEntity.getSprint()));
+        taskDetailsDTO.setSprint(taskEntity.getSprint() != null ? SprintConverter.convertToDTO(taskEntity.getSprint()) : new SprintDTO());
         taskDetailsDTO.setCreationDate(DateUtils.parseStringDatetime(taskEntity.getCreationDate()));
         taskDetailsDTO.setUpdateDate(DateUtils.parseStringDatetime(taskEntity.getUpdateDate()));
         taskDetailsDTO.setResolution(taskEntity.getResolution());
