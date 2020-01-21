@@ -176,11 +176,12 @@ VALUES ('2019-12-13 15:00', '2019-12-13 15:00', 'Test 1', '1.0', 'PROJECT-1', 'T
        ('2019-12-13 15:20', '2019-12-13 15:20', 'Test 3', '1.0', 'PROJECT-4', 'Testing tasks1', 4, 1, 1, 2, 7, 1, 1),
        ('2019-12-13 15:20', '2019-12-13 15:20', 'Test 3', '1.0', 'PROJECT-5', 'Testing tasks123', 1, 1, 1, 2, 7, 1, 1),
        ('2019-12-13 15:20', '2019-12-13 15:20', 'Test 3', '1.0', 'PROJECT-6', 'Testing tasks1234', 1, 1, 1, 2, 8, 1, 1),
-       ('2019-12-13 15:20', '2019-12-13 15:20', 'Test 3', '1.0', 'PROJECT-7', 'Testing tasks1234', 1, 1, 1, 2, 8, 1, 1);
+       ('2019-12-13 15:20', '2019-12-13 15:20', 'Test 3', '1.0', 'PROJECT-7', 'Testing tasks1234', 1, 1, 1, 2, 8, 1, 1),
+       ('2019-12-13 15:20', '2019-12-13 15:20', 'Test 3', '1.0', 'PROJECT-8', 'Tessddsg tasks12342', null, 1, 1, 2, 8, 1, 1);
 INSERT INTO comments(content, user_id, task_id, creation_date)
 VALUES ('test1', 1, 4, '2019-12-13 16:00'),
        ('test1', 1, 4, '2019-12-13 16:00'),
        ('other user comment', 2, 4, '2019-12-13 16:00'),
        ('to be updated', 1, 4, '2019-12-13 16:00'),
        ('to be deleted', 1, 4, '2019-12-13 16:00');
-INSERT INTO task_user (task_id, user_id) VALUES (4, 6), (4, 7), (4, 1);
+INSERT INTO task_user (task_id, user_id) VALUES (4, 6), (4, 7), (4, 1), (6, 6);

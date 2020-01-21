@@ -89,6 +89,34 @@ public class EditTaskIntegrationTest extends IntegrationBase {
     @Test
     @WithMockUser(value = DEFAULT_USERNAME)
     @Transactional
+    public void givenTaskWithNoAssigneeWhenAssignTaskToMeShouldReturnStatus200() throws Exception {
+        final long id = 8L;
+        final TaskEntity taskEntity = taskRepository.findById(id).get();
+        final UserEntity assigneeBefore = taskEntity.getAssignee();
+        final Date updateDateBefore = taskEntity.getUpdateDate();
+        
+        mockMvc.perform(patch("/secure/tasks/edit/assignToMe/" + id))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("Task has been assigned")))
+                .andExpect(jsonPath("$.type", is("SUCCESS")))
+                .andExpect(jsonPath("$.object", is(notNullValue())))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isOk());
+        
+        final TaskEntity taskEntityAfter = taskRepository.findById(id).get();
+        final UserEntity assigneeAfter = taskEntityAfter.getAssignee();
+        final Date updateDateAfter = taskEntityAfter.getUpdateDate();
+        
+        assertNotNull(assigneeAfter);
+        assertNotEquals(assigneeBefore, assigneeAfter);
+        assertNotEquals(updateDateBefore, updateDateAfter);
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
     public void givenProperUserWhenAssignTaskToMeShouldReturnStatus200() throws Exception {
         final long id = 4L;
         final TaskEntity taskEntity = taskRepository.findById(id).get();
@@ -111,6 +139,68 @@ public class EditTaskIntegrationTest extends IntegrationBase {
         
         assertNotEquals(assigneeBefore, assigneeAfter);
         assertNotEquals(updateDateBefore, updateDateAfter);
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
+    public void givenUserAlreadyWatchingTaskWhenWatchingTaskShouldReturnStatus400() throws Exception {
+        final long id = 4L;
+        
+        mockMvc.perform(patch("/secure/tasks/edit/watch/" + id))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("You already watch this task")))
+                .andExpect(jsonPath("$.type", is("ERROR")))
+                .andExpect(jsonPath("$.object", is(nullValue())))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
+    public void givenEmptyListOfWatchersWhenWatchingTaskShouldReturnStatus200() throws Exception {
+        final long id = 5L;
+        final UserEntity userEntity = userRepository.findByUsername(DEFAULT_USERNAME).get();
+        final TaskEntity taskEntity = taskRepository.findById(id).get();
+        
+        mockMvc.perform(patch("/secure/tasks/edit/watch/" + id))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("You have been added to watchers")))
+                .andExpect(jsonPath("$.type", is("SUCCESS")))
+                .andExpect(jsonPath("$.object", is(notNullValue())))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isOk());
+        
+        assertTrue(taskEntity.getWatchers().contains(userEntity));
+        assertEquals(1, taskEntity.getWatchers().size());
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
+    public void givenNotEmptyListOfWatchersWhenWatchingTaskShouldReturnStatus200() throws Exception {
+        final long id = 6L;
+        final UserEntity userEntity = userRepository.findByUsername(DEFAULT_USERNAME).get();
+        final TaskEntity taskEntity = taskRepository.findById(id).get();
+        final int sizeBefore = taskEntity.getWatchers().size();
+        
+        mockMvc.perform(patch("/secure/tasks/edit/watch/" + id))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("You have been added to watchers")))
+                .andExpect(jsonPath("$.type", is("SUCCESS")))
+                .andExpect(jsonPath("$.object", is(notNullValue())))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isOk());
+        
+        assertTrue(taskEntity.getWatchers().contains(userEntity));
+        assertNotEquals(sizeBefore, taskRepository.findById(id).get().getWatchers().size());
     }
     
     @Test

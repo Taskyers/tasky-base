@@ -56,7 +56,7 @@ public class EditTaskSLOImpl implements EditTaskSLO {
         
         if ( isTaskFound == null ) {
             final TaskEntity taskEntity = taskDAO.getTaskById(id).get();
-            if ( taskEntity.getAssignee().equals(userEntity) ) {
+            if ( taskEntity.getAssignee() != null && taskEntity.getAssignee().equals(userEntity) ) {
                 log.warn("User {} has tried to assign yourself again to task {}", UserUtils.getPersonals(userEntity), taskEntity.getKey());
                 return ResponseEntity.badRequest().body(new ResponseMessage<>(MessageCode.task_same_assignee.getMessage(), MessageType.ERROR));
             }
@@ -76,7 +76,7 @@ public class EditTaskSLOImpl implements EditTaskSLO {
         
         if ( isTaskFound == null ) {
             final TaskEntity taskEntity = taskDAO.getTaskById(id).get();
-            if ( watcherExists(taskEntity.getWatchers(), userEntity) == null ) {
+            if ( watcherExists(taskEntity.getWatchers(), userEntity) != null ) {
                 log.warn("User {} has tried to watch task {} again", UserUtils.getPersonals(userEntity), taskEntity.getKey());
                 return ResponseEntity.badRequest().body(new ResponseMessage<>(MessageCode.task_same_watcher.getMessage(), MessageType.ERROR));
             }
