@@ -42,6 +42,12 @@ public class VerificationTokenDAOImpl implements TokenDAO<VerificationTokenEntit
     public void createToken(UserEntity userEntity, ProjectEntity projectEntity) {
     }
     
+    @Deprecated
+    @Override
+    public void createToken(UserEntity userEntity, String email) {
+    
+    }
+    
     @Override
     public String getToken(UserEntity userEntity) {
         return verificationTokenRepository.findByUser(userEntity).isPresent() ? verificationTokenRepository.findByUser(userEntity).get().getToken() :

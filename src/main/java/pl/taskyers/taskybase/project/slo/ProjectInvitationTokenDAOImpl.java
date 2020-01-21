@@ -62,6 +62,12 @@ public class ProjectInvitationTokenDAOImpl implements TokenDAO<ProjectInvitation
         projectInvitationTokenRepository.save(projectInvitationTokenEntity);
     }
     
+    @Deprecated
+    @Override
+    public void createToken(UserEntity userEntity, String email) {
+    
+    }
+    
     @Override
     public void deleteToken(String token) {
         Optional<ProjectInvitationTokenEntity> passwordRecoveryTokenEntity = projectInvitationTokenRepository.findByToken(token);
