@@ -48,11 +48,20 @@ public interface TokenDAO<T> {
     /**
      * Create and save to database token which will be assigned to passed user
      *
-     * @param userEntity user that token will be created for
+     * @param userEntity    user that token will be created for
      * @param projectEntity project that token will be created for
      * @since 0.0.3
      */
     void createToken(UserEntity userEntity, ProjectEntity projectEntity);
+    
+    /**
+     * Create and save to database token which will be assigned to passed user
+     *
+     * @param userEntity user that token will be created for
+     * @param email      email
+     * @since 0.0.7
+     */
+    void createToken(UserEntity userEntity, String email);
     
     /**
      * Delete from database token entity by token as string

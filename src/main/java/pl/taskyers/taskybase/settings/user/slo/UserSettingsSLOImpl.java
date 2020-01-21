@@ -81,8 +81,7 @@ public class UserSettingsSLOImpl implements UserSettingsSLO {
         if ( validationMessageContainer.hasErrors() ) {
             return ResponseEntity.badRequest().body(validationMessageContainer.getErrors());
         }
-        userEntity.setEmail(email);
-        emailUpdateTokenDAO.createToken(userEntity);
+        emailUpdateTokenDAO.createToken(userEntity,email);
         boolean emailWasSent = emailSLO.sendEmailWithTemplateToSingleAddressee(AccountConverter.convertToDTO(userEntity),
                 MessageCode.email_subject_email_update.getMessage(),
                 EmailConstants.EMAIL_UPDATE_PATH,

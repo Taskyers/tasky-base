@@ -40,28 +40,34 @@ public class EmailUpdateTokenDAOImpl implements TokenDAO<EmailUpdateTokenEntity>
         return emailUpdateTokenRepository.findByToken(token).isPresent() ? emailUpdateTokenRepository.findByToken(token).get() : null;
     }
     
+    @Deprecated
     @Override
     public void createToken(UserEntity userEntity) {
-        EmailUpdateTokenEntity emailUpdateTokenEntity;
-        if ( emailUpdateTokenRepository.findByUser(userEntity).isPresent() ) {
-            emailUpdateTokenEntity = emailUpdateTokenRepository.findByUser(userEntity).get();
-            emailUpdateTokenEntity.setToken(generateToken());
-            emailUpdateTokenEntity.setEmail(userEntity.getEmail());
-            log.debug("Updating token for user: " + userEntity.getUsername());
-        } else {
-            emailUpdateTokenEntity = new EmailUpdateTokenEntity();
-            emailUpdateTokenEntity.setToken(generateToken());
-            emailUpdateTokenEntity.setUser(userEntity);
-            emailUpdateTokenEntity.setEmail(userEntity.getEmail());
-            log.debug("Generating new token for user: " + userEntity.getUsername());
-        }
-        emailUpdateTokenRepository.save(emailUpdateTokenEntity);
+    
     }
     
     @Deprecated
     @Override
     public void createToken(UserEntity userEntity, ProjectEntity projectEntity) {
     
+    }
+    
+    @Override
+    public void createToken(UserEntity userEntity, String email) {
+        EmailUpdateTokenEntity emailUpdateTokenEntity;
+        if ( emailUpdateTokenRepository.findByUser(userEntity).isPresent() ) {
+            emailUpdateTokenEntity = emailUpdateTokenRepository.findByUser(userEntity).get();
+            emailUpdateTokenEntity.setToken(generateToken());
+            emailUpdateTokenEntity.setEmail(email);
+            log.debug("Updating token for user: " + userEntity.getUsername());
+        } else {
+            emailUpdateTokenEntity = new EmailUpdateTokenEntity();
+            emailUpdateTokenEntity.setToken(generateToken());
+            emailUpdateTokenEntity.setUser(userEntity);
+            emailUpdateTokenEntity.setEmail(email);
+            log.debug("Generating new token for user: " + userEntity.getUsername());
+        }
+        emailUpdateTokenRepository.save(emailUpdateTokenEntity);
     }
     
     @Override

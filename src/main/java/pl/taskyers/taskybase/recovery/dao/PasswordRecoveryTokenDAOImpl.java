@@ -56,6 +56,12 @@ public class PasswordRecoveryTokenDAOImpl implements TokenDAO<PasswordRecoveryTo
     public void createToken(UserEntity userEntity, ProjectEntity projectEntity) {
     }
     
+    @Deprecated
+    @Override
+    public void createToken(UserEntity userEntity, String email) {
+    
+    }
+    
     @Override
     public PasswordRecoveryTokenEntity getTokenEntity(String token) {
         return passwordRecoveryTokenRepository.findByToken(token).isPresent() ? passwordRecoveryTokenRepository.findByToken(token).get() : null;
