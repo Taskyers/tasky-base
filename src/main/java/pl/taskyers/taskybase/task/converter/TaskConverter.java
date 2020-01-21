@@ -50,7 +50,7 @@ public class TaskConverter {
         taskDetailsDTO.setSprint(taskEntity.getSprint() != null ? SprintConverter.convertToDTO(taskEntity.getSprint()) : new SprintDTO());
         taskDetailsDTO.setCreationDate(DateUtils.parseStringDatetime(taskEntity.getCreationDate()));
         taskDetailsDTO.setUpdateDate(DateUtils.parseStringDatetime(taskEntity.getUpdateDate()));
-        taskDetailsDTO.setResolution(taskEntity.getResolution());
+        taskDetailsDTO.setResolution(taskEntity.getResolution().getValue());
         taskDetailsDTO.setAssignedToMe(taskEntity.getAssignee() != null && taskEntity.getAssignee().getId().equals(userEntity.getId()));
         taskDetailsDTO.setWatching(watcherExists(taskEntity.getWatchers(), userEntity) != null);
         taskDetailsDTO.setProjectName(taskEntity.getProject().getName());

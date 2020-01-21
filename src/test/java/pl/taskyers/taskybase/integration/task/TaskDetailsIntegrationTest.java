@@ -78,7 +78,7 @@ public class TaskDetailsIntegrationTest extends IntegrationBase {
                 .andExpect(jsonPath("$.fixVersion", is(taskEntity.getFixVersion())))
                 .andExpect(jsonPath("$.creationDate", is(DateUtils.parseStringDatetime(taskEntity.getCreationDate()))))
                 .andExpect(jsonPath("$.updateDate", is(DateUtils.parseStringDatetime(taskEntity.getUpdateDate()))))
-                .andExpect(jsonPath("$.resolution", is(taskEntity.getResolution())))
+                .andExpect(jsonPath("$.resolution", is(taskEntity.getResolution().getValue())))
                 .andExpect(jsonPath("$.status.value", is(taskEntity.getStatus().getValue())))
                 .andExpect(jsonPath("$.status.textColor", is(taskEntity.getStatus().getTextColor())))
                 .andExpect(jsonPath("$.status.backgroundColor", is(taskEntity.getStatus().getBackgroundColor())))
