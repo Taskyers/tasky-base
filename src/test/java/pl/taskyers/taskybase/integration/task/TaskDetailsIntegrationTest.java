@@ -94,6 +94,7 @@ public class TaskDetailsIntegrationTest extends IntegrationBase {
                                 taskEntity.getSprint().getEnd()))))
                 .andExpect(jsonPath("$.watchers.length()", is(taskEntity.getWatchers().size())))
                 .andExpect(jsonPath("$.comments.length()", is(taskEntity.getComments().size())))
+                .andExpect(jsonPath("$.projectName", is(taskEntity.getProject().getName())))
                 .andExpect(redirectedUrl(null))
                 .andExpect(forwardedUrl(null))
                 .andExpect(status().isOk());

@@ -48,5 +48,7 @@ public class TaskDetailsDTO {
     private String updateDate;
     
     private ResolutionType resolution;
+    
+    private String projectName;
 
 }

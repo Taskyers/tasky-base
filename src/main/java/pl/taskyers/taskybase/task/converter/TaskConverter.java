@@ -52,6 +52,7 @@ public class TaskConverter {
         taskDetailsDTO.setResolution(taskEntity.getResolution());
         taskDetailsDTO.setAssignedToMe(taskEntity.getAssignee() != null && taskEntity.getAssignee().getId().equals(userEntity.getId()));
         taskDetailsDTO.setWatching(watcherExists(taskEntity.getWatchers(), userEntity) != null);
+        taskDetailsDTO.setProjectName(taskEntity.getProject().getName());
         return taskDetailsDTO;
     }
     
