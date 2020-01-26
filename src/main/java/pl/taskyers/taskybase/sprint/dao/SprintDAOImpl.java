@@ -56,7 +56,8 @@ public class SprintDAOImpl implements SprintDAO {
     
     @Override
     public boolean doesSprintInPeriodExists(ProjectEntity project, Date start, Date end) {
-        return sprintRepository.findAllByProjectAndStartGreaterThanEqualAndEndLessThanEqual(project, start, end).size() > 0;
+        return sprintRepository.findAllByProjectAndStartBeforeAndEndAfter(project, start, end).size() > 0 ||
+               sprintRepository.findAllByProjectAndStartGreaterThanEqualAndEndLessThanEqual(project, start, end).size() > 0;
     }
     
     @Override
