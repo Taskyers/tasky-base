@@ -18,4 +18,6 @@ public interface SprintRepository extends JpaRepository<SprintEntity, Long> {
     
     List<SprintEntity> findAllByProjectAndStartGreaterThanEqualAndEndLessThanEqual(ProjectEntity project, Date start, Date end);
     
+    List<SprintEntity> findAllByProjectAndStartBeforeAndEndAfter(ProjectEntity project, Date start, Date end);
+    
 }
