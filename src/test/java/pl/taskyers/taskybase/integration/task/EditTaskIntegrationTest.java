@@ -143,6 +143,125 @@ public class EditTaskIntegrationTest extends IntegrationBase {
     
     @Test
     @WithMockUser(value = DEFAULT_USERNAME)
+    public void givenNotExistingTaskIdWhenUnassignFromTaskShouldReturnStatus404() throws Exception {
+        final long id = 213;
+        
+        mockMvc.perform(patch("/secure/tasks/edit/unassignFromMe/" + id))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("Task with id " + id + " was not found")))
+                .andExpect(jsonPath("$.type", is("WARN")))
+                .andExpect(jsonPath("$.object", is(nullValue())))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isNotFound());
+        
+        assertFalse(taskRepository.findById(id).isPresent());
+    }
+    
+    @Test
+    @WithMockUser(value = "enabled")
+    public void givenUserNotInProjectWhenUnassigningFromTaskShouldReturnStatus403() throws Exception {
+        final long id = 1L;
+        
+        mockMvc.perform(patch("/secure/tasks/edit/unassignFromMe/" + id))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("You have no permission for requested operation")))
+                .andExpect(jsonPath("$.type", is("ERROR")))
+                .andExpect(jsonPath("$.object", is(nullValue())))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isForbidden());
+        
+        assertTrue(taskRepository.findById(id).isPresent());
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
+    public void givenNotAssignTaskWhenUnassignFromTaskShouldReturnStatus400() throws Exception {
+        final long id = 8L;
+        final TaskEntity taskEntity = taskRepository.findById(id).get();
+        final UserEntity assigneeBefore = taskEntity.getAssignee();
+        final Date updateDateBefore = taskEntity.getUpdateDate();
+        
+        mockMvc.perform(patch("/secure/tasks/edit/unassignFromMe/" + id))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("You cannot unassign from this task")))
+                .andExpect(jsonPath("$.type", is("ERROR")))
+                .andExpect(jsonPath("$.object", is(nullValue())))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isBadRequest());
+        
+        final TaskEntity taskEntityAfter = taskRepository.findById(id).get();
+        final UserEntity assigneeAfter = taskEntityAfter.getAssignee();
+        final Date updateDateAfter = taskEntityAfter.getUpdateDate();
+        
+        assertEquals(taskEntity, taskEntityAfter);
+        assertEquals(assigneeBefore, assigneeAfter);
+        assertEquals(updateDateBefore, updateDateAfter);
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
+    public void givenTaskWithNotValidAssigneeWhenUnssignFromTaskShouldReturnStatus400() throws Exception {
+        final long id = 4L;
+        final TaskEntity taskEntity = taskRepository.findById(id).get();
+        final UserEntity assigneeBefore = taskEntity.getAssignee();
+        final Date updateDateBefore = taskEntity.getUpdateDate();
+        
+        mockMvc.perform(patch("/secure/tasks/edit/unassignFromMe/" + id))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("You cannot unassign from this task")))
+                .andExpect(jsonPath("$.type", is("ERROR")))
+                .andExpect(jsonPath("$.object", is(nullValue())))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isBadRequest());
+        
+        final TaskEntity taskEntityAfter = taskRepository.findById(id).get();
+        final UserEntity assigneeAfter = taskEntityAfter.getAssignee();
+        final Date updateDateAfter = taskEntityAfter.getUpdateDate();
+        
+        assertNotNull(assigneeAfter);
+        assertEquals(assigneeBefore, assigneeAfter);
+        assertEquals(updateDateBefore, updateDateAfter);
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
+    public void givenProperUserWhenUnassignFromTaskShouldReturnStatus200() throws Exception {
+        final long id = 7L;
+        final TaskEntity taskEntity = taskRepository.findById(id).get();
+        final UserEntity assigneeBefore = taskEntity.getAssignee();
+        final Date updateDateBefore = taskEntity.getUpdateDate();
+        
+        mockMvc.perform(patch("/secure/tasks/edit/unassignFromMe/" + id))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message", is("Task has been unassigned")))
+                .andExpect(jsonPath("$.type", is("SUCCESS")))
+                .andExpect(jsonPath("$.object", is(notNullValue())))
+                .andExpect(redirectedUrl(null))
+                .andExpect(forwardedUrl(null))
+                .andExpect(status().isOk());
+        
+        final TaskEntity taskEntityAfter = taskRepository.findById(id).get();
+        final UserEntity assigneeAfter = taskEntityAfter.getAssignee();
+        final Date updateDateAfter = taskEntityAfter.getUpdateDate();
+        
+        assertNotEquals(assigneeBefore, assigneeAfter);
+        assertNotEquals(updateDateBefore, updateDateAfter);
+    }
+    
+    @Test
+    @WithMockUser(value = DEFAULT_USERNAME)
     @Transactional
     public void givenUserAlreadyWatchingTaskWhenWatchingTaskShouldReturnStatus400() throws Exception {
         final long id = 4L;

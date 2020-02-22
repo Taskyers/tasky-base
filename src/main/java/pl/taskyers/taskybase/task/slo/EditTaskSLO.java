@@ -16,6 +16,8 @@ public interface EditTaskSLO {
     
     String ASSIGN_TO_ME = "/assignToMe/{id}";
     
+    String UNASSIGN_FROM_ME = "/unassignFromMe/{id}";
+    
     String WATCH_THIS_TASK = "/watch/{id}";
     
     String STOP_WATCHING_THIS_TASK = "/stopWatching/{id}";
@@ -38,6 +40,15 @@ public interface EditTaskSLO {
      * @since 0.0.7
      */
     ResponseEntity assignToMe(Long id);
+    
+    /**
+     * Anassign task from currently logged in user
+     *
+     * @param id task's id
+     * @return status 404 if task was not found, 403 if user is not in project, 400 if user is already unassigned to this task otherwise 200
+     * @since 0.0.7
+     */
+    ResponseEntity unassignFromMe(Long id);
     
     /**
      * Add currently logged in user to task's watchers collection

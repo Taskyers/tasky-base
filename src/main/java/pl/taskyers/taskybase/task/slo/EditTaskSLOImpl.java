@@ -70,6 +70,29 @@ public class EditTaskSLOImpl implements EditTaskSLO {
     }
     
     @Override
+    public ResponseEntity unassignFromMe(Long id) {
+        final UserEntity userEntity = authProvider.getUserEntity();
+        ResponseEntity isTaskFound = checkForTask(id, userEntity);
+        
+        if ( isTaskFound == null ) {
+            final TaskEntity taskEntity = taskDAO.getTaskById(id).get();
+            
+            if ( taskEntity.getAssignee() == null || !taskEntity.getAssignee().equals(userEntity) ) {
+                log.warn("User {} wrong unassign yourself from task {}", UserUtils.getPersonals(userEntity), taskEntity.getKey());
+                return ResponseEntity.badRequest().body(new ResponseMessage<>(MessageCode.task_invalid_unassign.getMessage(), MessageType.ERROR));
+            }
+            
+            final TaskEntity updated = taskDAO.setAssignee(taskEntity, null);
+            sendEmails(updated);
+            return ResponseEntity.ok(
+                    new ResponseMessage<>(MessageCode.task_unassigned.getMessage(), MessageType.SUCCESS,
+                            TaskConverter.convertToDetailsDTO(updated, userEntity)));
+            
+        }
+        return isTaskFound;
+    }
+    
+    @Override
     public ResponseEntity watchThisTask(Long id) {
         final UserEntity userEntity = authProvider.getUserEntity();
         ResponseEntity isTaskFound = checkForTask(id, userEntity);
