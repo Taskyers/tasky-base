@@ -21,6 +21,11 @@ public class EditTaskRestController {
         return editTaskSLO.assignToMe(id);
     }
     
+    @RequestMapping(value = UNASSIGN_FROM_ME, method = RequestMethod.PATCH)
+    public ResponseEntity unassignFromMe(@PathVariable Long id) {
+        return editTaskSLO.unassignFromMe(id);
+    }
+    
     @RequestMapping(value = WATCH_THIS_TASK, method = RequestMethod.PATCH)
     public ResponseEntity watchTask(@PathVariable Long id) {
         return editTaskSLO.watchThisTask(id);
