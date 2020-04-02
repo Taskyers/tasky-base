@@ -28,6 +28,8 @@
 		<spring-boot-freemarker-email.version>0.6.3</spring-boot-freemarker-email.version>
 		<spring-security-test.version>5.1.5.RELEASE</spring-security-test.version>
 		<slf4j-api.version>1.7.25</slf4j-api.version>
+		<jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
+		<maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
 		<!-- Integration database -->
 		<mysql-connector-java.version>8.0.17</mysql-connector-java.version>
 		<integration-driver>com.mysql.cj.jdbc.Driver</integration-driver>
@@ -219,12 +221,12 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.1.1</version>
+				<version>${maven-javadoc-plugin.version}</version>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.5</version>
+				<version>${jacoco-maven-plugin.version}</version>
 				<executions>
 					<execution>
 						<goals>
