@@ -11,7 +11,6 @@ import java.io.Serializable;
 @Entity
 @Table(name = "role_linkers")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class RoleLinkerEntity implements Serializable {
     

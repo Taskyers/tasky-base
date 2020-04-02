@@ -1,7 +1,6 @@
 package pl.taskyers.taskybase.entry.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.taskyers.taskybase.entry.EntryType;
@@ -13,7 +12,6 @@ import java.io.Serializable;
 @Entity
 @Table(name = "entry_entities")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class EntryEntity implements Serializable {
     

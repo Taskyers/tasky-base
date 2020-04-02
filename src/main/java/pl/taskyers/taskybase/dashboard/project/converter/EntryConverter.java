@@ -5,6 +5,9 @@ import pl.taskyers.taskybase.entry.entity.EntryEntity;
 
 public class EntryConverter {
     
+    private EntryConverter() {
+    }
+    
     public static EntryDTO convertToDTO(EntryEntity entryEntity) {
         return new EntryDTO(entryEntity.getValue(), entryEntity.getTextColor(), entryEntity.getBackgroundColor());
     }

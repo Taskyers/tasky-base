@@ -10,7 +10,6 @@ import java.util.Set;
 @Table(name = "roles")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class RoleEntity implements Serializable {
     
     @Id
