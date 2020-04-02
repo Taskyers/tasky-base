@@ -10,8 +10,8 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "role_linkers")
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
 public class RoleLinkerEntity implements Serializable {
     

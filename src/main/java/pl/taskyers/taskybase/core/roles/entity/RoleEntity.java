@@ -8,9 +8,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "roles")
-@Data
+@Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class RoleEntity implements Serializable {
     
     @Id
