@@ -21,7 +21,6 @@ jobs:
       with:
         java-version: 1.8
     - name: Run SMTP 
-      run: sudo java -jar fakeSMTP-2.0.jar --start-server --background
     - name: Setup MySQL
       uses: mirromutth/mysql-action@v1.1
       with:
@@ -30,4 +29,4 @@ jobs:
         mysql database: tasky_integration
         mysql user: root 
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: sudo java -jar fakeSMTP-2.0.jar --start-server --background & mvn -B package --file pom.xml
