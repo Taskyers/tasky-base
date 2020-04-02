@@ -6,6 +6,9 @@ import pl.taskyers.taskybase.task.dto.SprintDTO;
 
 public class SprintConverter {
     
+    private SprintConverter() {
+    }
+    
     public static SprintDTO convertToDTO(SprintEntity sprintEntity) {
         return new SprintDTO(sprintEntity.getName(),
                 DateUtils.checkIfDateBetweenTwoDates(DateUtils.getCurrentDate(), sprintEntity.getStart(), sprintEntity.getEnd()));

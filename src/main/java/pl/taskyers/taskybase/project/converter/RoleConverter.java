@@ -5,8 +5,13 @@ import pl.taskyers.taskybase.core.roles.entity.RoleLinkerEntity;
 
 public class RoleConverter {
     
+    private RoleConverter() {
+    }
+    
     public static RoleDTO convertFromRoleLinker(RoleLinkerEntity roleLinkerEntity) {
-        return new RoleDTO(roleLinkerEntity.getRole().getKey(), roleLinkerEntity.getRole().getDescription(), roleLinkerEntity.isChecked());
+        return new RoleDTO(roleLinkerEntity.getRole()
+                .getKey(), roleLinkerEntity.getRole()
+                .getDescription(), roleLinkerEntity.isChecked());
     }
     
 }

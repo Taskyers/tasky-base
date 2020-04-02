@@ -19,6 +19,9 @@ import java.util.Set;
 
 public class TaskConverter {
     
+    private TaskConverter() {
+    }
+    
     public static TaskEntity convertFromDTO(TaskDTO taskDTO, ProjectEntity projectEntity) {
         TaskEntity taskEntity = new TaskEntity();
         taskEntity.setName(taskDTO.getName());
@@ -26,11 +29,6 @@ public class TaskConverter {
         taskEntity.setFixVersion(taskDTO.getFixVersion());
         taskEntity.setProject(projectEntity);
         return taskEntity;
-    }
-    
-    public static TaskDTO convertToDTO(TaskEntity taskEntity) {
-        return new TaskDTO(taskEntity.getName(), taskEntity.getDescription(), taskEntity.getStatus().getValue(), taskEntity.getPriority().getValue(),
-                taskEntity.getType().getValue(), taskEntity.getFixVersion(), taskEntity.getSprint().getName());
     }
     
     public static TaskDetailsDTO convertToDetailsDTO(TaskEntity taskEntity, UserEntity userEntity) {
@@ -50,15 +48,23 @@ public class TaskConverter {
         taskDetailsDTO.setSprint(taskEntity.getSprint() != null ? SprintConverter.convertToDTO(taskEntity.getSprint()) : new SprintDTO());
         taskDetailsDTO.setCreationDate(DateUtils.parseStringDatetime(taskEntity.getCreationDate()));
         taskDetailsDTO.setUpdateDate(DateUtils.parseStringDatetime(taskEntity.getUpdateDate()));
-        taskDetailsDTO.setResolution(taskEntity.getResolution().getValue());
-        taskDetailsDTO.setAssignedToMe(taskEntity.getAssignee() != null && taskEntity.getAssignee().getId().equals(userEntity.getId()));
+        taskDetailsDTO.setResolution(taskEntity.getResolution()
+                .getValue());
+        taskDetailsDTO.setAssignedToMe(taskEntity.getAssignee() != null && taskEntity.getAssignee()
+                .getId()
+                .equals(userEntity.getId()));
         taskDetailsDTO.setWatching(watcherExists(taskEntity.getWatchers(), userEntity) != null);
-        taskDetailsDTO.setProjectName(taskEntity.getProject().getName());
+        taskDetailsDTO.setProjectName(taskEntity.getProject()
+                .getName());
         return taskDetailsDTO;
     }
     
     private static UserEntity watcherExists(Set<UserEntity> watchers, UserEntity userEntity) {
-        return watchers.isEmpty() ? null : watchers.stream().filter(watcher -> watcher.getId().equals(userEntity.getId())).findFirst().orElse(null);
+        return watchers.isEmpty() ? null : watchers.stream()
+                .filter(watcher -> watcher.getId()
+                        .equals(userEntity.getId()))
+                .findFirst()
+                .orElse(null);
     }
     
     private static List<String> convertWatchers(Set<UserEntity> users) {

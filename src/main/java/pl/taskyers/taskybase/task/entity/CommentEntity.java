@@ -1,6 +1,5 @@
 package pl.taskyers.taskybase.task.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
@@ -12,7 +11,6 @@ import java.util.Date;
 @Entity
 @Table(name = "comments")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class CommentEntity implements Serializable {
     

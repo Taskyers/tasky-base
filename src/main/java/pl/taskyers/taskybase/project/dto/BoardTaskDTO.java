@@ -1,12 +1,10 @@
 package pl.taskyers.taskybase.project.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.taskyers.taskybase.dashboard.project.dto.EntryDTO;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class BoardTaskDTO {
     

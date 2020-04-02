@@ -7,6 +7,9 @@ import pl.taskyers.taskybase.task.entity.CommentEntity;
 
 public class CommentConverter {
     
+    private CommentConverter() {
+    }
+    
     public static CommentDTO convertToDTO(CommentEntity commentEntity, String personals) {
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setId(commentEntity.getId());
@@ -14,7 +17,8 @@ public class CommentConverter {
         commentDTO.setContent(commentEntity.getContent());
         commentDTO.setCreationDate(DateUtils.parseStringDatetime(commentEntity.getCreationDate()));
         commentDTO.setEdited(commentEntity.isEdited());
-        commentDTO.setYours(commentDTO.getAuthor().equals(personals));
+        commentDTO.setYours(commentDTO.getAuthor()
+                .equals(personals));
         return commentDTO;
     }
     

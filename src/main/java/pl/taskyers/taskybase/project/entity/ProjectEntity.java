@@ -16,7 +16,6 @@ import java.util.Set;
 @Entity
 @Table(name = "projects")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class ProjectEntity implements Serializable {
     

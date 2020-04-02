@@ -7,6 +7,9 @@ import pl.taskyers.taskybase.task.entity.TaskEntity;
 
 public class BoardTaskConverter {
     
+    private BoardTaskConverter() {
+    }
+    
     public static BoardTaskDTO convertToDTO(TaskEntity taskEntity) {
         BoardTaskDTO boardTaskDTO = new BoardTaskDTO();
         boardTaskDTO.setKey(taskEntity.getKey());

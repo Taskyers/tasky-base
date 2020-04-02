@@ -1,6 +1,5 @@
 package pl.taskyers.taskybase.project.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
@@ -10,7 +9,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "project_invitation_tokens")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class ProjectInvitationTokenEntity {
     

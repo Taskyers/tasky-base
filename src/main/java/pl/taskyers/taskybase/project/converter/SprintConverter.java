@@ -8,6 +8,9 @@ import java.util.Date;
 
 public class SprintConverter {
     
+    private SprintConverter() {
+    }
+    
     public static SprintResponseData convertToDTO(SprintEntity sprintEntity) {
         Date current = DateUtils.getCurrentDate();
         boolean isCurrentSprint = false;

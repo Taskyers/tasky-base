@@ -11,7 +11,6 @@ import java.util.Date;
 @Entity
 @Table(name = "sprints")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class SprintEntity implements Serializable {
     
