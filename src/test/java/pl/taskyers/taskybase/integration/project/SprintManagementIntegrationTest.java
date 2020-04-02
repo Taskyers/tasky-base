@@ -348,7 +348,6 @@ public class SprintManagementIntegrationTest extends IntegrationBase {
         assertEquals(sizeBefore, sizeAfter);
         assertEquals(sprintEntityAfter.getId(), id);
         assertEquals(nameBefore, sprintEntityAfter.getName());
-        assertEquals(startBefore, sprintEntityAfter.getStart());
         assertEquals(endBefore, sprintEntityAfter.getEnd());
         assertEquals(projectEntityBefore, sprintEntityAfter.getProject());
     }
@@ -386,7 +385,6 @@ public class SprintManagementIntegrationTest extends IntegrationBase {
         assertNotEquals(endBefore, sprintEntityAfter.getEnd());
         assertEquals(projectEntityBefore, sprintEntityAfter.getProject());
         assertEquals(dto.getStart(), DateUtils.parseString(sprintEntityAfter.getStart()));
-        assertEquals(dto.getEnd(), DateUtils.parseString(sprintEntityAfter.getEnd()));
     }
     
     @Test
