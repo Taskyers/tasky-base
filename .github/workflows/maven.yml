@@ -20,6 +20,8 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+    - name: Run SMTP 
+      run: java -jar fakeSMTP-2.0.jar --start-server
     - name: Setup MySQL
       uses: mirromutth/mysql-action@v1.1
       with:
