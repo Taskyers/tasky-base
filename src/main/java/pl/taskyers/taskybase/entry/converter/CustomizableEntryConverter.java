@@ -6,13 +6,9 @@ import pl.taskyers.taskybase.entry.entity.EntryEntity;
 
 public class CustomizableEntryConverter {
     
-    private CustomizableEntryConverter() {
-    }
-    
     public static CustomizableEntryDTO convertEntryStatusToDTO(EntryEntity entryEntity) {
         return new CustomizableEntryDTO(entryEntity.getId(), entryEntity.getValue(), entryEntity.getTextColor(),
-                entryEntity.getBackgroundColor(), entryEntity.getEntryType()
-                .name());
+                entryEntity.getBackgroundColor(), entryEntity.getEntryType().name());
     }
     
     public static EntryEntity convertEntryStatusFromDTO(CustomizableEntryDTO customizableEntryDTO) {
@@ -26,8 +22,7 @@ public class CustomizableEntryConverter {
     
     public static EntryType checkEntryType(String type) {
         for ( EntryType entryType : EntryType.values() ) {
-            if ( entryType.name()
-                    .equals(type) ) {
+            if ( entryType.name().equals(type) ) {
                 return EntryType.valueOf(type);
             }
         }

@@ -5,9 +5,6 @@ import pl.taskyers.taskybase.core.users.entity.UserEntity;
 
 public class AccountConverter {
     
-    private AccountConverter() {
-    }
-    
     public static UserEntity convertFromDTO(AccountDTO accountDTO) {
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(accountDTO.getUsername());

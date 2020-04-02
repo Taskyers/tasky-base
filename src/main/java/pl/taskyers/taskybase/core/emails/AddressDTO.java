@@ -1,9 +1,9 @@
 package pl.taskyers.taskybase.core.emails;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 @AllArgsConstructor
 public class AddressDTO {
     

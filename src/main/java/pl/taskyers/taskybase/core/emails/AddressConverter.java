@@ -8,9 +8,6 @@ import java.util.Set;
 
 public class AddressConverter {
     
-    private AddressConverter() {
-    }
-    
     public static List<AddressDTO> convertToDTOList(Set<UserEntity> users) {
         List<AddressDTO> result = new ArrayList<>();
         for ( UserEntity userEntity : users ) {
