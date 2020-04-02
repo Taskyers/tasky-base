@@ -29,3 +29,7 @@ jobs:
         mysql user: root 
     - name: Build with Maven
       run: sudo java -jar fakeSMTP-2.0.jar --start-server --background & mvn -B package --file pom.xml
+    - name: Codecov
+      uses: codecov/codecov-action@v1.0.6
+      with:
+        token: e77e82af-29f2-49e3-b2fa-a202ee9d4684
