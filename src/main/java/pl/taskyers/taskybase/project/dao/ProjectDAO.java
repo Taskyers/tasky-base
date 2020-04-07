@@ -16,6 +16,8 @@ public interface ProjectDAO {
     
     String PROJECTS_PREFIX = "/secure/projects";
     
+    int PROJECTS_LIMIT = 5;
+    
     /**
      * Get n currently logged in user's projects as DTO converted from ProjectEntity
      *
@@ -124,5 +126,14 @@ public interface ProjectDAO {
      * @since 0.0.7
      */
     List<ProjectEntity> getAllProjectsEntities();
+    
+    /**
+     * Get all project entities by owner
+     *
+     * @param owner owner
+     * @return all project entities as list
+     * @since 0.0.7
+     */
+    List<ProjectEntity> getAllProjectsByOwner(UserEntity owner);
     
 }

@@ -11,7 +11,6 @@ import pl.taskyers.taskybase.core.users.dao.UserDAO;
 import pl.taskyers.taskybase.core.utils.DateUtils;
 import pl.taskyers.taskybase.dashboard.main.converter.ProjectConverter;
 import pl.taskyers.taskybase.dashboard.main.dto.ProjectDTO;
-import pl.taskyers.taskybase.project.dao.ProjectDAO;
 import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.project.repository.ProjectRepository;
 
@@ -119,6 +118,11 @@ public class ProjectDAOImpl implements ProjectDAO {
     @Override
     public List<ProjectEntity> getAllProjectsEntities() {
         return projectRepository.findAllByUsersContaining(authProvider.getUserEntityAsSet());
+    }
+    
+    @Override
+    public List<ProjectEntity> getAllProjectsByOwner(UserEntity owner) {
+        return projectRepository.findAllByOwner(owner);
     }
     
     private List<ProjectDTO> getProjectsAsDTO(List<ProjectEntity> projectEntities) {

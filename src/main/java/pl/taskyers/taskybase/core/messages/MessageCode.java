@@ -36,6 +36,7 @@ public enum MessageCode {
     project_deleted,
     project_field_already_exists,
     project_invitation_acceptance,
+    project_limit,
     project_not_found,
     project_permission_not_granted,
     project_updated,

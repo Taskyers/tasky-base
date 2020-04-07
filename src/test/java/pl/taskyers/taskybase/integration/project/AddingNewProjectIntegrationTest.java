@@ -3,7 +3,6 @@ package pl.taskyers.taskybase.integration.project;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import pl.taskyers.taskybase.core.roles.entity.RoleLinkerEntity;
 import pl.taskyers.taskybase.integration.IntegrationBase;
 import pl.taskyers.taskybase.project.dto.ProjectDTO;
 
@@ -16,11 +15,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static pl.taskyers.taskybase.project.dao.ProjectDAO.PROJECTS_LIMIT;
 
 public class AddingNewProjectIntegrationTest extends IntegrationBase {
     
     @Test
-    @WithMockUser(value = DEFAULT_USERNAME)
+    @WithMockUser(value = "enabled")
     @Transactional
     public void givenExistingProjectNameWhenAddingNewProjectShouldReturnStatus400() throws Exception {
         int sizeBefore = projectRepository.findAll().size();
@@ -47,7 +47,7 @@ public class AddingNewProjectIntegrationTest extends IntegrationBase {
     }
     
     @Test
-    @WithMockUser(value = DEFAULT_USERNAME)
+    @WithMockUser(value = "enabled")
     @Transactional
     public void givenProjectWithEmptyNameWhenAddingNewProjectShouldReturnStatus400() throws Exception {
         int sizeBefore = projectRepository.findAll().size();
@@ -74,7 +74,7 @@ public class AddingNewProjectIntegrationTest extends IntegrationBase {
     }
     
     @Test
-    @WithMockUser(value = DEFAULT_USERNAME)
+    @WithMockUser(value = "enabled")
     @Transactional
     public void givenValidProjectWhenAddingNewProjectShouldReturnStatus201() throws Exception {
         int sizeBefore = projectRepository.findAll().size();
@@ -90,7 +90,7 @@ public class AddingNewProjectIntegrationTest extends IntegrationBase {
                 .andExpect(jsonPath("$.type", is("SUCCESS")))
                 .andExpect(jsonPath("$.object.id", is(notNullValue())))
                 .andExpect(jsonPath("$.object.owner", is(notNullValue())))
-                .andExpect(jsonPath("$.object.owner.username", is(DEFAULT_USERNAME)))
+                .andExpect(jsonPath("$.object.owner.username", is("enabled")))
                 .andExpect(jsonPath("$.object.users", is(notNullValue())))
                 .andExpect(jsonPath("$.object.users.length()", is(notNullValue())))
                 .andExpect(jsonPath("$.object.name", is("uniqueName")))
@@ -129,6 +129,35 @@ public class AddingNewProjectIntegrationTest extends IntegrationBase {
                 .andExpect(forwardedUrl(null))
                 .andExpect(redirectedUrl(null))
                 .andExpect(status().isOk());
+    }
+    
+    @Test
+    @WithMockUser(value = "userWith5Projects")
+    @Transactional
+    public void givenUserWith5ProjectsWhenAddingNewProjectShouldReturnStatus400() throws Exception {
+        int sizeBefore = projectRepository.findAll().size();
+        int roleLinkerSizeBefore = roleLinkerRepository.findAll().size();
+        final String message = "You cannot add new project! Limit is " + PROJECTS_LIMIT;
+        String projectJSON = objectMapper.writeValueAsString(new ProjectDTO("test1", "test"));
+    
+        mockMvc.perform(post("/secure/projects")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(projectJSON))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()", is(1)))
+                .andExpect(jsonPath("$[0].message", is(message)))
+                .andExpect(jsonPath("$[0].type", is("ERROR")))
+                .andExpect(jsonPath("$[0].field", is("name")))
+                .andExpect(forwardedUrl(null))
+                .andExpect(redirectedUrl(null))
+                .andExpect(status().isBadRequest());
+    
+        int sizeAfter = projectRepository.findAll().size();
+        int roleLinkerSizeAfter = roleLinkerRepository.findAll().size();
+    
+        assertEquals(sizeBefore, sizeAfter);
+        assertEquals(roleLinkerSizeBefore, roleLinkerSizeAfter);
     }
     
 }
