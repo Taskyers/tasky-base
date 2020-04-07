@@ -8,8 +8,7 @@ import pl.taskyers.taskybase.project.dto.ProjectDTO;
 
 import javax.transaction.Transactional;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -138,17 +137,17 @@ public class AddingNewProjectIntegrationTest extends IntegrationBase {
         int sizeBefore = projectRepository.findAll().size();
         int roleLinkerSizeBefore = roleLinkerRepository.findAll().size();
         final String message = "You cannot add new project! Limit is " + PROJECTS_LIMIT;
-        String projectJSON = objectMapper.writeValueAsString(new ProjectDTO("test1", "test"));
+        String projectJSON = objectMapper.writeValueAsString(new ProjectDTO("dfghdfg", "test"));
     
         mockMvc.perform(post("/secure/projects")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(projectJSON))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.length()", is(1)))
-                .andExpect(jsonPath("$[0].message", is(message)))
-                .andExpect(jsonPath("$[0].type", is("ERROR")))
-                .andExpect(jsonPath("$[0].field", is("name")))
+                .andExpect(jsonPath("$.length()", is(3)))
+                .andExpect(jsonPath("$.message", is(message)))
+                .andExpect(jsonPath("$.type", is("ERROR")))
+                .andExpect(jsonPath("$.object", is(nullValue())))
                 .andExpect(forwardedUrl(null))
                 .andExpect(redirectedUrl(null))
                 .andExpect(status().isBadRequest());
