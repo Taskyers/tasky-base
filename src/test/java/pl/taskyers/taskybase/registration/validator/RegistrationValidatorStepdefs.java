@@ -48,10 +48,12 @@ public class RegistrationValidatorStepdefs {
     public void iHaveFollowingUser(List<AccountDTO> user) {
         entry = user.get(0);
         if ( usernameExists(entry.getUsername()) != null ) {
-            when(userDAO.getEntityByUsername(anyString()).isPresent()).thenAnswer(invocationOnMock -> Optional.of(entry));
+            when(userDAO.getEntityByUsername(anyString())
+                    .isPresent()).thenAnswer(invocationOnMock -> Optional.of(entry));
         }
         if ( emailExists(entry.getEmail()) != null ) {
-            when(userDAO.getEntityByEmail(anyString()).isPresent()).thenAnswer(invocationOnMock -> Optional.of(entry));
+            when(userDAO.getEntityByEmail(anyString())
+                    .isPresent()).thenAnswer(invocationOnMock -> Optional.of(entry));
         }
     }
     
@@ -68,37 +70,59 @@ public class RegistrationValidatorStepdefs {
             assertNotNull(checkForField(result, validationMessage));
         }
         assertTrue(result.hasErrors());
-        assertEquals(result.getErrors().size(), validationMessages.size());
+        assertEquals(result.getErrors()
+                .size(), validationMessages.size());
     }
     
     @Then("^Container is empty$")
     public void containerIsEmpty() {
         assertFalse(result.hasErrors());
-        assertEquals(0, result.getAll().size());
+        assertEquals(0, result.getAll()
+                .size());
     }
     
     private AccountDTO usernameExists(String username) {
-        return users.stream().filter(accountDTO -> accountDTO.getUsername().equals(username)).findFirst().orElse(null);
+        return users.stream()
+                .filter(accountDTO -> accountDTO.getUsername()
+                        .equals(username))
+                .findFirst()
+                .orElse(null);
     }
     
     private AccountDTO emailExists(String email) {
-        return users.stream().filter(accountDTO -> accountDTO.getEmail().equals(email)).findFirst().orElse(null);
+        return users.stream()
+                .filter(accountDTO -> accountDTO.getEmail()
+                        .equals(email))
+                .findFirst()
+                .orElse(null);
     }
     
     private Message checkForType(ValidationMessageContainer validationMessageContainer, ValidationMessage validationMessage) {
-        return validationMessageContainer.getAll().stream().filter(message -> message.getType().equals(validationMessage.getType())).findFirst()
+        return validationMessageContainer.getAll()
+                .stream()
+                .filter(message -> message.getType()
+                        .equals(validationMessage.getType()))
+                .findFirst()
                 .orElse(null);
     }
     
     private Message checkForMessage(ValidationMessageContainer validationMessageContainer, ValidationMessage validationMessage) {
-        return validationMessageContainer.getAll().stream().filter(message -> message.getMessage().equals(validationMessage.getMessage())).findFirst()
+        return validationMessageContainer.getAll()
+                .stream()
+                .filter(message -> message.getMessage()
+                        .equals(validationMessage.getMessage()))
+                .findFirst()
                 .orElse(null);
     }
     
     private Message checkForField(ValidationMessageContainer validationMessageContainer, ValidationMessage validationMessage) {
-        return validationMessageContainer.getAll().stream().filter(message -> message instanceof ValidationMessage)
+        return validationMessageContainer.getAll()
+                .stream()
+                .filter(message -> message instanceof ValidationMessage)
                 .map(message -> ((ValidationMessage) message))
-                .filter(validationMessage1 -> validationMessage1.getField().equals(validationMessage.getField())).findFirst()
+                .filter(validationMessage1 -> validationMessage1.getField()
+                        .equals(validationMessage.getField()))
+                .findFirst()
                 .orElse(null);
     }
     
