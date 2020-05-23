@@ -23,11 +23,13 @@ public class AccountActivationSLOImpl implements AccountActivationSLO {
     
     @Override
     public ResponseEntity activateAccount(String token) {
-        VerificationTokenEntity verificationTokenEntity = (VerificationTokenEntity) verificationTokenDAO.getTokenEntity(token);
+        VerificationTokenEntity verificationTokenEntity = (VerificationTokenEntity)
+                verificationTokenDAO.getTokenEntity(token);
         if ( verificationTokenEntity != null ) {
             return ResponseEntity.ok(activateAccount(verificationTokenEntity));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(logWarn(token));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(logWarn(token));
     }
     
     private ResponseMessage activateAccount(VerificationTokenEntity verificationTokenEntity) {
