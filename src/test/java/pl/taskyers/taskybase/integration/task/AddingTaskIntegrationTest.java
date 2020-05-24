@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.transaction.annotation.Transactional;
 import pl.taskyers.taskybase.core.users.entity.UserEntity;
 import pl.taskyers.taskybase.entry.EntryType;
 import pl.taskyers.taskybase.integration.IntegrationBase;
@@ -11,8 +12,6 @@ import pl.taskyers.taskybase.project.entity.ProjectEntity;
 import pl.taskyers.taskybase.task.ResolutionType;
 import pl.taskyers.taskybase.task.dto.TaskDTO;
 import pl.taskyers.taskybase.task.entity.TaskEntity;
-
-import javax.transaction.Transactional;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.empty;
@@ -186,6 +185,7 @@ public class AddingTaskIntegrationTest extends IntegrationBase {
     
     @Test
     @WithMockUser(value = DEFAULT_USERNAME)
+    @Transactional
     public void givenValidTaskWhenCreatingTaskShouldReturnStatus201() throws Exception {
         final int sizeBefore = taskRepository.findAll()
                 .size();
