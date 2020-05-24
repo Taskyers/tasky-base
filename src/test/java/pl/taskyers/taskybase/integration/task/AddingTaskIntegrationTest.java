@@ -28,8 +28,10 @@ public class AddingTaskIntegrationTest extends IntegrationBase {
     @WithMockUser(value = "enabled")
     @Transactional
     public void givenUserWithNoProjectsWhenGettingProjectsWithUserShouldReturnEmptyList() throws Exception {
-        final UserEntity userEntity = userRepository.findByUsername("enabled").get();
-        final int projectSize = projectRepository.findAllByUsersContaining(Sets.newHashSet(userEntity)).size();
+        final UserEntity userEntity = userRepository.findByUsername("enabled")
+                .get();
+        final int projectSize = projectRepository.findAllByUsersContaining(Sets.newHashSet(userEntity))
+                .size();
         
         mockMvc.perform(get("/secure/tasks/create"))
                 .andDo(print())
@@ -45,8 +47,10 @@ public class AddingTaskIntegrationTest extends IntegrationBase {
     @WithMockUser(value = DEFAULT_USERNAME)
     @Transactional
     public void givenUserWithProjectsWhenGettingProjectsWithUserShouldReturnOnlyProjectNames() throws Exception {
-        final UserEntity userEntity = userRepository.findByUsername(DEFAULT_USERNAME).get();
-        final int projectSize = projectRepository.findAllByUsersContaining(Sets.newHashSet(userEntity)).size();
+        final UserEntity userEntity = userRepository.findByUsername(DEFAULT_USERNAME)
+                .get();
+        final int projectSize = projectRepository.findAllByUsersContaining(Sets.newHashSet(userEntity))
+                .size();
         
         mockMvc.perform(get("/secure/tasks/create"))
                 .andDo(print())
@@ -73,7 +77,8 @@ public class AddingTaskIntegrationTest extends IntegrationBase {
                 .andExpect(forwardedUrl(null))
                 .andExpect(status().isNotFound());
         
-        assertFalse(projectRepository.findByName(name).isPresent());
+        assertFalse(projectRepository.findByName(name)
+                .isPresent());
     }
     
     @Test
@@ -91,7 +96,8 @@ public class AddingTaskIntegrationTest extends IntegrationBase {
                 .andExpect(forwardedUrl(null))
                 .andExpect(status().isForbidden());
         
-        assertTrue(projectRepository.findByName(name).isPresent());
+        assertTrue(projectRepository.findByName(name)
+                .isPresent());
     }
     
     @Test
@@ -99,11 +105,16 @@ public class AddingTaskIntegrationTest extends IntegrationBase {
     @Transactional
     public void givenProjectNameWhenGettingTaskEntryDataShouldReturnStatus200() throws Exception {
         final String name = "test12";
-        final ProjectEntity projectEntity = projectRepository.findByName(name).get();
-        final int entryTypeSize = entryEntityRepository.findAllByProjectAndEntryType(projectEntity, EntryType.TYPE).size();
-        final int entryStatusSize = entryEntityRepository.findAllByProjectAndEntryType(projectEntity, EntryType.STATUS).size();
-        final int entryPrioritySize = entryEntityRepository.findAllByProjectAndEntryType(projectEntity, EntryType.PRIORITY).size();
-        final int sprintSize = sprintRepository.findAllByProject(projectEntity).size();
+        final ProjectEntity projectEntity = projectRepository.findByName(name)
+                .get();
+        final int entryTypeSize = entryEntityRepository.findAllByProjectAndEntryType(projectEntity, EntryType.TYPE)
+                .size();
+        final int entryStatusSize = entryEntityRepository.findAllByProjectAndEntryType(projectEntity, EntryType.STATUS)
+                .size();
+        final int entryPrioritySize = entryEntityRepository.findAllByProjectAndEntryType(projectEntity, EntryType.PRIORITY)
+                .size();
+        final int sprintSize = sprintRepository.findAllByProject(projectEntity)
+                .size();
         
         mockMvc.perform(get("/secure/tasks/create/" + name))
                 .andDo(print())
@@ -121,10 +132,12 @@ public class AddingTaskIntegrationTest extends IntegrationBase {
     @Test
     @WithMockUser(value = DEFAULT_USERNAME)
     public void givenEmptyDTOWhenCreatingTaskShouldReturnStatus400() throws Exception {
-        final int sizeBefore = taskRepository.findAll().size();
+        final int sizeBefore = taskRepository.findAll()
+                .size();
         final String content = objectMapper.writeValueAsString(new TaskDTO());
         
-        mockMvc.perform(post("/secure/tasks/create/test12").contentType(MediaType.APPLICATION_JSON).content(content))
+        mockMvc.perform(post("/secure/tasks/create/test12").contentType(MediaType.APPLICATION_JSON)
+                .content(content))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()", is(4)))
@@ -138,7 +151,8 @@ public class AddingTaskIntegrationTest extends IntegrationBase {
                 .andExpect(forwardedUrl(null))
                 .andExpect(status().isBadRequest());
         
-        final int sizeAfter = taskRepository.findAll().size();
+        final int sizeAfter = taskRepository.findAll()
+                .size();
         
         assertEquals(sizeBefore, sizeAfter);
     }
@@ -146,13 +160,15 @@ public class AddingTaskIntegrationTest extends IntegrationBase {
     @Test
     @WithMockUser(value = DEFAULT_USERNAME)
     public void givenExistingTaskNameWhenCreatingTaskShouldReturnStatus400() throws Exception {
-        final int sizeBefore = taskRepository.findAll().size();
+        final int sizeBefore = taskRepository.findAll()
+                .size();
         final String name = "Testing tasks1";
         final String projectName = "test12";
         TaskDTO dto = new TaskDTO(name, "sadf", "asdf", "asdf", "asdf", "1.0", "asdf");
         final String content = objectMapper.writeValueAsString(dto);
         
-        mockMvc.perform(post("/secure/tasks/create/" + projectName).contentType(MediaType.APPLICATION_JSON).content(content))
+        mockMvc.perform(post("/secure/tasks/create/" + projectName).contentType(MediaType.APPLICATION_JSON)
+                .content(content))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].message", is("Task with name " + dto.getName() + " in " + projectName + " project already exists")))
@@ -162,7 +178,8 @@ public class AddingTaskIntegrationTest extends IntegrationBase {
                 .andExpect(forwardedUrl(null))
                 .andExpect(status().isBadRequest());
         
-        final int sizeAfter = taskRepository.findAll().size();
+        final int sizeAfter = taskRepository.findAll()
+                .size();
         
         assertEquals(sizeBefore, sizeAfter);
     }
@@ -170,13 +187,18 @@ public class AddingTaskIntegrationTest extends IntegrationBase {
     @Test
     @WithMockUser(value = DEFAULT_USERNAME)
     public void givenValidTaskWhenCreatingTaskShouldReturnStatus201() throws Exception {
-        final int sizeBefore = taskRepository.findAll().size();
+        final int sizeBefore = taskRepository.findAll()
+                .size();
         final String projectName = "test12";
-        final ProjectEntity projectEntity = projectRepository.findByName(projectName).get();
-        TaskDTO dto = new TaskDTO("new task", "sadf", "test5", "test4", "test6", "1.0", "current");
+        final ProjectEntity projectEntity = projectRepository.findByName(projectName)
+                .get();
+        TaskDTO dto = new TaskDTO("new task", "sadf", "test5",
+                "test4", "test6", "1.0", "current");
         final String content = objectMapper.writeValueAsString(dto);
         
-        mockMvc.perform(post("/secure/tasks/create/" + projectName).contentType(MediaType.APPLICATION_JSON).content(content))
+        mockMvc.perform(post("/secure/tasks/create/" + projectName)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message", is("Task has been created")))
@@ -186,8 +208,10 @@ public class AddingTaskIntegrationTest extends IntegrationBase {
                 .andExpect(forwardedUrl(null))
                 .andExpect(status().isCreated());
         
-        final int sizeAfter = taskRepository.findAll().size();
-        final TaskEntity taskEntity = taskRepository.findByNameAndProject(dto.getName(), projectEntity).get();
+        final int sizeAfter = taskRepository.findAll()
+                .size();
+        final TaskEntity taskEntity = taskRepository.findByNameAndProject(dto.getName(), projectEntity)
+                .get();
         
         assertNotEquals(sizeBefore, sizeAfter);
         assertEquals(taskEntity.getName(), dto.getName());
