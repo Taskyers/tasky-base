@@ -45,7 +45,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(ImmutableList.of("*"));
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedMethods(ImmutableList.of("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"));
+        corsConfiguration.setAllowedMethods(ImmutableList.of("GET", "POST", "PUT", "PATCH",
+                "DELETE", "HEAD", "OPTIONS"));
         corsConfiguration.setAllowedHeaders(ImmutableList.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
@@ -60,17 +61,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+                .csrf()
+                .disable()
                 .exceptionHandling()
                 .authenticationEntryPoint(restAuthenticationEntryPoint)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/secure/**").authenticated()
+                .antMatchers("/secure/**")
+                .authenticated()
                 .and()
                 .addFilterAt(getAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .formLogin()
                 .and()
-                .logout().deleteCookies("JSESSIONID").invalidateHttpSession(true)
+                .logout()
+                .deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true)
                 .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
                 .and()
                 .cors();
