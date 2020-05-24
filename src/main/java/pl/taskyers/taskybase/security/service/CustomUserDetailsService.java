@@ -26,13 +26,16 @@ public class CustomUserDetailsService implements UserDetailsService {
         if ( !user.isPresent() ) {
             throw new UsernameNotFoundException("User not found.");
         }
-        if ( !user.get().isEnabled() ) {
+        if ( !user.get()
+                .isEnabled() ) {
             throw new UserNotEnabledException("User is not enabled.");
         }
         
-        return new org.springframework.security.core.userdetails.User(user.get().getUsername(),
-                                                                      user.get().getPassword(),
-                                                                      new HashSet<SimpleGrantedAuthority>());
+        return new org.springframework.security.core.userdetails.User(user.get()
+                .getUsername(),
+                user.get()
+                        .getPassword(),
+                new HashSet<SimpleGrantedAuthority>());
         
     }
     
