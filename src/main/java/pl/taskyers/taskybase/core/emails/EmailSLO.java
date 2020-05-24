@@ -23,7 +23,8 @@ public interface EmailSLO {
      * @return true if email was sent otherwise false
      * @since 0.0.1
      */
-    boolean sendEmailWithTemplateToSingleAddressee(AccountDTO accountDTO, String subject, String templatePath, String[] keys, Object[] values);
+    boolean sendEmailWithTemplateToSingleAddressee(AccountDTO accountDTO, String subject,
+            String templatePath, String[] keys, Object[] values);
     
     /**
      * Sending email to list of addresses
