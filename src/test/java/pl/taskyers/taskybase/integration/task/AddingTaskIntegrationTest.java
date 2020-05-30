@@ -185,7 +185,6 @@ public class AddingTaskIntegrationTest extends IntegrationBase {
     
     @Test
     @WithMockUser(value = DEFAULT_USERNAME)
-    @Transactional
     public void givenValidTaskWhenCreatingTaskShouldReturnStatus201() throws Exception {
         final int sizeBefore = taskRepository.findAll()
                 .size();
