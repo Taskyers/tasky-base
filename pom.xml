@@ -31,7 +31,7 @@
 		<jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
 		<maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
 		<!-- Integration database -->
-		<mysql-connector-java.version>8.0.17</mysql-connector-java.version>
+		<mysql-connector-java.version>8.0.28</mysql-connector-java.version>
 		<integration-driver>com.mysql.cj.jdbc.Driver</integration-driver>
 		<integration-url>jdbc:mysql://localhost:3306/</integration-url>
 		<integration-username>root</integration-username>
